@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Музыкальный Дом</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       height: 100vh;
       font-family: 'Inter', sans-serif;
@@ -79,5 +75,12 @@
   </div>
 
   <script>
-    setTimeout(() => {
-      document.querySelector('.load
+    window.onload = function() {
+      setTimeout(() => {
+        document.querySelector('.loader').style.opacity = '0';
+        document.getElementById('menu').classList.add('active');
+      }, 2000);
+    };
+  </script>
+</body>
+</html>
