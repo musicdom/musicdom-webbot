@@ -61,6 +61,25 @@
     }
     h1 {margin-bottom: 15px;}
     p {max-width: 600px; font-size: 1rem; opacity: 0.9;}
+    input {
+      padding:10px 20px;
+      border-radius:20px;
+      border:none;
+      font-size:1rem;
+      margin:10px 0;
+      text-align:center;
+    }
+    a.download-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 10px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    a.download-btn:hover {background: rgba(255,255,255,0.35);}
   </style>
 </head>
 <body>
@@ -87,39 +106,39 @@
   </div>
 
   <!-- Раздел "Найти свою песню" -->
-<div class="section" id="find">
-  <h1>🔍 Найти свою песню</h1>
+  <div class="section" id="find">
+    <h1>🔍 Найти свою песню</h1>
 
-  <div id="searchBox">
-    <p>Введите код вашей песни:</p>
-    <input type="text" id="songCode" placeholder="Например: p32r32f" 
-           style="padding:10px 20px; border-radius:20px; border:none; font-size:1rem; margin:10px 0;">
-    <button onclick="findSong()">Найти</button>
-  </div>
+    <div id="searchBox">
+      <p>Введите код вашей песни:</p>
+      <input type="text" id="songCode" placeholder="Например: 456">
+      <button onclick="findSong()">Найти</button>
+    </div>
 
-  <div id="songInfo" style="display:none; margin-top:20px;">
-    <h2 id="songTitle"></h2>
-    <audio id="demoPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
-    <div id="buySection"></div>
-  </div>
+    <div id="songInfo" style="display:none; margin-top:20px;">
+      <h2 id="songTitle"></h2>
+      <audio id="demoPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+      <div id="buySection"></div>
+    </div>
 
-  <div id="successInfo" style="display:none; margin-top:20px;">
-    <h2>✅ Оплата прошла успешно!</h2>
-    <p>Ваша полная версия песни готова:</p>
-    <audio id="fullPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+    <div id="successInfo" style="display:none; margin-top:20px;">
+      <h2>✅ Оплата прошла успешно!</h2>
+      <p>Ваша полная версия песни готова:</p>
+      <audio id="fullPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+      <a id="downloadLink" class="download-btn" download>⬇ Скачать песню</a>
+      <button onclick="goBack()">⬅ Назад в меню</button>
+    </div>
+
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
-
-  <button onclick="goBack()">⬅ Назад в меню</button>
-</div>
 
 <script>
 const songs = [
   {
     code: "456",
     title: "Песня Музыкальный Дом",
-    demo: "songs/songssong456_demo.mp3",
-    full: "songs/songssong456_full.mp3",
+    demo: "songs/song456_demo.mp3",
+    full: "songs/song456_full.mp3",
     price: 10
   },
   {
@@ -137,12 +156,14 @@ const successCode = urlParams.get("success");
 if (successCode) {
   const song = songs.find(s => s.code === successCode);
   if (song) {
+    document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.remove('active');
     const findSection = document.getElementById('find');
     findSection.classList.add('active');
     document.getElementById('searchBox').style.display = 'none';
     document.getElementById('successInfo').style.display = 'block';
     document.getElementById('fullPlayer').src = song.full;
+    document.getElementById('downloadLink').href = song.full;
   }
 }
 
@@ -159,33 +180,33 @@ function findSong() {
   document.getElementById('songTitle').textContent = song.title;
   document.getElementById('demoPlayer').src = song.demo;
 
- document.getElementById('buySection').innerHTML = `
-  <p>Цена: ${song.price}₽</p>
-  <a href="https://yoomoney.ru/quickpay/confirm.xml?receiver=4100117600206950&sum=${song.price}&label=${song.code}&successURL=https://sasha12071998214-wq.github.io/musicdom-webbot/?success=${song.code}" 
-     target="_blank">
-    <button>💳 Оплатить через ЮMoney</button>
-  </a>
-`;
+  document.getElementById('buySection').innerHTML = `
+    <p>Цена: ${song.price}₽</p>
+    <a href="https://yoomoney.ru/quickpay/confirm.xml?receiver=4100117600206950&sum=${song.price}&label=${song.code}&successURL=https://sasha12071998214-wq.github.io/musicdom-webbot/?success=${song.code}" 
+       target="_blank">
+      <button>💳 Оплатить через ЮMoney</button>
+    </a>
+  `;
+}
+
+// Анимация загрузки
+window.onload = function() {
+  setTimeout(() => {
+    document.querySelector('.loader').style.opacity = '0';
+    document.getElementById('menu').classList.add('active');
+  }, 2000);
+};
+
+function openSection(id) {
+  document.getElementById('menu').classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('menu').classList.add('active');
+  history.pushState({}, "", window.location.pathname); // очищаем URL
 }
 </script>
-
-  <script>
-    window.onload = function() {
-      setTimeout(() => {
-        document.querySelector('.loader').style.opacity = '0';
-        document.getElementById('menu').classList.add('active');
-      }, 2000);
-    };
-
-    function openSection(id) {
-      document.getElementById('menu').classList.remove('active');
-      document.getElementById(id).classList.add('active');
-    }
-
-    function goBack() {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById('menu').classList.add('active');
-    }
-  </script>
 </body>
 </html>
