@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Найти свою песню</title>
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+    color: white;
+    text-align: center;
+    padding: 40px;
+  }
+  input {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+  }
+  button {
+    margin-left: 10px;
+    padding: 10px 25px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background: rgba(255,255,255,0.4); }
+  audio { margin-top: 20px; width: 100%; max-width: 400px; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+  <h1>🔍 Найти свою песню</h1>
+  <p>Введите код, который вам выдали после заказа:</p>
+  <input type="text" id="codeInput" placeholder="Например: 456">
+  <button onclick="findSong()">Найти</button>
+
+  <div id="songArea" class="hidden">
+    <h2 id="songTitle"></h2>
+    <audio id="demoAudio" controls></audio>
+    <div id="paySection" class="hidden">
+      <p>Чтобы получить полную версию песни, оплатите 500 ₽</p>
+      <a id="payLink" target="_blank">
+        <button>💳 Оплатить через ЮMoney</button>
+      </a>
+    </div>
+  </div>
+
+<script>
+const songs = {
+  "456": {
+    title: "Моя песня №456",
+    demo: "demo456.mp3", // короткий демо-файл
+    full: "full456.mp3"  // полный вариант (открывается после оплаты)
+  }
+};
+
+function findSong() {
+  const code = document.getElementById('codeInput').value.trim();
+  const song = songs[code];
+  const area = document.getElementById('songArea');
+  const title = document.getElementById('songTitle');
+  const audio = document.getElementById('demoAudio');
+  const pay = document.getElementById('paySection');
+  const link = document.getElementById('payLink');
+
+  if (song) {
+    area.classList.remove('hidden');
+    title.textContent = song.title;
+    audio.src = song.demo;
+    pay.classList.remove('hidden');
+    link.href = `https://yoomoney.ru/quickpay/confirm.xml?receiver=4100117600206950&sum=500&label=${code}&successURL=https://musicdom.github.io/full/${song.full}`;
+  } else {
+    alert("Песня с таким кодом не найдена 😔");
+  }
+}
+</script>
+</body>
+</html>
