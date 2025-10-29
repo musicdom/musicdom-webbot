@@ -75,12 +75,16 @@
   </div>
 
   <script>
-    window.onload = function() {
+  window.onload = function() {
+    setTimeout(() => {
+      const loader = document.querySelector('.loader');
+      loader.style.opacity = '0';
       setTimeout(() => {
-        document.querySelector('.loader').style.opacity = '0';
+        loader.style.display = 'none';
         document.getElementById('menu').classList.add('active');
-      }, 2000);
-    };
-  </script>
+      }, 1000); // ждём 1 секунду, чтобы анимация плавно закончилась
+    }, 2000); // логотип виден первые 2 секунды
+  };
+</script>
 </body>
 </html>
