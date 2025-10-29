@@ -120,7 +120,7 @@ const songs = [
     title: "Песня Музыкальный Дом",
     demo: "songs/songssong456_demo.mp3",
     full: "songs/songssong456_full.mp3",
-    price: 500
+    price: 10
   },
   {
     code: "123",
@@ -159,13 +159,13 @@ function findSong() {
   document.getElementById('songTitle').textContent = song.title;
   document.getElementById('demoPlayer').src = song.demo;
 
-  document.getElementById('buySection').innerHTML = `
-    <p>Цена: ${song.price}₽</p>
-    <a href="https://unitpay.money/pay/ВАША_ССЫЛКА/?sum=${song.price}&account=${song.code}" 
-       target="_blank">
-      <button>💳 Купить полную версию</button>
-    </a>
-  `;
+ document.getElementById('buySection').innerHTML = `
+  <p>Цена: ${song.price}₽</p>
+  <a href="https://yoomoney.ru/quickpay/confirm.xml?receiver=4100117600206950&sum=${song.price}&label=${song.code}&successURL=https://sasha12071998214-wq.github.io/musicdom-webbot/?success=${song.code}" 
+     target="_blank">
+    <button>💳 Оплатить через ЮMoney</button>
+  </a>
+`;
 }
 </script>
 
