@@ -133,7 +133,7 @@
   </div>
 
 <script>
-const workerUrl = "https://musicdom-pay.workers.dev/"; // ← сюда вставь свой URL от Cloudflare Worker
+const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/"; // ← сюда вставь свой URL от Cloudflare Worker
 
 const songs = [
   {
@@ -187,7 +187,7 @@ function findSong() {
 
   document.getElementById('buySection').innerHTML = `
     <p>Цена: ${song.price}₽</p>
-   <a href="https://musicdom-worker.ТВОЁ_ИМЯ.workers.dev/?code=${song.code}&price=${song.price}" target="_blank">
+   <a href="https://musicdom-pay.sasha12071998214.workers.dev/?code=${song.code}&price=${song.price}" target="_blank">
   <button>💳 Оплатить через ЮMoney</button>
    </a>
   `;
