@@ -9,107 +9,75 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: "Segoe UI", Roboto, sans-serif;
     }
-
     body {
       height: 100vh;
-      width: 100%;
-      background: linear-gradient(135deg, #5b2be0, #b134a7, #f66b45);
-      background-size: 200% 200%;
-      animation: gradientShift 8s ease infinite;
+      font-family: 'Inter', sans-serif;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+      background-size: 200% 200%;
+      animation: gradientMove 10s ease infinite;
+      color: white;
       overflow: hidden;
     }
-
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
-
-    #loader {
+    .loader, .menu {
+      position: absolute;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      opacity: 1;
-      transition: opacity 0.8s ease;
-    }
-
-    #loader img {
-      width: 160px;
-      height: 160px;
-      border-radius: 24px;
-      box-shadow: 0 0 30px rgba(0,0,0,0.2);
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    #menu {
-      display: none;
-      flex-direction: column;
       align-items: center;
-      gap: 20px;
-      opacity: 0;
+      flex-direction: column;
       transition: opacity 1s ease;
     }
-
-    .menu-btn {
-      width: 240px;
-      padding: 14px 20px;
+    .loader img {
+      width: 160px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    }
+    .menu {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .menu.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .menu button {
+      background: rgba(255,255,255,0.15);
       border: none;
-      border-radius: 30px;
-      background: rgba(255, 255, 255, 0.9);
-      color: #333;
-      font-size: 18px;
-      font-weight: 600;
+      color: white;
+      font-size: 1.2rem;
+      padding: 15px 40px;
+      margin: 10px;
+      border-radius: 40px;
+      backdrop-filter: blur(10px);
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
       transition: all 0.3s ease;
     }
-
-    .menu-btn:hover {
-      background: #fff;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-    }
-
-    .menu-btn:active {
-      transform: translateY(1px);
-      box-shadow: none;
+    .menu button:hover {
+      background: rgba(255,255,255,0.25);
+      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <div id="loader">
-    <img src="logo.jpg" alt="Музыкальный Дом" />
+  <div class="loader">
+    <img src="logo.jpg" alt="Музыкальный Дом">
   </div>
 
-  <div id="menu">
-    <button class="menu-btn">🎵 Работы</button>
-    <button class="menu-btn">💬 О нас</button>
-    <button class="menu-btn">🔍 Найти свою песню</button>
+  <div class="menu" id="menu">
+    <button>🎵 Работы</button>
+    <button>💬 О нас</button>
+    <button>🔍 Найти свою песню</button>
   </div>
 
   <script>
-    // Через 2 секунды скрываем логотип и показываем меню
     setTimeout(() => {
-      const loader = document.getElementById('loader');
-      const menu = document.getElementById('menu');
-      loader.style.opacity = '0';
-      setTimeout(() => {
-        loader.style.display = 'none';
-        menu.style.display = 'flex';
-        setTimeout(() => menu.style.opacity = '1', 100);
-      }, 800);
-    }, 2000);
-  </script>
-</body>
-</html>
+      document.querySelector('.load
