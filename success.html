@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Музыкальный Дом — Ваша песня</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: linear-gradient(135deg, #ffe5ec, #e0f7fa);
+    }
+    .player {
+      margin-top: 20px;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      display: inline-block;
+    }
+    audio {
+      width: 100%;
+      outline: none;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background: #008cff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #006dd9;
+    }
+  </style>
+</head>
+<body>
+  <h2>✅ Спасибо за оплату!</h2>
+  <p>Ваша полная версия песни готова 🎵</p>
+
+  <div class="player" id="playerBox"></div>
+
+  <script>
+    // Получаем код песни из ссылки
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+
+    // Путь к полной песне (пример: songs/songssong456_full.mp3)
+    const songPath = `songs/songssong${code}_full.mp3`;
+
+    // Проверяем, найден ли код
+    if (code) {
+      document.getElementById("playerBox").innerHTML = `
+        <audio controls>
+          <source src="${songPath}" type="audio/mpeg">
+          Ваш браузер не поддерживает аудио-плеер.
+        </audio>
+        <br>
+        <a href="${songPath}" download>
+          <button>⬇️ Скачать песню</button>
+        </a>
+      `;
+    } else {
+      document.getElementById("playerBox").innerHTML = "<p>Ошибка: код песни не найден.</p>";
+    }
+  </script>
+</body>
+</html>
