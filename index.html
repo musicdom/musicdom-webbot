@@ -86,11 +86,88 @@
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <div class="section" id="find">
-    <h1>🔍 Найти свою песню</h1>
-    <p>Ищете песню под вашу историю? Напишите нам, и мы создадим трек именно для вас. Музыка, которая звучит вашим голосом ❤️</p>
+  <!-- Раздел "Найти свою песню" -->
+<div class="section" id="find">
+  <h1>🔍 Найти свою песню</h1>
+
+  <div id="searchBox">
+    <p>Введите код вашей песни:</p>
+    <input type="text" id="songCode" placeholder="Например: 123" 
+           style="padding:10px 20px; border-radius:20px; border:none; font-size:1rem; margin:10px 0;">
+    <button onclick="findSong()">Найти</button>
+  </div>
+
+  <div id="songInfo" style="display:none; margin-top:20px;">
+    <h2 id="songTitle"></h2>
+    <audio id="demoPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+    <div id="buySection"></div>
+  </div>
+
+  <div id="successInfo" style="display:none; margin-top:20px;">
+    <h2>✅ Оплата прошла успешно!</h2>
+    <p>Ваша полная версия песни готова:</p>
+    <audio id="fullPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
+
+  <button onclick="goBack()">⬅ Назад в меню</button>
+</div>
+
+<script>
+const songs = [
+  {
+    code: "123",
+    title: "Песня для Любы",
+    demo: "songs/song123_demo.mp3",
+    full: "songs/song123_full.mp3",
+    price: 150
+  },
+  {
+    code: "456",
+    title: "Песня для Максима",
+    demo: "songs/song456_demo.mp3",
+    full: "songs/song456_full.mp3",
+    price: 200
+  }
+];
+
+// Проверка успешной оплаты
+const urlParams = new URLSearchParams(window.location.search);
+const successCode = urlParams.get("success");
+if (successCode) {
+  const song = songs.find(s => s.code === successCode);
+  if (song) {
+    document.getElementById('menu').classList.remove('active');
+    const findSection = document.getElementById('find');
+    findSection.classList.add('active');
+    document.getElementById('searchBox').style.display = 'none';
+    document.getElementById('successInfo').style.display = 'block';
+    document.getElementById('fullPlayer').src = song.full;
+  }
+}
+
+// Поиск песни
+function findSong() {
+  const code = document.getElementById('songCode').value.trim();
+  const song = songs.find(s => s.code === code);
+  if (!song) {
+    alert("Песня с таким кодом не найдена 😢");
+    return;
+  }
+
+  document.getElementById('songInfo').style.display = 'block';
+  document.getElementById('songTitle').textContent = song.title;
+  document.getElementById('demoPlayer').src = song.demo;
+
+  document.getElementById('buySection').innerHTML = `
+    <p>Цена: ${song.price}₽</p>
+    <a href="https://unitpay.money/pay/ВАША_ССЫЛКА/?sum=${song.price}&account=${song.code}" 
+       target="_blank">
+      <button>💳 Купить полную версию</button>
+    </a>
+  `;
+}
+</script>
 
   <script>
     window.onload = function() {
