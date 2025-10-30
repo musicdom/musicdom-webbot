@@ -47,21 +47,32 @@
     const url = new URL(window.location.href);
     const code = url.searchParams.get('code');
 
-    // Путь к полной песне (пример: songs/songssong456_full.mp3)
+    // Правильный путь к файлу
     const songPath = `songs/song${code}_full.mp3`;
 
-    // Проверяем, найден ли код
+    // Проверяем наличие кода
     if (code) {
-      document.getElementById("playerBox").innerHTML = `
-        <audio controls>
-          <source src="${songPath}" type="audio/mpeg">
-          Ваш браузер не поддерживает аудио-плеер.
-        </audio>
-        <br>
-        <a href="${songPath}" download>
-          <button>⬇️ Скачать песню</button>
-        </a>
-      `;
+      // Проверяем, существует ли файл
+      fetch(songPath, { method: "HEAD" })
+        .then(res => {
+          if (res.ok) {
+            document.getElementById("playerBox").innerHTML = `
+              <audio controls>
+                <source src="${songPath}" type="audio/mpeg">
+                Ваш браузер не поддерживает аудио-плеер.
+              </audio>
+              <br>
+              <a href="${songPath}" download>
+                <button>⬇️ Скачать песню</button>
+              </a>
+            `;
+          } else {
+            document.getElementById("playerBox").innerHTML = "<p>⚠️ Файл песни ещё не загружен.</p>";
+          }
+        })
+        .catch(() => {
+          document.getElementById("playerBox").innerHTML = "<p>⚠️ Файл песни ещё не загружен.</p>";
+        });
     } else {
       document.getElementById("playerBox").innerHTML = "<p>Ошибка: код песни не найден.</p>";
     }
