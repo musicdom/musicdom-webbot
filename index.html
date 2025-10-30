@@ -23,6 +23,7 @@
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
+
     .loader, .menu, .section {
       position: absolute;
       display: flex;
@@ -43,22 +44,38 @@
     }
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
+
+    /* Кнопки */
     button {
-      background: rgba(255,255,255,0.15);
-      border: none;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       color: white;
       font-size: 1.2rem;
       padding: 15px 40px;
       margin: 10px;
       border-radius: 40px;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
       cursor: pointer;
       transition: all 0.3s ease;
     }
     button:hover {
-      background: rgba(255,255,255,0.25);
-      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      transform: scale(1.03);
     }
+
+    /* Кнопка оплаты — более выразительная */
+    #buySection button {
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    }
+    #buySection button:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+      transform: scale(1.04);
+    }
+
     h1 {margin-bottom: 15px;}
     p {max-width: 600px; font-size: 1rem; opacity: 0.9;}
     input {
@@ -68,7 +85,10 @@
       font-size:1rem;
       margin:10px 0;
       text-align:center;
+      background: rgba(255,255,255,0.2);
+      color: white;
     }
+    input::placeholder {color: rgba(255,255,255,0.7);}
     a.download-btn {
       background: rgba(255,255,255,0.2);
       color: white;
@@ -105,10 +125,8 @@
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <!-- Раздел "Найти свою песню" -->
   <div class="section" id="find">
     <h1>🔍 Найти свою песню</h1>
-
     <div id="searchBox">
       <p>Введите код вашей песни:</p>
       <input type="text" id="songCode" placeholder="Например: 456">
@@ -132,86 +150,64 @@
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-<script>
-const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/"; // ← сюда вставь свой URL от Cloudflare Worker
+  <script>
+  const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
 
-const songs = [
-  {
-    code: "456",
-    title: "Песня Музыкальный Дом",
-    demo: "songs/song456_demo.mp3",
-    full: "songs/song456_full.mp3",
-    price: 10
-  },
-  {
-    code: "123",
-    title: "Песня для Максима",
-    demo: "songs/song123_demo.mp3",
-    full: "songs/song123_full.mp3",
-    price: 200
+  const songs = [
+    { code: "456", title: "Песня Музыкальный Дом", demo: "songs/song456_demo.mp3", full: "songs/song456_full.mp3", price: 10 },
+    { code: "123", title: "Песня для Максима", demo: "songs/song123_demo.mp3", full: "songs/song123_full.mp3", price: 200 }
+  ];
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const successCode = urlParams.get("success");
+  if (successCode) {
+    const song = songs.find(s => s.code === successCode);
+    if (song) {
+      document.querySelector('.loader').style.opacity = '0';
+      document.getElementById('menu').classList.remove('active');
+      const findSection = document.getElementById('find');
+      findSection.classList.add('active');
+      document.getElementById('searchBox').style.display = 'none';
+      document.getElementById('successInfo').style.display = 'block';
+      document.getElementById('fullPlayer').src = song.full;
+      document.getElementById('downloadLink').href = song.full;
+    }
   }
-];
 
-// Проверка успешной оплаты
-const urlParams = new URLSearchParams(window.location.search);
-const successCode = urlParams.get("success");
-if (successCode) {
-  const song = songs.find(s => s.code === successCode);
-  if (song) {
-    document.querySelector('.loader').style.opacity = '0';
+  function findSong() {
+    const code = document.getElementById('songCode').value.trim();
+    const song = songs.find(s => s.code === code);
+    if (!song) return alert("Песня с таким кодом не найдена 😢");
+
+    document.getElementById('songInfo').style.display = 'block';
+    document.getElementById('songTitle').textContent = song.title;
+    document.getElementById('demoPlayer').src = song.demo;
+
+    document.getElementById('buySection').innerHTML = `
+      <p>Цена: ${song.price}₽</p>
+      <a href="${workerUrl}/?code=${song.code}&price=${song.price}" target="_blank">
+        <button>💳 Оплатить через ЮMoney</button>
+      </a>
+    `;
+  }
+
+  window.onload = function() {
+    setTimeout(() => {
+      document.querySelector('.loader').style.opacity = '0';
+      document.getElementById('menu').classList.add('active');
+    }, 2000);
+  };
+
+  function openSection(id) {
     document.getElementById('menu').classList.remove('active');
-    const findSection = document.getElementById('find');
-    findSection.classList.add('active');
-    document.getElementById('searchBox').style.display = 'none';
-    document.getElementById('successInfo').style.display = 'block';
-    document.getElementById('fullPlayer').src = song.full;
-    document.getElementById('downloadLink').href = song.full;
-  }
-}
-
-// Поиск песни
-function findSong() {
-  const code = document.getElementById('songCode').value.trim();
-  const song = songs.find(s => s.code === code);
-  if (!song) {
-    alert("Песня с таким кодом не найдена 😢");
-    return;
+    document.getElementById(id).classList.add('active');
   }
 
-  document.getElementById('songInfo').style.display = 'block';
-  document.getElementById('songTitle').textContent = song.title;
-  document.getElementById('demoPlayer').src = song.demo;
-
-  // Генерация ссылки через Cloudflare Worker
-  const paymentLink = `${workerUrl}/?code=${song.code}&price=${song.price}`;
-
-  document.getElementById('buySection').innerHTML = `
-    <p>Цена: ${song.price}₽</p>
-   <a href="https://musicdom-pay.sasha12071998214.workers.dev/?code=${song.code}&price=${song.price}" target="_blank">
-  <button>💳 Оплатить через ЮMoney</button>
-   </a>
-  `;
-}
-
-// Анимация загрузки
-window.onload = function() {
-  setTimeout(() => {
-    document.querySelector('.loader').style.opacity = '0';
+  function goBack() {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.getElementById('menu').classList.add('active');
-  }, 2000);
-};
-
-function openSection(id) {
-  document.getElementById('menu').classList.remove('active');
-  document.getElementById(id).classList.add('active');
-}
-
-function goBack() {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('menu').classList.add('active');
-  history.pushState({}, "", window.location.pathname); // очищаем URL
-}
-</script>
-</script>
+    history.pushState({}, "", window.location.pathname);
+  }
+  </script>
 </body>
 </html>
