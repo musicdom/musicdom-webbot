@@ -17,6 +17,8 @@
       border-radius: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       display: inline-block;
+      max-width: 400px;
+      width: 100%;
     }
     audio {
       width: 100%;
@@ -43,20 +45,21 @@
   <div class="player" id="playerBox"></div>
 
   <script>
-    // Получаем код песни из ссылки
+    // Получаем код песни из ссылки (например ?code=456)
     const url = new URL(window.location.href);
     const code = url.searchParams.get('code');
 
-    // Правильный путь к файлу
+    // Укажи правильную папку, где лежат mp3 (например /songs/)
     const songPath = `songs/song${code}_full.mp3`;
 
-    // Проверяем наличие кода
+    const playerBox = document.getElementById("playerBox");
+
     if (code) {
-      // Проверяем, существует ли файл
-      fetch(songPath, { method: "HEAD" })
+      // Проверяем, существует ли песня (без ошибок 404)
+      fetch(songPath, { method: 'HEAD' })
         .then(res => {
           if (res.ok) {
-            document.getElementById("playerBox").innerHTML = `
+            playerBox.innerHTML = `
               <audio controls>
                 <source src="${songPath}" type="audio/mpeg">
                 Ваш браузер не поддерживает аудио-плеер.
@@ -67,14 +70,14 @@
               </a>
             `;
           } else {
-            document.getElementById("playerBox").innerHTML = "<p>⚠️ Файл песни ещё не загружен.</p>";
+            playerBox.innerHTML = `<p>Песня с кодом ${code} не найдена. Свяжитесь с поддержкой.</p>`;
           }
         })
         .catch(() => {
-          document.getElementById("playerBox").innerHTML = "<p>⚠️ Файл песни ещё не загружен.</p>";
+          playerBox.innerHTML = `<p>Ошибка при загрузке файла. Проверьте код ${code}.</p>`;
         });
     } else {
-      document.getElementById("playerBox").innerHTML = "<p>Ошибка: код песни не найден.</p>";
+      playerBox.innerHTML = "<p>Ошибка: код песни не найден в ссылке.</p>";
     }
   </script>
 </body>
