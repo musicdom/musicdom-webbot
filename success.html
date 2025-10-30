@@ -17,12 +17,10 @@
       border-radius: 20px;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
       display: inline-block;
-      max-width: 400px;
-      width: 100%;
+      width: 300px;
     }
     audio {
       width: 100%;
-      outline: none;
     }
     button {
       margin-top: 15px;
@@ -33,9 +31,7 @@
       color: white;
       cursor: pointer;
     }
-    button:hover {
-      background: #006dd9;
-    }
+    button:hover { background: #006dd9; }
   </style>
 </head>
 <body>
@@ -45,40 +41,25 @@
   <div class="player" id="playerBox"></div>
 
   <script>
-    // Получаем код песни из ссылки (например ?code=456)
     const url = new URL(window.location.href);
     const code = url.searchParams.get('code');
 
-    // Укажи правильную папку, где лежат mp3 (например /songs/)
-    const songPath = `songs/song${code}_full.mp3`;
-
-    const playerBox = document.getElementById("playerBox");
-
     if (code) {
-      // Проверяем, существует ли песня (без ошибок 404)
-      fetch(songPath, { method: 'HEAD' })
-        .then(res => {
-          if (res.ok) {
-            playerBox.innerHTML = `
-              <audio controls>
-                <source src="${songPath}" type="audio/mpeg">
-                Ваш браузер не поддерживает аудио-плеер.
-              </audio>
-              <br>
-              <a href="${songPath}" download>
-                <button>⬇️ Скачать песню</button>
-              </a>
-            `;
-          } else {
-            playerBox.innerHTML = `<p>Песня с кодом ${code} не найдена. Свяжитесь с поддержкой.</p>`;
-          }
-        })
-        .catch(() => {
-          playerBox.innerHTML = `<p>Ошибка при загрузке файла. Проверьте код ${code}.</p>`;
-        });
+      const songPath = `songs/song${code}_full.mp3`; // ✅ исправлено
+      document.getElementById("playerBox").innerHTML = `
+        <audio controls autoplay>
+          <source src="${songPath}" type="audio/mpeg">
+          Ваш браузер не поддерживает аудио-плеер.
+        </audio>
+        <br>
+        <a href="${songPath}" download>
+          <button>⬇️ Скачать песню</button>
+        </a>
+      `;
     } else {
-      playerBox.innerHTML = "<p>Ошибка: код песни не найден в ссылке.</p>";
+      document.getElementById("playerBox").innerHTML = "<p>Ошибка: код песни не найден.</p>";
     }
   </script>
 </body>
 </html>
+
