@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Музыкальный Дом — Ваша песня</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #ffb6c1, #d1c4e9, #bbdefb);
+      background-size: 300% 300%;
+      animation: gradientShift 10s ease infinite;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #222;
+      text-align: center;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+      padding: 35px;
+      width: 90%;
+      max-width: 440px;
+      text-align: center;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      font-size: 26px;
+      margin-bottom: 10px;
+      color: #111;
+    }
+
+    p {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .download-button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 17px;
+      font-weight: 600;
+      border-radius: 18px;
+      color: white;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+
+    .download-button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
+      transform: skewX(-25deg);
+      transition: 0.6s;
+    }
+
+    .download-button:hover::before {
+      left: 125%;
+    }
+
+    .download-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>✅ Спасибо за оплату!</h2>
+    <p>Ваша полная версия песни готова 🎵</p>
+
+    <div id="playerBox"></div>
+
+    <footer>Музыкальный Дом © 2025</footer>
+  </div>
+
+  <script>
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get('code');
+
+    if (code) {
+      const songPath = `songs/song${code}_full.mp3`; // ✅ твой оригинальный путь
+      document.getElementById("playerBox").innerHTML = `
+        <audio controls autoplay>
+          <source src="${songPath}" type="audio/mpeg">
+          Ваш браузер не поддерживает аудио-плеер.
+        </audio>
+        <br>
+        <a href="${songPath}" download class="download-button">
+          ⬇️ Скачать песню
+        </a>
+      `;
+    } else {
+      document.getElementById("playerBox").innerHTML = "<p>Ошибка: код песни не найден.</p>";
+    }
+  </script>
+</body>
+</html>
