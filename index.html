@@ -113,59 +113,22 @@
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
   </div>
 
-  <div id="content"></div>
-  <script>
-const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
-
-const songs = [
-  { code: "456", title: "Песня Музыкальный Дом", demo: "songs/song456_demo.mp3", full: "songs/song456_full.mp3", price: 10 },
-  { code: "123", title: "Песня для Максима", demo: "songs/song123_demo.mp3", full: "songs/song123_full.mp3", price: 200 }
-];
-
-window.onload = function() {
-  setTimeout(() => {
-    document.querySelector('.loader').style.opacity = '0';
-    document.getElementById('menu').classList.add('active');
-  }, 2000);
-};
-
-function openSection(id) {
-  document.getElementById('menu').classList.remove('active');
-  loadSection(id);
-}
-
-function goBack() {
-  document.getElementById('content').innerHTML = '';
-  document.getElementById('menu').classList.add('active');
-  history.pushState({}, "", window.location.pathname);
-}
-
-async function loadSection(id) {
-  const content = document.getElementById('content');
-  content.innerHTML = '<p>Загрузка...</p>';
-
-  try {
-    const response = await fetch(`${id}.html`);
-    const html = await response.text();
-    content.innerHTML = html;
-    // активируем анимацию и стили
-    const section = content.querySelector('.section');
-    if (section) section.classList.add('active');
-  } catch (e) {
-    content.innerHTML = '<p>Ошибка загрузки раздела 😢</p>';
-  }
-}
-</script>
-
-
+ <div class="section" id="about">
+    <h1>💬НАши работы</h1>
+    <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
+    <button onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+  
   <div class="section" id="about">
     <h1>💬 О нас</h1>
     <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
+  <!-- Раздел "Найти свою песню" -->
   <div class="section" id="find">
     <h1>🔍 Найти свою песню</h1>
+
     <div id="searchBox">
       <p>Введите код вашей песни:</p>
       <input type="text" id="songCode" placeholder="Например: 456">
@@ -189,64 +152,86 @@ async function loadSection(id) {
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <script>
-  const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
+<script>
+const workerUrl = "https://musicdom-pay.workers.dev/"; // ← сюда вставь свой URL от Cloudflare Worker
 
-  const songs = [
-    { code: "456", title: "Песня Музыкальный Дом", demo: "songs/song456_demo.mp3", full: "songs/song456_full.mp3", price: 10 },
-    { code: "123", title: "Песня для Максима", demo: "songs/song123_demo.mp3", full: "songs/song123_full.mp3", price: 200 }
-  ];
-
-  const urlParams = new URLSearchParams(window.location.search);
-  const successCode = urlParams.get("success");
-  if (successCode) {
-    const song = songs.find(s => s.code === successCode);
-    if (song) {
-      document.querySelector('.loader').style.opacity = '0';
-      document.getElementById('menu').classList.remove('active');
-      const findSection = document.getElementById('find');
-      findSection.classList.add('active');
-      document.getElementById('searchBox').style.display = 'none';
-      document.getElementById('successInfo').style.display = 'block';
-      document.getElementById('fullPlayer').src = song.full;
-      document.getElementById('downloadLink').href = song.full;
-    }
+const songs = [
+  {
+    code: "456",
+    title: "Песня Музыкальный Дом",
+    demo: "songs/song456_demo.mp3",
+    full: "songs/song456_full.mp3",
+    price: 10
+  },
+  {
+    code: "123",
+    title: "Песня для Максима",
+    demo: "songs/song123_demo.mp3",
+    full: "songs/song123_full.mp3",
+    price: 200
   }
+];
 
-  function findSong() {
-    const code = document.getElementById('songCode').value.trim();
-    const song = songs.find(s => s.code === code);
-    if (!song) return alert("Песня с таким кодом не найдена 😢");
-
-    document.getElementById('songInfo').style.display = 'block';
-    document.getElementById('songTitle').textContent = song.title;
-    document.getElementById('demoPlayer').src = song.demo;
-
-    document.getElementById('buySection').innerHTML = `
-      <p>Цена: ${song.price}₽</p>
-      <a href="${workerUrl}/?code=${song.code}&price=${song.price}" target="_blank">
-        <button>💳 Оплатить через ЮMoney</button>
-      </a>
-    `;
-  }
-
-  window.onload = function() {
-    setTimeout(() => {
-      document.querySelector('.loader').style.opacity = '0';
-      document.getElementById('menu').classList.add('active');
-    }, 2000);
-  };
-
-  function openSection(id) {
+// Проверка успешной оплаты
+const urlParams = new URLSearchParams(window.location.search);
+const successCode = urlParams.get("success");
+if (successCode) {
+  const song = songs.find(s => s.code === successCode);
+  if (song) {
+    document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.remove('active');
-    document.getElementById(id).classList.add('active');
+    const findSection = document.getElementById('find');
+    findSection.classList.add('active');
+    document.getElementById('searchBox').style.display = 'none';
+    document.getElementById('successInfo').style.display = 'block';
+    document.getElementById('fullPlayer').src = song.full;
+    document.getElementById('downloadLink').href = song.full;
+  }
+}
+
+// Поиск песни
+function findSong() {
+  const code = document.getElementById('songCode').value.trim();
+  const song = songs.find(s => s.code === code);
+  if (!song) {
+    alert("Песня с таким кодом не найдена 😢");
+    return;
   }
 
-  function goBack() {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('songInfo').style.display = 'block';
+  document.getElementById('songTitle').textContent = song.title;
+  document.getElementById('demoPlayer').src = song.demo;
+
+  // Генерация ссылки через Cloudflare Worker
+  const paymentLink = `${workerUrl}/?code=${song.code}&price=${song.price}`;
+
+  document.getElementById('buySection').innerHTML = `
+    <p>Цена: ${song.price}₽</p>
+   <a href="https://musicdom-worker.ТВОЁ_ИМЯ.workers.dev/?code=${song.code}&price=${song.price}" target="_blank">
+  <button>💳 Оплатить через ЮMoney</button>
+   </a>
+  `;
+}
+
+// Анимация загрузки
+window.onload = function() {
+  setTimeout(() => {
+    document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.add('active');
-    history.pushState({}, "", window.location.pathname);
-  }
-  </script>
+  }, 2000);
+};
+
+function openSection(id) {
+  document.getElementById('menu').classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('menu').classList.add('active');
+  history.pushState({}, "", window.location.pathname); // очищаем URL
+}
+</script>
+</script>
 </body>
 </html>
