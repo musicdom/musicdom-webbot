@@ -74,8 +74,7 @@
   </div>
 
   <div class="menu" id="menu">
-    <!-- Кнопка "Работы" теперь ведёт на отдельную страницу -->
-    <button onclick="goToWorks()">🎵 Работы</button>
+    <button onclick="window.location.href='button-works.html'">🎵 Работы</button>
     <button onclick="openSection('about')">💬 О нас</button>
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
   </div>
@@ -110,10 +109,6 @@
     function goBack() {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById('menu').classList.add('active');
-    }
-
-    function goToWorks() {
-      window.location.href = "button-works.html";
     }
 
     function findSong() {
