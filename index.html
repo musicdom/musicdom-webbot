@@ -113,11 +113,52 @@
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
   </div>
 
-  <div class="section" id="works">
-    <h1>🎵 Наши работы</h1>
-    <p>Здесь вы сможете услышать наши авторские песни и заказы клиентов. Раздел обновляется каждую неделю 🎶</p>
-    <button onclick="goBack()">⬅ Назад в меню</button>
-  </div>
+  <div id="content"></div>
+  <script>
+const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
+
+const songs = [
+  { code: "456", title: "Песня Музыкальный Дом", demo: "songs/song456_demo.mp3", full: "songs/song456_full.mp3", price: 10 },
+  { code: "123", title: "Песня для Максима", demo: "songs/song123_demo.mp3", full: "songs/song123_full.mp3", price: 200 }
+];
+
+window.onload = function() {
+  setTimeout(() => {
+    document.querySelector('.loader').style.opacity = '0';
+    document.getElementById('menu').classList.add('active');
+  }, 2000);
+};
+
+function openSection(id) {
+  document.getElementById('menu').classList.remove('active');
+  loadSection(id);
+}
+
+function goBack() {
+  document.getElementById('content').innerHTML = '';
+  document.getElementById('menu').classList.add('active');
+  history.pushState({}, "", window.location.pathname);
+}
+
+async function loadSection(id) {
+  const content = document.getElementById('content');
+  content.innerHTML = '<p>Загрузка...</p>';
+
+  try {
+    const response = await fetch(`${id}.html`);
+    const html = await response.text();
+    content.innerHTML = html;
+    // активируем анимацию и стили
+    const section = content.querySelector('.section');
+    if (section) section.classList.add('active');
+  } catch (e) {
+    content.innerHTML = '<p>Ошибка загрузки раздела 😢</p>';
+  }
+}
+</script>
+
+ <button onclick="openSection('works')">🎵 Работы</button>
+
 
   <div class="section" id="about">
     <h1>💬 О нас</h1>
