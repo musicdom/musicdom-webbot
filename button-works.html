@@ -13,10 +13,7 @@
       background-size: 200% 200%;
       animation: gradientMove 10s ease infinite;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px 100px;
+      padding-bottom: 100px; /* отступ под кнопку */
     }
     @keyframes gradientMove {
       0% {background-position: 0% 50%;}
@@ -24,126 +21,95 @@
       100% {background-position: 0% 50%;}
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 2rem;
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    .gallery {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 20px;
-      width: 100%;
-      max-width: 1000px;
-    }
-
-    .gallery img {
-      width: 45%;
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.3);
-      transition: transform 0.4s ease;
-    }
-
-    .gallery img:hover {
-      transform: scale(1.05);
-    }
-
-    .songs {
-      margin-top: 40px;
-      width: 100%;
-      max-width: 600px;
+    .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 20px;
+      padding: 30px 20px;
+      text-align: center;
     }
 
-    .song-card {
-      background: rgba(255, 255, 255, 0.15);
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+
+    .works {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .work {
+      width: 260px;
+      text-align: center;
+      background: rgba(255,255,255,0.1);
       border-radius: 20px;
       padding: 20px;
-      text-align: center;
-      width: 100%;
       backdrop-filter: blur(10px);
-      box-shadow: 0 0 25px rgba(255,255,255,0.1);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
     }
 
-    .song-card h3 {
-      margin-bottom: 10px;
-      font-size: 1.2rem;
-    }
-
-    .song-card audio {
+    .work img {
       width: 100%;
-      margin-top: 10px;
-      border-radius: 10px;
+      border-radius: 15px;
+      margin-bottom: 10px;
     }
 
-    /* Кнопка "Назад" закреплена внизу */
+    .request {
+      font-style: italic;
+      opacity: 0.8;
+      margin-top: 5px;
+    }
+
     .back-btn {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
       color: white;
       font-size: 1.1rem;
-      padding: 15px 40px;
+      padding: 12px 30px;
       border-radius: 40px;
       backdrop-filter: blur(15px);
       box-shadow: 0 0 20px rgba(255,255,255,0.15);
       cursor: pointer;
       transition: all 0.3s ease;
     }
-
     .back-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      box-shadow: 0 0 25px rgba(255,255,255,0.3);
-      transform: translateX(-50%) scale(1.03);
-    }
-
-    p.subtitle {
-      margin-top: 40px;
-      font-size: 1.1rem;
-      opacity: 0.9;
-      text-align: center;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>🎵 Наши работы</h1>
+    <div class="works">
+      <div class="work">
+        <img src="work1.jpg" alt="Песня 1">
+        <div class="request">История о первой любви 💕</div>
+        <audio controls>
+          <source src="song1.mp3" type="audio/mpeg">
+        </audio>
+      </div>
 
-  <h1>🎵 Наши работы</h1>
+      <div class="work">
+        <img src="work2.jpg" alt="Песня 2">
+        <div class="request">Песня по просьбе мамы 👩‍👦</div>
+        <audio controls>
+          <source src="song2.mp3" type="audio/mpeg">
+        </audio>
+      </div>
 
-  <div class="gallery">
-    <img src="img/preview-left.jpg" alt="Пример песни 1">
-    <img src="img/preview-right.jpg" alt="Пример песни 2">
+      <!-- Можно добавлять ещё -->
+    </div>
   </div>
 
-  <p class="subtitle">Просьбы о песнях и наши примеры ниже 👇</p>
-
-  <div class="songs">
-    <div class="song-card">
-      <h3>Песня "Влюбился в мой голос"</h3>
-      <audio controls src="songs/song456_demo.mp3"></audio>
-    </div>
-
-    <div class="song-card">
-      <h3>Песня "Спасибо, Ислам"</h3>
-      <audio controls src="songs/song123_demo.mp3"></audio>
-    </div>
-  </div>
-
-  <button class="back-btn" onclick="goBack()">⬅ Назад в меню</button>
-
-  <script>
-    function goBack() {
-      window.location.href = "index.html";
-    }
-  </script>
+  <button class="back-btn" onclick="window.location.href='index.html'">⬅ Назад</button>
 </body>
 </html>
-
