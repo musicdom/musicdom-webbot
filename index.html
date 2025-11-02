@@ -74,17 +74,10 @@
   </div>
 
   <div class="menu" id="menu">
-    <!-- сюда будет подгружена кнопка "Работы" -->
-    <div id="worksButtonContainer"></div>
-
+    <!-- Кнопка "Работы" теперь ведёт на отдельную страницу -->
+    <button onclick="goToWorks()">🎵 Работы</button>
     <button onclick="openSection('about')">💬 О нас</button>
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
-  </div>
-
-  <div class="section" id="works">
-    <h1>🎵 Наши работы</h1>
-    <p>Здесь вы сможете услышать наши авторские песни и заказы клиентов. Раздел обновляется каждую неделю 🎶</p>
-    <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
   <div class="section" id="about">
@@ -102,13 +95,6 @@
   </div>
 
   <script>
-    // Загружаем кнопку "Работы" из отдельного файла
-    fetch("button-works.html")
-      .then(r => r.text())
-      .then(html => {
-        document.getElementById("worksButtonContainer").innerHTML = html;
-      });
-
     window.onload = function() {
       setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
@@ -124,6 +110,10 @@
     function goBack() {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById('menu').classList.add('active');
+    }
+
+    function goToWorks() {
+      window.location.href = "button-works.html";
     }
 
     function findSong() {
