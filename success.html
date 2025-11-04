@@ -4,35 +4,36 @@
   <meta charset="UTF-8">
   <title>Музыкальный Дом — Ваша песня</title>
   <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
-      margin: 0;
-      font-family: "Poppins", "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #ffb6c1, #d1c4e9, #bbdefb);
-      background-size: 300% 300%;
-      animation: gradientShift 10s ease infinite;
+      height: 100vh;
+      font-family: 'Inter', sans-serif;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      color: #222;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+      background-size: 200% 200%;
+      animation: gradientMove 10s ease infinite;
+      color: white;
+      overflow: hidden;
       text-align: center;
     }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       border-radius: 25px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      padding: 35px;
+      padding: 40px 30px;
+      margin: 20px;
+      max-width: 500px;
       width: 90%;
-      max-width: 440px;
-      text-align: center;
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
       animation: fadeIn 0.8s ease-in-out;
     }
     @keyframes fadeIn {
@@ -41,68 +42,52 @@
     }
 
     h2 {
-      font-size: 26px;
-      margin-bottom: 10px;
-      color: #111;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
     }
 
     p {
-      font-size: 16px;
-      color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
+      opacity: 0.9;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     audio {
       width: 100%;
-      margin-top: 15px;
-      border-radius: 12px;
-      outline: none;
+      max-width: 400px;
+      margin: 20px 0;
+      border-radius: 10px;
     }
 
+    /* Кнопка скачивания в стиле основной страницы */
     .download-button {
-      margin-top: 20px;
-      padding: 12px 28px;
-      font-size: 17px;
-      font-weight: 600;
-      border-radius: 18px;
-      color: white;
       background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 0 20px rgba(233, 30, 99, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 1.1rem;
+      padding: 15px 35px;
+      margin: 15px 0;
+      border-radius: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
-      position: relative;
-      overflow: hidden;
-      transition: all 0.4s ease;
-    }
-
-    .download-button::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: -75%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(120deg, rgba(255,255,255,0.4), rgba(255,255,255,0));
-      transform: skewX(-25deg);
-      transition: 0.6s;
-    }
-
-    .download-button:hover::before {
-      left: 125%;
+      transition: all 0.3s ease;
     }
 
     .download-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 25px rgba(255, 105, 180, 0.6);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      transform: scale(1.03);
     }
 
     footer {
       margin-top: 25px;
-      font-size: 13px;
-      color: #555;
+      font-size: 0.9rem;
+      opacity: 0.7;
     }
   </style>
 </head>
@@ -121,7 +106,7 @@
     const code = url.searchParams.get('code');
 
     if (code) {
-      const songPath = `song/song${code}_full.mp3`; // ✅ твой оригинальный путь
+      const songPath = `song/song${code}_full.mp3`;
       document.getElementById("playerBox").innerHTML = `
         <audio controls autoplay>
           <source src="${songPath}" type="audio/mpeg">
