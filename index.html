@@ -185,6 +185,49 @@
     .work-card .buy-button:hover {
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
     }
+
+    /* Стили для карточек соцсетей */
+    .social-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 15px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      width: 100px;
+      height: 100px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .social-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .social-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .social-name {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
   </style>
 </head>
 <body>
@@ -240,6 +283,27 @@
   <div class="section" id="about">
     <h1>💬 О нас</h1>
     <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
+    
+    <!-- Добавленные карточки соцсетей -->
+    <div class="social-container">
+      <a href="https://vk.com/musicdom" class="social-card" target="_blank">
+        <div class="social-icon">📘</div>
+        <div class="social-name">VK</div>
+      </a>
+      <a href="https://t.me/musicdom" class="social-card" target="_blank">
+        <div class="social-icon">📱</div>
+        <div class="social-name">Telegram</div>
+      </a>
+      <a href="https://youtube.com/musicdom" class="social-card" target="_blank">
+        <div class="social-icon">📺</div>
+        <div class="social-name">YouTube</div>
+      </a>
+      <a href="https://instagram.com/musicdom" class="social-card" target="_blank">
+        <div class="social-icon">📷</div>
+        <div class="social-name">Instagram</div>
+      </a>
+    </div>
+    
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
