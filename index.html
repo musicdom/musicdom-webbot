@@ -51,9 +51,9 @@
       height: 200px;
       border-radius: 50%;
       object-fit: cover;
-      margin-bottom: 25px;
-      margin-top: -40px;
-      box-shadow: 0 0 30px rgba(255,255,255,0.4);
+      margin-bottom: 30px;
+      margin-top: -45px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
       border: 3px solid rgba(255,255,255,0.2);
     }
 
@@ -195,35 +195,19 @@
   <div class="menu" id="menu">
     <img src="logo.jpg" alt="Музыкальный Дом" class="menu-logo">
     
+    <!-- Новый порядок кнопок -->
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
     <button onclick="openSection('works')">🎵 Работы</button>
     <button onclick="openSection('about')">💬 О нас</button>
-   </div> 
+  </div>
 
- <div class="section" id="find">
+  <div class="section" id="find">
     <h1>🔍 Найти свою песню</h1>
     <div id="searchBox">
       <p>Введите код вашей песни:</p>
       <input type="text" id="songCode" placeholder="Например: 456">
       <button onclick="findSong()">Найти</button>
     </div>
-  
-  <div class="section" id="works">
-    <h1>🎵 Наши работы</h1>
-    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
-    
-    <div class="works-container" id="worksContainer">
-      <!-- Карточки работ будут добавляться с помощью JavaScript -->
-    </div>
-    
-    <button onclick="goBack()">⬅ Назад в меню</button>
-  </div>
-
-  <div class="section" id="about">
-    <h1>💬 О нас</h1>
-    <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
-    <button onclick="goBack()">⬅ Назад в меню</button>
-  </div>
 
     <div id="songInfo" style="display:none; margin-top:20px;">
       <h2 id="songTitle"></h2>
@@ -239,6 +223,23 @@
       <button onclick="goBack()">⬅ Назад в меню</button>
     </div>
 
+    <button onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+
+  <div class="section" id="works">
+    <h1>🎵 Наши работы</h1>
+    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+    
+    <div class="works-container" id="worksContainer">
+      <!-- Карточки работ будут добавляться с помощью JavaScript -->
+    </div>
+    
+    <button onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+
+  <div class="section" id="about">
+    <h1>💬 О нас</h1>
+    <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
