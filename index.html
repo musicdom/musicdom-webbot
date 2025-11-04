@@ -151,63 +151,71 @@
   </div>
 
   <script>
-  const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
+const workerUrl = "https://musicdom-pay.sasha12071998214.workers.dev/";
 
-  const songs = [
-    { code: "456", title: "Песня Музыкальный Дом", demo: "song/song456_demo.mp3", full: "song/song456_full.mp3", price: 10 },
-    { code: "123", title: "Песня для Максима", demo: "song/song123_demo.mp3", full: "song/song123_full.mp3", price: 200 }
-  ];
+// 👉 теперь указываем только код, название и цену
+const songs = [
+  { code: "456", title: "Песня Музыкальный Дом", price: 10 },
+  { code: "123", title: "Песня для Максима", price: 200 }
+];
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const successCode = urlParams.get("success");
-  if (successCode) {
-    const song = songs.find(s => s.code === successCode);
-    if (song) {
-      document.querySelector('.loader').style.opacity = '0';
-      document.getElementById('menu').classList.remove('active');
-      const findSection = document.getElementById('find');
-      findSection.classList.add('active');
-      document.getElementById('searchBox').style.display = 'none';
-      document.getElementById('successInfo').style.display = 'block';
-      document.getElementById('fullPlayer').src = song.full;
-      document.getElementById('downloadLink').href = song.full;
-    }
-  }
+// автоматическая подстановка путей
+songs.forEach(song => {
+  song.demo = `song/song${song.code}_demo.mp3`;
+  song.full = `song/song${song.code}_full.mp3`;
+});
 
-  function findSong() {
-    const code = document.getElementById('songCode').value.trim();
-    const song = songs.find(s => s.code === code);
-    if (!song) return alert("Песня с таким кодом не найдена 😢");
-
-    document.getElementById('songInfo').style.display = 'block';
-    document.getElementById('songTitle').textContent = song.title;
-    document.getElementById('demoPlayer').src = song.demo;
-
-    document.getElementById('buySection').innerHTML = `
-      <p>Цена: ${song.price}₽</p>
-      <a href="${workerUrl}/?code=${song.code}&price=${song.price}" target="_blank">
-        <button>💳 Оплатить через ЮMoney</button>
-      </a>
-    `;
-  }
-
-  window.onload = function() {
-    setTimeout(() => {
-      document.querySelector('.loader').style.opacity = '0';
-      document.getElementById('menu').classList.add('active');
-    }, 2000);
-  };
-
-  function openSection(id) {
+// проверяем URL-параметр success (после оплаты)
+const urlParams = new URLSearchParams(window.location.search);
+const successCode = urlParams.get("success");
+if (successCode) {
+  const song = songs.find(s => s.code === successCode);
+  if (song) {
+    document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.remove('active');
-    document.getElementById(id).classList.add('active');
+    const findSection = document.getElementById('find');
+    findSection.classList.add('active');
+    document.getElementById('searchBox').style.display = 'none';
+    document.getElementById('successInfo').style.display = 'block';
+    document.getElementById('fullPlayer').src = song.full;
+    document.getElementById('downloadLink').href = song.full;
   }
+}
 
-  function goBack() {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+function findSong() {
+  const code = document.getElementById('songCode').value.trim();
+  const song = songs.find(s => s.code === code);
+  if (!song) return alert("Песня с таким кодом не найдена 😢");
+
+  document.getElementById('songInfo').style.display = 'block';
+  document.getElementById('songTitle').textContent = song.title;
+  document.getElementById('demoPlayer').src = song.demo;
+
+  document.getElementById('buySection').innerHTML = `
+    <p>Цена: ${song.price}₽</p>
+    <a href="${workerUrl}/?code=${song.code}&price=${song.price}" target="_blank">
+      <button>💳 Оплатить через ЮMoney</button>
+    </a>
+  `;
+}
+
+window.onload = function() {
+  setTimeout(() => {
+    document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.add('active');
-    history.pushState({}, "", window.location.pathname);
-  }
-  </script>
+  }, 2000);
+};
+
+function openSection(id) {
+  document.getElementById('menu').classList.remove('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function goBack() {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('menu').classList.add('active');
+  history.pushState({}, "", window.location.pathname);
+}
+</script>
 </body>
 </html>
