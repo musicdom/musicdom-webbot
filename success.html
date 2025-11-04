@@ -121,7 +121,7 @@
     const code = url.searchParams.get('code');
 
     if (code) {
-      const songPath = `songs/song${code}_full.mp3`; // ✅ твой оригинальный путь
+      const songPath = `song/song${code}_full.mp3`; // ✅ твой оригинальный путь
       document.getElementById("playerBox").innerHTML = `
         <audio controls autoplay>
           <source src="${songPath}" type="audio/mpeg">
