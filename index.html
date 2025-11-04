@@ -113,11 +113,11 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* Стили для карточек работ */
+    /* Стили для карточек работ - уменьшенные и адаптированные */
     .works-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
       max-width: 1200px;
       width: 100%;
       margin: 20px 0;
@@ -128,56 +128,92 @@
 
     .work-card {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 18px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 25px rgba(255,255,255,0.1);
-      transition: transform 0.3s ease;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      transition: all 0.4s ease;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: slideUp 0.6s ease forwards;
     }
 
+    /* Анимация появления карточек */
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Задержки для анимации каждой карточки */
+    .work-card:nth-child(1) { animation-delay: 0.1s; }
+    .work-card:nth-child(2) { animation-delay: 0.2s; }
+    .work-card:nth-child(3) { animation-delay: 0.3s; }
+    .work-card:nth-child(4) { animation-delay: 0.4s; }
+    .work-card:nth-child(5) { animation-delay: 0.5s; }
+    .work-card:nth-child(6) { animation-delay: 0.6s; }
+
     .work-card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
     }
 
     .work-image {
       width: 100%;
-      height: 200px;
+      height: 160px;
       object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 15px;
+      border-radius: 12px;
+      margin-bottom: 12px;
     }
 
     .work-title {
-      font-size: 1.4rem;
-      margin-bottom: 10px;
+      font-size: 1.2rem;
+      margin-bottom: 8px;
       color: white;
+      min-height: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .work-description {
-      font-size: 0.95rem;
-      margin-bottom: 15px;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
       opacity: 0.9;
       line-height: 1.4;
       color: white;
+      min-height: 3.5rem;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .work-audio {
       width: 100%;
-      margin: 15px 0;
-      border-radius: 10px;
+      margin: 12px 0;
+      border-radius: 8px;
+      height: 40px;
     }
 
     .work-price {
-      font-size: 1.2rem;
+      font-size: 1.1rem;
       font-weight: bold;
-      margin: 10px 0;
+      margin: 8px 0;
       color: #ffd700;
     }
 
     .work-card .buy-button {
       width: 100%;
-      margin-top: 10px;
+      margin-top: 8px;
+      padding: 12px 20px;
+      font-size: 1rem;
       background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
       border: 1px solid rgba(255,255,255,0.4);
     }
