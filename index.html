@@ -45,6 +45,17 @@
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
 
+    /* Круглый логотип в меню */
+    .menu-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 30px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+
     /* Кнопки */
     button {
       background: rgba(255, 255, 255, 0.15);
@@ -108,6 +119,9 @@
   </div>
 
   <div class="menu" id="menu">
+    <!-- Добавлен круглый логотип -->
+    <img src="logo.jpg" alt="Музыкальный Дом" class="menu-logo">
+    
     <button onclick="openSection('works')">🎵 Работы</button>
     <button onclick="openSection('about')">💬 О нас</button>
     <button onclick="openSection('find')">🔍 Найти свою песню</button>
