@@ -298,27 +298,26 @@
 
     /* Стили для кнопки назад в разделе работ - изменены */
     #works .back-button {
-      #works .back-button {
-     position: fixed;
-     bottom: 0px;
-     left: 50%;
-     transform: translateX(-50%);
-     z-index: 100;
-     background: rgba(255, 255, 255, 0.15);
-     border: 1px solid rgba(255, 255, 255, 0.3);
-     backdrop-filter: blur(15px);
-     padding: 10px 80px; /* Немного уменьшил горизонтальные отступы */
-     font-size: 1.2rem;
-     border-radius: 40px;
-     box-shadow: 0 0 20px rgba(255,255,255,0.15);
-     white-space: nowrap; /* Добавил это свойство для текста в одну строку */
-     }
-
-   #works .back-button:hover {
-     background: rgba(255, 255, 255, 0.25);
-     box-shadow: 0 0 25px rgba(255,255,255,0.25);
-     transform: translateX(-50%) scale(1.03);
-   }
+      position: fixed;
+      bottom: 0px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      padding: 10px 100px; /* Удлинена по горизонтали */
+      font-size: 1.2rem;
+      border-radius: 40px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      white-space: nowrap; /* Добавил это свойство для текста в одну строку */
+    }
+    
+    #works .back-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      transform: translateX(-50%) scale(1.03);
+    }
   </style>
 </head>
 <body>
