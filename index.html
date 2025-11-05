@@ -122,46 +122,34 @@
       width: 100%;
       margin: 20px 0;
       padding: 0 20px;
-      max-height: 70vh;
+      max-height: 75vh;
       overflow-y: auto;
+      align-items: start;
     }
 
     .work-card {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      padding: 18px;
+      border-radius: 15px;
+      padding: 15px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
-      transition: all 0.4s ease;
+      transition: all 0.3s ease;
       opacity: 0;
-      transform: translateY(50px);
-      animation: slideUp 0.6s ease forwards;
+      transform: translateY(30px);
+      animation: cardAppear 0.6s ease forwards;
     }
 
-    /* Анимация появления карточек */
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateY(50px);
-      }
+    @keyframes cardAppear {
       to {
         opacity: 1;
         transform: translateY(0);
       }
     }
 
-    /* Задержки для анимации каждой карточки */
-    .work-card:nth-child(1) { animation-delay: 0.1s; }
-    .work-card:nth-child(2) { animation-delay: 0.2s; }
-    .work-card:nth-child(3) { animation-delay: 0.3s; }
-    .work-card:nth-child(4) { animation-delay: 0.4s; }
-    .work-card:nth-child(5) { animation-delay: 0.5s; }
-    .work-card:nth-child(6) { animation-delay: 0.6s; }
-
     .work-card:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      transform: translateY(-5px);
+      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
     }
 
     .work-image {
@@ -183,16 +171,14 @@
     }
 
     .work-description {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       margin-bottom: 12px;
       opacity: 0.9;
       line-height: 1.4;
       color: white;
       min-height: 3.5rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+      display: flex;
+      align-items: center;
     }
 
     .work-audio {
@@ -212,7 +198,7 @@
     .work-card .buy-button {
       width: 100%;
       margin-top: 8px;
-      padding: 12px 20px;
+      padding: 10px 20px;
       font-size: 1rem;
       background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
       border: 1px solid rgba(255,255,255,0.4);
@@ -263,6 +249,25 @@
     .social-name {
       font-size: 0.8rem;
       opacity: 0.9;
+    }
+
+    /* Улучшенная прокрутка для контейнера работ */
+    .works-container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .works-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    .works-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .works-container::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.5);
     }
   </style>
 </head>
@@ -386,14 +391,17 @@ const works = [
   }
 ];
 
-// Функция для отображения карточек работ
+// Функция для отображения карточек работ с анимацией
 function renderWorks() {
   const container = document.getElementById('worksContainer');
   container.innerHTML = '';
   
-  works.forEach(work => {
+  works.forEach((work, index) => {
     const workCard = document.createElement('div');
     workCard.className = 'work-card';
+    
+    // Добавляем задержку для анимации появления
+    workCard.style.animationDelay = `${index * 0.1}s`;
     
     workCard.innerHTML = `
       <img src="${work.image}" alt="${work.title}" class="work-image">
@@ -464,7 +472,9 @@ function openSection(id) {
   
   // При открытии раздела работ рендерим карточки
   if (id === 'works') {
-    renderWorks();
+    setTimeout(() => {
+      renderWorks();
+    }, 100);
   }
 }
 
