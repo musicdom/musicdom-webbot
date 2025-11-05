@@ -141,38 +141,16 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ РАЗДЕЛА РАБОТ */
-    #works {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .works-header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: inherit;
-      padding: 20px;
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .works-scroll-container {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 20px 100px 20px;
-    }
-
+    /* Стили для карточек работ */
     .works-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       max-width: 1200px;
       width: 100%;
-      margin: 0 auto;
+      margin: 20px 0;
+      padding: 0 20px;
+      /* Убрано ограничение высоты и прокрутка */
       align-items: start;
     }
 
@@ -300,35 +278,18 @@
       opacity: 0.9;
     }
 
-    /* Улучшенная прокрутка для контейнера работ */
-    .works-scroll-container::-webkit-scrollbar {
-      width: 8px;
-    }
-
-    .works-scroll-container::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
-
-    .works-scroll-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 4px;
-    }
-
-    .works-scroll-container::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.5);
-    }
-
-    /* Стили для кнопки назад в разделе работ */
+    /* Стили для кнопки назад в разделе работ - изменены */
     #works .back-button {
       position: fixed;
-      bottom: 10px; /* Чуть ниже */
+      bottom: 80px; /* Опущена ниже */
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
+      padding: 12px 80px; /* Меньше по вертикали, длиннее по горизонтали */
+      font-size: 1rem; /* Чуть меньше текст */
     }
   </style>
 </head>
@@ -376,17 +337,11 @@
   </div>
 
   <div class="section" id="works">
-    <!-- Закрепленный заголовок и описание -->
-    <div class="works-header">
-      <h1>🎵 Наши работы</h1>
-      <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
-    </div>
+    <h1>🎵 Наши работы</h1>
+    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
     
-    <!-- Прокручиваемая область с карточками -->
-    <div class="works-scroll-container">
-      <div class="works-container" id="worksContainer">
-        <!-- Карточки работ будут добавляться с помощью JavaScript -->
-      </div>
+    <div class="works-container" id="worksContainer">
+      <!-- Карточки работ будут добавляться с помощью JavaScript -->
     </div>
     
     <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
