@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Музыкальный Дом</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="loader">
+    <img src="logo.jpg" alt="Музыкальный Дом">
+  </div>
+
+  <div class="menu" id="menu">
+    <img src="logo.jpg" alt="Музыкальный Дом" class="menu-logo">
+    
+    <button onclick="openSection('find')">🔍 Найти свою песню</button>
+    <button onclick="openSection('works')">🎵 Работы</button>
+    <button onclick="openSection('about')">💬 О нас</button>
+  </div>
+
+  <!-- Контейнер для загружаемых разделов -->
+  <div id="sections-container"></div>
+
+  <script src="js/sections.js"></script>
+  <script src="js/payment.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
