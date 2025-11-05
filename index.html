@@ -7,7 +7,7 @@
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
-      height: 100vh;
+      min-height: 100vh;
       font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
@@ -16,7 +16,7 @@
       background-size: 200% 200%;
       animation: gradientMove 10s ease infinite;
       color: white;
-      overflow: hidden;
+      overflow-x: hidden;
     }
     @keyframes gradientMove {
       0% {background-position: 0% 50%;}
@@ -27,7 +27,7 @@
     .loader, .menu, .section {
       position: absolute;
       display: flex;
-      justify-content: center;
+      justify-content: flex-start; /* Изменено для бесконечного скролла */
       align-items: center;
       flex-direction: column;
       text-align: center;
@@ -35,6 +35,8 @@
       width: 100%;
       height: 100%;
       padding: 20px;
+      top: 0;
+      left: 0;
     }
     .loader img {
       width: 160px;
@@ -113,18 +115,34 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* Стили для карточек работ - уменьшенные и адаптированные */
+    /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ БЕСКОНЕЧНОГО РАЗДЕЛА РАБОТ */
+    #works {
+      position: fixed;
+      overflow-y: auto;
+      height: 100vh;
+      justify-content: flex-start;
+      padding-top: 40px;
+      padding-bottom: 100px; /* Место для кнопки */
+    }
+
+    .works-content {
+      width: 100%;
+      max-width: 1200px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100%;
+    }
+
     .works-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      max-width: 1200px;
       width: 100%;
       margin: 20px 0;
       padding: 0 20px;
-      max-height: 75vh;
-      overflow-y: auto;
       align-items: start;
+      /* Убраны ограничения по высоте */
     }
 
     .work-card {
@@ -251,32 +269,26 @@
       opacity: 0.9;
     }
 
-    /* Улучшенная прокрутка для контейнера работ */
-    .works-container::-webkit-scrollbar {
+    /* Улучшенная прокрутка для всего раздела работ */
+    #works::-webkit-scrollbar {
       width: 8px;
     }
 
-    .works-container::-webkit-scrollbar-track {
+    #works::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
     }
 
-    .works-container::-webkit-scrollbar-thumb {
+    #works::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.3);
       border-radius: 4px;
     }
 
-    .works-container::-webkit-scrollbar-thumb:hover {
+    #works::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
 
     /* НОВЫЕ СТИЛИ: Позиционирование кнопки "Назад" в разделе Работы */
-    #works {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
     #works .back-button {
       position: fixed;
       bottom: 30px;
@@ -288,14 +300,12 @@
       backdrop-filter: blur(10px);
     }
 
-    #works .works-content {
-      width: 100%;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-y: auto;
-      padding-bottom: 100px; /* Добавляем отступ снизу для кнопки */
+    /* Индикатор загрузки для бесконечного скролла */
+    .loading-indicator {
+      padding: 20px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
     }
   </style>
 </head>
@@ -346,6 +356,11 @@
       <div class="works-container" id="worksContainer">
         <!-- Карточки работ будут добавляться с помощью JavaScript -->
       </div>
+      
+      <!-- Индикатор загрузки для бесконечного скролла -->
+      <div class="loading-indicator" id="loadingIndicator" style="display: none;">
+        Загрузка следующих работ...
+      </div>
     </div>
     
     <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
@@ -389,8 +404,8 @@ songs.forEach(song => {
   song.full = `song/song${song.code}_full.mp3`;
 });
 
-// Данные для карточек работ
-const works = [
+// Базовые данные для карточек работ
+const baseWorks = [
   {
     code: "456",
     title: "Песня-Музыкальный Дом",
@@ -421,24 +436,49 @@ const works = [
   }
 ];
 
+// Переменные для бесконечного скролла
+let currentPage = 0;
+const worksPerPage = 4;
+let isLoading = false;
+
+// Функция для генерации дополнительных работ (для демонстрации бесконечного скролла)
+function generateMoreWorks(page) {
+  const moreWorks = [];
+  for (let i = 0; i < worksPerPage; i++) {
+    const baseWork = baseWorks[i % baseWorks.length];
+    moreWorks.push({
+      ...baseWork,
+      title: `${baseWork.title} (Часть ${page + 1}.${i + 1})`,
+      code: `${baseWork.code}-${page}-${i}`,
+      price: baseWork.price + (page * 10) + i
+    });
+  }
+  return moreWorks;
+}
+
 // Функция для отображения карточек работ с анимацией
-function renderWorks() {
+function renderWorks(append = false) {
   const container = document.getElementById('worksContainer');
-  container.innerHTML = '';
+  if (!append) {
+    container.innerHTML = '';
+    currentPage = 0;
+  }
   
-  works.forEach((work, index) => {
+  const worksToRender = generateMoreWorks(currentPage);
+  
+  worksToRender.forEach((work, index) => {
     const workCard = document.createElement('div');
     workCard.className = 'work-card';
     
     // Добавляем задержку для анимации появления
-    workCard.style.animationDelay = `${index * 0.1}s`;
+    workCard.style.animationDelay = `${(append ? worksPerPage * currentPage + index : index) * 0.1}s`;
     
     workCard.innerHTML = `
       <img src="${work.image}" alt="${work.title}" class="work-image">
       <h3 class="work-title">${work.title}</h3>
       <p class="work-description">${work.description}</p>
       <audio controls class="work-audio">
-        <source src="song/song${work.code}_demo.mp3" type="audio/mpeg">
+        <source src="song/song${work.code.split('-')[0]}_demo.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио элементы.
       </audio>
       <div class="work-price">Цена: ${work.price}₽</div>
@@ -447,6 +487,30 @@ function renderWorks() {
     
     container.appendChild(workCard);
   });
+  
+  currentPage++;
+  isLoading = false;
+  document.getElementById('loadingIndicator').style.display = 'none';
+}
+
+// Функция для загрузки дополнительных работ при прокрутке
+function loadMoreWorks() {
+  if (isLoading) return;
+  
+  const worksSection = document.getElementById('works');
+  const scrollPosition = worksSection.scrollTop + worksSection.clientHeight;
+  const scrollHeight = worksSection.scrollHeight;
+  
+  // Загружаем новые работы когда пользователь прокрутил до 80% высоты
+  if (scrollPosition >= scrollHeight * 0.8) {
+    isLoading = true;
+    document.getElementById('loadingIndicator').style.display = 'block';
+    
+    // Имитируем задержку загрузки
+    setTimeout(() => {
+      renderWorks(true);
+    }, 1000);
+  }
 }
 
 // Функция для покупки работы
@@ -500,17 +564,24 @@ function openSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   
-  // При открытии раздела работ рендерим карточки
+  // При открытии раздела работ рендерим карточки и настраиваем бесконечный скролл
   if (id === 'works') {
     setTimeout(() => {
-      renderWorks();
+      renderWorks(false);
+      // Добавляем обработчик прокрутки для бесконечного скролла
+      document.getElementById('works').addEventListener('scroll', loadMoreWorks);
     }, 100);
+  } else {
+    // Убираем обработчик прокрутки при переходе в другие разделы
+    document.getElementById('works').removeEventListener('scroll', loadMoreWorks);
   }
 }
 
 function goBack() {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('menu').classList.add('active');
+  // Убираем обработчик прокрутки при возврате в меню
+  document.getElementById('works').removeEventListener('scroll', loadMoreWorks);
   history.pushState({}, "", window.location.pathname);
 }
 </script>
