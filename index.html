@@ -141,17 +141,38 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* Стили для карточек работ */
+    /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ РАЗДЕЛА РАБОТ */
+    #works {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .works-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: inherit;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .works-scroll-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 20px 100px 20px;
+    }
+
     .works-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
       max-width: 1200px;
       width: 100%;
-      margin: 20px 0;
-      padding: 0 20px;
-      max-height: 75vh;
-      overflow-y: auto;
+      margin: 0 auto;
       align-items: start;
     }
 
@@ -280,28 +301,28 @@
     }
 
     /* Улучшенная прокрутка для контейнера работ */
-    .works-container::-webkit-scrollbar {
+    .works-scroll-container::-webkit-scrollbar {
       width: 8px;
     }
 
-    .works-container::-webkit-scrollbar-track {
+    .works-scroll-container::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
     }
 
-    .works-container::-webkit-scrollbar-thumb {
+    .works-scroll-container::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.3);
       border-radius: 4px;
     }
 
-    .works-container::-webkit-scrollbar-thumb:hover {
+    .works-scroll-container::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
 
     /* Стили для кнопки назад в разделе работ */
     #works .back-button {
       position: fixed;
-      bottom: 30px;
+      bottom: 10px; /* Чуть ниже */
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
@@ -355,11 +376,17 @@
   </div>
 
   <div class="section" id="works">
-    <h1>🎵 Наши работы</h1>
-    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+    <!-- Закрепленный заголовок и описание -->
+    <div class="works-header">
+      <h1>🎵 Наши работы</h1>
+      <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+    </div>
     
-    <div class="works-container" id="worksContainer">
-      <!-- Карточки работ будут добавляться с помощью JavaScript -->
+    <!-- Прокручиваемая область с карточками -->
+    <div class="works-scroll-container">
+      <div class="works-container" id="worksContainer">
+        <!-- Карточки работ будут добавляться с помощью JavaScript -->
+      </div>
     </div>
     
     <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
