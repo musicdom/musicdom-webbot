@@ -7,7 +7,7 @@
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
-      min-height: 100vh;
+      height: 100vh;
       font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
@@ -16,7 +16,7 @@
       background-size: 200% 200%;
       animation: gradientMove 10s ease infinite;
       color: white;
-      overflow-x: hidden;
+      overflow: hidden;
     }
     @keyframes gradientMove {
       0% {background-position: 0% 50%;}
@@ -27,7 +27,7 @@
     .loader, .menu, .section {
       position: absolute;
       display: flex;
-      justify-content: flex-start; /* Изменено для бесконечного скролла */
+      justify-content: center;
       align-items: center;
       flex-direction: column;
       text-align: center;
@@ -35,17 +35,44 @@
       width: 100%;
       height: 100%;
       padding: 20px;
-      top: 0;
-      left: 0;
     }
     .loader img {
       width: 160px;
       height: auto;
       border-radius: 20px;
       box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      margin-bottom: 30px;
     }
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
+
+    /* Стили для загрузки */
+    .loading-text {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    .loading-bar {
+      width: 300px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loading-progress {
+      height: 100%;
+      width: 0%;
+      background: white;
+      border-radius: 3px;
+      animation: loading 2s ease-in-out forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
 
     /* Круглый логотип в меню - увеличен и поднят выше */
     .menu-logo {
@@ -54,7 +81,6 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 30px;
-      margin-top: -45px;
       box-shadow: 0 0 25px rgba(255,255,255,0.4);
       border: 3px solid rgba(255,255,255,0.2);
     }
@@ -115,34 +141,18 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ БЕСКОНЕЧНОГО РАЗДЕЛА РАБОТ */
-    #works {
-      position: fixed;
-      overflow-y: auto;
-      height: 100vh;
-      justify-content: flex-start;
-      padding-top: 40px;
-      padding-bottom: 100px; /* Место для кнопки */
-    }
-
-    .works-content {
-      width: 100%;
-      max-width: 1200px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100%;
-    }
-
+    /* Стили для карточек работ */
     .works-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
+      max-width: 1200px;
       width: 100%;
       margin: 20px 0;
       padding: 0 20px;
+      max-height: 75vh;
+      overflow-y: auto;
       align-items: start;
-      /* Убраны ограничения по высоте */
     }
 
     .work-card {
@@ -269,26 +279,26 @@
       opacity: 0.9;
     }
 
-    /* Улучшенная прокрутка для всего раздела работ */
-    #works::-webkit-scrollbar {
+    /* Улучшенная прокрутка для контейнера работ */
+    .works-container::-webkit-scrollbar {
       width: 8px;
     }
 
-    #works::-webkit-scrollbar-track {
+    .works-container::-webkit-scrollbar-track {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 4px;
     }
 
-    #works::-webkit-scrollbar-thumb {
+    .works-container::-webkit-scrollbar-thumb {
       background: rgba(255, 255, 255, 0.3);
       border-radius: 4px;
     }
 
-    #works::-webkit-scrollbar-thumb:hover {
+    .works-container::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
 
-    /* НОВЫЕ СТИЛИ: Позиционирование кнопки "Назад" в разделе Работы */
+    /* Стили для кнопки назад в разделе работ */
     #works .back-button {
       position: fixed;
       bottom: 30px;
@@ -299,19 +309,15 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
     }
-
-    /* Индикатор загрузки для бесконечного скролла */
-    .loading-indicator {
-      padding: 20px;
-      text-align: center;
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 0.9rem;
-    }
   </style>
 </head>
 <body>
   <div class="loader">
     <img src="logo.jpg" alt="Музыкальный Дом">
+    <div class="loading-text">Загрузка...</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
   </div>
 
   <div class="menu" id="menu">
@@ -349,18 +355,11 @@
   </div>
 
   <div class="section" id="works">
-    <div class="works-content">
-      <h1>🎵 Наши работы</h1>
-      <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
-      
-      <div class="works-container" id="worksContainer">
-        <!-- Карточки работ будут добавляться с помощью JavaScript -->
-      </div>
-      
-      <!-- Индикатор загрузки для бесконечного скролла -->
-      <div class="loading-indicator" id="loadingIndicator" style="display: none;">
-        Загрузка следующих работ...
-      </div>
+    <h1>🎵 Наши работы</h1>
+    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+    
+    <div class="works-container" id="worksContainer">
+      <!-- Карточки работ будут добавляться с помощью JavaScript -->
     </div>
     
     <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
@@ -404,8 +403,8 @@ songs.forEach(song => {
   song.full = `song/song${song.code}_full.mp3`;
 });
 
-// Базовые данные для карточек работ
-const baseWorks = [
+// Данные для карточек работ
+const works = [
   {
     code: "456",
     title: "Песня-Музыкальный Дом",
@@ -436,49 +435,24 @@ const baseWorks = [
   }
 ];
 
-// Переменные для бесконечного скролла
-let currentPage = 0;
-const worksPerPage = 4;
-let isLoading = false;
-
-// Функция для генерации дополнительных работ (для демонстрации бесконечного скролла)
-function generateMoreWorks(page) {
-  const moreWorks = [];
-  for (let i = 0; i < worksPerPage; i++) {
-    const baseWork = baseWorks[i % baseWorks.length];
-    moreWorks.push({
-      ...baseWork,
-      title: `${baseWork.title} (Часть ${page + 1}.${i + 1})`,
-      code: `${baseWork.code}-${page}-${i}`,
-      price: baseWork.price + (page * 10) + i
-    });
-  }
-  return moreWorks;
-}
-
 // Функция для отображения карточек работ с анимацией
-function renderWorks(append = false) {
+function renderWorks() {
   const container = document.getElementById('worksContainer');
-  if (!append) {
-    container.innerHTML = '';
-    currentPage = 0;
-  }
+  container.innerHTML = '';
   
-  const worksToRender = generateMoreWorks(currentPage);
-  
-  worksToRender.forEach((work, index) => {
+  works.forEach((work, index) => {
     const workCard = document.createElement('div');
     workCard.className = 'work-card';
     
     // Добавляем задержку для анимации появления
-    workCard.style.animationDelay = `${(append ? worksPerPage * currentPage + index : index) * 0.1}s`;
+    workCard.style.animationDelay = `${index * 0.1}s`;
     
     workCard.innerHTML = `
       <img src="${work.image}" alt="${work.title}" class="work-image">
       <h3 class="work-title">${work.title}</h3>
       <p class="work-description">${work.description}</p>
       <audio controls class="work-audio">
-        <source src="song/song${work.code.split('-')[0]}_demo.mp3" type="audio/mpeg">
+        <source src="song/song${work.code}_demo.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио элементы.
       </audio>
       <div class="work-price">Цена: ${work.price}₽</div>
@@ -487,30 +461,6 @@ function renderWorks(append = false) {
     
     container.appendChild(workCard);
   });
-  
-  currentPage++;
-  isLoading = false;
-  document.getElementById('loadingIndicator').style.display = 'none';
-}
-
-// Функция для загрузки дополнительных работ при прокрутке
-function loadMoreWorks() {
-  if (isLoading) return;
-  
-  const worksSection = document.getElementById('works');
-  const scrollPosition = worksSection.scrollTop + worksSection.clientHeight;
-  const scrollHeight = worksSection.scrollHeight;
-  
-  // Загружаем новые работы когда пользователь прокрутил до 80% высоты
-  if (scrollPosition >= scrollHeight * 0.8) {
-    isLoading = true;
-    document.getElementById('loadingIndicator').style.display = 'block';
-    
-    // Имитируем задержку загрузки
-    setTimeout(() => {
-      renderWorks(true);
-    }, 1000);
-  }
 }
 
 // Функция для покупки работы
@@ -564,24 +514,17 @@ function openSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   
-  // При открытии раздела работ рендерим карточки и настраиваем бесконечный скролл
+  // При открытии раздела работ рендерим карточки
   if (id === 'works') {
     setTimeout(() => {
-      renderWorks(false);
-      // Добавляем обработчик прокрутки для бесконечного скролла
-      document.getElementById('works').addEventListener('scroll', loadMoreWorks);
+      renderWorks();
     }, 100);
-  } else {
-    // Убираем обработчик прокрутки при переходе в другие разделы
-    document.getElementById('works').removeEventListener('scroll', loadMoreWorks);
   }
 }
 
 function goBack() {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById('menu').classList.add('active');
-  // Убираем обработчик прокрутки при возврате в меню
-  document.getElementById('works').removeEventListener('scroll', loadMoreWorks);
   history.pushState({}, "", window.location.pathname);
 }
 </script>
