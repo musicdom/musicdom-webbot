@@ -269,6 +269,34 @@
     .works-container::-webkit-scrollbar-thumb:hover {
       background: rgba(255, 255, 255, 0.5);
     }
+
+    /* НОВЫЕ СТИЛИ: Позиционирование кнопки "Назад" в разделе Работы */
+    #works {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #works .back-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    #works .works-content {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      padding-bottom: 100px; /* Добавляем отступ снизу для кнопки */
+    }
   </style>
 </head>
 <body>
@@ -311,14 +339,16 @@
   </div>
 
   <div class="section" id="works">
-    <h1>🎵 Наши работы</h1>
-    <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
-    
-    <div class="works-container" id="worksContainer">
-      <!-- Карточки работ будут добавляться с помощью JavaScript -->
+    <div class="works-content">
+      <h1>🎵 Наши работы</h1>
+      <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+      
+      <div class="works-container" id="worksContainer">
+        <!-- Карточки работ будут добавляться с помощью JavaScript -->
+      </div>
     </div>
     
-    <button onclick="goBack()">⬅ Назад в меню</button>
+    <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
   <div class="section" id="about">
