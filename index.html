@@ -401,7 +401,7 @@
           • 1 готовый вариант песни<br>
           Идеально, чтобы попробовать или создать короткую идею 💫
         </p>
-        <button onclick="orderPlan('Старт', 500)">💳 Заказать</button>
+        <button onclick="buyPlan('Старт', 500)">💳 Оплатить</button>
       </div>
 
       <div class="price-plan">
@@ -412,7 +412,7 @@
           • До 2 правок после утверждения<br>
           Баланс между простотой и глубиной — песня с настроением 🎶
         </p>
-        <button onclick="orderPlan('История', 900)">💳 Заказать</button>
+        <button onclick="buyPlan('История', 900)">💳 Оплатить</button>
       </div>
 
       <div class="price-plan">
@@ -423,7 +423,7 @@
           • До 5 правок после утверждения<br>
           Максимальная проработка — каждая строка и переход звучат идеально 🔥
         </p>
-        <button onclick="orderPlan('Премиум', 1500)">💳 Заказать</button>
+        <button onclick="buyPlan('Премиум', 1500)">💳 Оплатить</button>
       </div>
     </div>
 
@@ -454,101 +454,150 @@
   </div>
 
   <script>
-    const loader = document.querySelector('.loader');
-    const menu = document.getElementById('menu');
-    const worksContainer = document.getElementById('worksContainer');
-
-    // Данные для работ
-    const works = [
+    // URL для обработки оплаты
+    const workerUrl = "https://your-payment-worker.com"; // Замените на ваш URL
+    
+    // Данные песен
+    const songs = [
       {
-        id: 1,
+        code: "001",
         title: "Утренняя роса",
         description: "Нежная баллада о первых лучах солнца и новых начинаниях.",
         image: "🎵",
-        audio: "audio1.mp3",
+        demo: "audio/demo1.mp3",
+        full: "audio/full1.mp3",
         price: 500
       },
       {
-        id: 2,
+        code: "002",
         title: "Городские огни",
         description: "Энергичный трек о жизни в большом городе и ночных приключениях.",
         image: "🎶",
-        audio: "audio2.mp3",
+        demo: "audio/demo2.mp3",
+        full: "audio/full2.mp3",
         price: 700
       },
       {
-        id: 3,
+        code: "003",
         title: "Тихий вечер",
         description: "Спокойная акустическая композиция для релаксации и размышлений.",
         image: "🎼",
-        audio: "audio3.mp3",
+        demo: "audio/demo3.mp3",
+        full: "audio/full3.mp3",
         price: 600
       },
       {
-        id: 4,
+        code: "004",
         title: "Бесконечная дорога",
         description: "Мощный рок-трек о путешествиях и поиске себя.",
         image: "🎸",
-        audio: "audio4.mp3",
+        demo: "audio/demo4.mp3",
+        full: "audio/full4.mp3",
         price: 800
       },
       {
-        id: 5,
+        code: "005",
         title: "Летний дождь",
         description: "Романтическая мелодия с элементами джаза о внезапной встрече.",
         image: "🎹",
-        audio: "audio5.mp3",
+        demo: "audio/demo5.mp3",
+        full: "audio/full5.mp3",
         price: 750
       },
       {
-        id: 6,
+        code: "006",
         title: "Зимний сон",
         description: "Завораживающая инструментальная композиция в стиле эмбиент.",
         image: "❄️",
-        audio: "audio6.mp3",
+        demo: "audio/demo6.mp3",
+        full: "audio/full6.mp3",
         price: 650
       }
     ];
 
+    const loader = document.querySelector('.loader');
+    const menu = document.getElementById('menu');
+    const worksContainer = document.getElementById('worksContainer');
+
+    // Функция для покупки работы
+    function buyWork(code, price) {
+      window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
+    }
+
+    // Функция для покупки плана
+    function buyPlan(plan, price) {
+      window.open(`${workerUrl}/?plan=${plan}&price=${price}`, '_blank');
+    }
+
     // Функция для отображения работ
     function renderWorks() {
       worksContainer.innerHTML = '';
-      works.forEach(work => {
+      songs.forEach(song => {
         const workCard = document.createElement('div');
         workCard.className = 'work-card';
         workCard.innerHTML = `
-          <div class="work-image">${work.image}</div>
-          <div class="work-title">${work.title}</div>
-          <div class="work-description">${work.description}</div>
-          <div class="work-price">${work.price} ₽</div>
+          <div class="work-image">${song.image}</div>
+          <div class="work-title">${song.title}</div>
+          <div class="work-description">${song.description}</div>
+          <div class="work-price">${song.price} ₽</div>
           <audio class="work-audio" controls>
-            <source src="${work.audio}" type="audio/mpeg">
+            <source src="${song.demo}" type="audio/mpeg">
             Ваш браузер не поддерживает аудио элемент.
           </audio>
-          <button class="buy-button" onclick="orderWork(${work.id}, '${work.title}', ${work.price})">
-            💳 Купить полную версию
+          <button class="buy-button" onclick="buyWork('${song.code}', ${song.price})">
+            💳 Оплатить
           </button>
         `;
         worksContainer.appendChild(workCard);
       });
     }
 
-    // Функция для заказа работы
-    function orderWork(id, title, price) {
-      window.open(`https://t.me/musicdom?text=Хочу купить работу "${title}" (ID: ${id}) за ${price}₽`, '_blank');
+    // Функция для поиска песни
+    function findSong() {
+      const code = document.getElementById('songCode').value.trim();
+      const song = songs.find(s => s.code === code);
+      
+      if (!song) {
+        alert("Песня с таким кодом не найдена 😢");
+        return;
+      }
+
+      document.getElementById('songInfo').style.display = 'block';
+      document.getElementById('songTitle').textContent = song.title;
+      document.getElementById('demoPlayer').src = song.demo;
+
+      document.getElementById('buySection').innerHTML = `
+        <p>Цена: ${song.price}₽</p>
+        <button onclick="buyWork('${song.code}', ${song.price})">💳 Оплатить</button>
+      `;
     }
 
-    // Функция для заказа плана
-    function orderPlan(plan, price) {
-      window.open(`https://t.me/musicdom?text=Хочу заказать ${plan} за ${price}₽`, '_blank');
+    // Проверяем URL-параметр success (после оплаты)
+    const urlParams = new URLSearchParams(window.location.search);
+    const successCode = urlParams.get("success");
+    
+    if (successCode) {
+      const song = songs.find(s => s.code === successCode);
+      if (song) {
+        document.querySelector('.loader').style.opacity = '0';
+        document.getElementById('menu').classList.remove('active');
+        const findSection = document.getElementById('find');
+        findSection.classList.add('active');
+        document.getElementById('searchBox').style.display = 'none';
+        document.getElementById('successInfo').style.display = 'block';
+        document.getElementById('fullPlayer').src = song.full;
+        document.getElementById('downloadLink').href = song.full;
+      }
     }
 
     // Инициализация при загрузке
-    setTimeout(() => {
-      loader.style.display = 'none';
-      menu.classList.add('active');
-      renderWorks();
-    }, 2500);
+    window.onload = function() {
+      setTimeout(() => {
+        document.querySelector('.loader').style.opacity = '0';
+        document.getElementById('menu').classList.add('active');
+        renderWorks();
+      }, 2000);
+    };
 
     function openSection(sectionId) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
@@ -564,16 +613,7 @@
     function goBack() {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       menu.classList.add('active');
-    }
-
-    // Функция для поиска песни (заглушка)
-    function findSong() {
-      const code = document.getElementById('songCode').value;
-      if (code) {
-        document.getElementById('songInfo').style.display = 'block';
-        document.getElementById('songTitle').textContent = `Песня #${code}`;
-        document.getElementById('buySection').innerHTML = `<button onclick="orderPlan('Индивидуальная песня', 1000)">💳 Купить полную версию</button>`;
-      }
+      history.pushState({}, "", window.location.pathname);
     }
   </script>
 </body>
