@@ -197,6 +197,12 @@
       object-fit: cover;
       border-radius: 12px;
       margin-bottom: 12px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 3rem;
     }
 
     .work-title {
@@ -237,14 +243,18 @@
     .work-card .buy-button, .price-plan button {
       width: 100%;
       margin-top: 8px;
-      padding: 10px 20px;
+      padding: 12px 20px;
       font-size: 1rem;
       background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
       border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
     }
     
     .work-card .buy-button:hover, .price-plan button:hover {
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+      transform: scale(1.03);
     }
 
     .social-container {
@@ -385,7 +395,9 @@
       <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
     </div>
     
-    <div class="works-container" id="worksContainer"></div>
+    <div class="works-container" id="worksContainer">
+      <!-- Карточки работ будут добавлены через JavaScript -->
+    </div>
     
     <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
@@ -461,16 +473,109 @@
   <script>
     const loader = document.querySelector('.loader');
     const menu = document.getElementById('menu');
+    const worksContainer = document.getElementById('worksContainer');
 
+    // Данные для работ
+    const works = [
+      {
+        id: 1,
+        title: "Утренняя роса",
+        description: "Нежная баллада о первых лучах солнца и новых начинаниях.",
+        image: "🎵",
+        audio: "audio1.mp3",
+        price: 500
+      },
+      {
+        id: 2,
+        title: "Городские огни",
+        description: "Энергичный трек о жизни в большом городе и ночных приключениях.",
+        image: "🎶",
+        audio: "audio2.mp3",
+        price: 700
+      },
+      {
+        id: 3,
+        title: "Тихий вечер",
+        description: "Спокойная акустическая композиция для релаксации и размышлений.",
+        image: "🎼",
+        audio: "audio3.mp3",
+        price: 600
+      },
+      {
+        id: 4,
+        title: "Бесконечная дорога",
+        description: "Мощный рок-трек о путешествиях и поиске себя.",
+        image: "🎸",
+        audio: "audio4.mp3",
+        price: 800
+      },
+      {
+        id: 5,
+        title: "Летний дождь",
+        description: "Романтическая мелодия с элементами джаза о внезапной встрече.",
+        image: "🎹",
+        audio: "audio5.mp3",
+        price: 750
+      },
+      {
+        id: 6,
+        title: "Зимний сон",
+        description: "Завораживающая инструментальная композиция в стиле эмбиент.",
+        image: "❄️",
+        audio: "audio6.mp3",
+        price: 650
+      }
+    ];
+
+    // Функция для отображения работ
+    function renderWorks() {
+      worksContainer.innerHTML = '';
+      works.forEach(work => {
+        const workCard = document.createElement('div');
+        workCard.className = 'work-card';
+        workCard.innerHTML = `
+          <div class="work-image">${work.image}</div>
+          <div class="work-title">${work.title}</div>
+          <div class="work-description">${work.description}</div>
+          <div class="work-price">${work.price} ₽</div>
+          <audio class="work-audio" controls>
+            <source src="${work.audio}" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио элемент.
+          </audio>
+          <button class="buy-button" onclick="orderWork(${work.id}, '${work.title}', ${work.price})">
+            💳 Купить полную версию
+          </button>
+        `;
+        worksContainer.appendChild(workCard);
+      });
+    }
+
+    // Функция для заказа работы
+    function orderWork(id, title, price) {
+      window.open(`https://t.me/musicdom?text=Хочу купить работу "${title}" (ID: ${id}) за ${price}₽`, '_blank');
+    }
+
+    // Функция для заказа плана
+    function orderPlan(plan, price) {
+      window.open(`https://t.me/musicdom?text=Хочу заказать ${plan} за ${price}₽`, '_blank');
+    }
+
+    // Инициализация при загрузке
     setTimeout(() => {
       loader.style.display = 'none';
       menu.classList.add('active');
+      renderWorks();
     }, 2500);
 
     function openSection(sectionId) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       menu.classList.remove('active');
       document.getElementById(sectionId).classList.add('active');
+      
+      // При открытии раздела работ обновляем отображение
+      if (sectionId === 'works') {
+        setTimeout(renderWorks, 100);
+      }
     }
 
     function goBack() {
@@ -478,8 +583,14 @@
       menu.classList.add('active');
     }
 
-    function orderPlan(plan, price) {
-      window.open(`https://t.me/musicdom?text=Хочу заказать ${plan} за ${price}₽`, '_blank');
+    // Функция для поиска песни (заглушка)
+    function findSong() {
+      const code = document.getElementById('songCode').value;
+      if (code) {
+        document.getElementById('songInfo').style.display = 'block';
+        document.getElementById('songTitle').textContent = `Песня #${code}`;
+        document.getElementById('buySection').innerHTML = `<button onclick="orderPlan('Индивидуальная песня', 1000)">💳 Купить полную версию</button>`;
+      }
     }
   </script>
 </body>
