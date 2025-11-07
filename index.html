@@ -454,64 +454,26 @@
   </div>
 
   <script>
-    // URL для обработки оплаты
-    const workerUrl = "musicdom-payment.vercel.app"; // Замените на ваш URL
+    const workerUrl = "musicdom-payment.vercel.app/";
     
-    // Данные песен
     const songs = [
       {
         code: "456",
-        title: "Музыкальный Дом",
-        description: "Компазиция создана для интро проекта Музыкальный дом.",
+        title: "Песня Музыкальный Дом",
+        description: "Эксклюзивная композиция от Музыкального Дома",
         image: "🎵",
-        demo: "song/song456_demo.mp3",
-        full: "song/song456_full.mp3",
-        price: 500
+        demo: "songs/song456_demo.mp3",
+        full: "songs/song456_full.mp3",
+        price: 10
       },
       {
-        code: "002",
-        title: "Городские огни",
-        description: "Энергичный трек о жизни в большом городе и ночных приключениях.",
+        code: "123",
+        title: "Песня для Максима",
+        description: "Индивидуальная песня, созданная специально для Максима",
         image: "🎶",
-        demo: "audio/demo2.mp3",
-        full: "audio/full2.mp3",
-        price: 700
-      },
-      {
-        code: "003",
-        title: "Тихий вечер",
-        description: "Спокойная акустическая композиция для релаксации и размышлений.",
-        image: "🎼",
-        demo: "audio/demo3.mp3",
-        full: "audio/full3.mp3",
-        price: 600
-      },
-      {
-        code: "004",
-        title: "Бесконечная дорога",
-        description: "Мощный рок-трек о путешествиях и поиске себя.",
-        image: "🎸",
-        demo: "audio/demo4.mp3",
-        full: "audio/full4.mp3",
-        price: 800
-      },
-      {
-        code: "005",
-        title: "Летний дождь",
-        description: "Романтическая мелодия с элементами джаза о внезапной встрече.",
-        image: "🎹",
-        demo: "audio/demo5.mp3",
-        full: "audio/full5.mp3",
-        price: 750
-      },
-      {
-        code: "006",
-        title: "Зимний сон",
-        description: "Завораживающая инструментальная композиция в стиле эмбиент.",
-        image: "❄️",
-        demo: "audio/demo6.mp3",
-        full: "audio/full6.mp3",
-        price: 650
+        demo: "songs/song123_demo.mp3",
+        full: "songs/song123_full.mp3",
+        price: 200
       }
     ];
 
@@ -599,20 +561,20 @@
       }, 2000);
     };
 
-    function openSection(sectionId) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      menu.classList.remove('active');
-      document.getElementById(sectionId).classList.add('active');
+    function openSection(id) {
+      document.getElementById('menu').classList.remove('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
       
       // При открытии раздела работ обновляем отображение
-      if (sectionId === 'works') {
+      if (id === 'works') {
         setTimeout(renderWorks, 100);
       }
     }
 
     function goBack() {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      menu.classList.add('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('menu').classList.add('active');
       history.pushState({}, "", window.location.pathname);
     }
   </script>
