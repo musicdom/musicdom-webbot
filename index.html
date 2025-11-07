@@ -83,33 +83,54 @@
       border: 3px solid rgba(255,255,255,0.2);
     }
 
-    button {
+    /* Одинаковые стили для всех кнопок */
+    button, .fixed-back-button, .buy-button, .price-plan button, #buySection button {
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: white;
-      font-size: 1.2rem;
-      padding: 15px 40px;
+      font-size: 1rem;
+      padding: 14px 35px;
       margin: 10px;
       border-radius: 40px;
       backdrop-filter: blur(15px);
       box-shadow: 0 0 20px rgba(255,255,255,0.15);
       cursor: pointer;
       transition: all 0.3s ease;
+      min-width: 200px;
+      max-width: 300px;
+      width: auto;
+      display: inline-block;
+      text-align: center;
     }
-    button:hover {
+
+    button:hover, .fixed-back-button:hover, .buy-button:hover, .price-plan button:hover, #buySection button:hover {
       background: rgba(255, 255, 255, 0.25);
       box-shadow: 0 0 25px rgba(255,255,255,0.25);
       transform: scale(1.03);
     }
 
-    #buySection button {
+    /* Специфичные стили для некоторых кнопок */
+    #buySection button, .buy-button, .price-plan button {
       background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
       border: 1px solid rgba(255,255,255,0.4);
       box-shadow: 0 0 30px rgba(255,255,255,0.2);
     }
-    #buySection button:hover {
+
+    #buySection button:hover, .buy-button:hover, .price-plan button:hover {
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
-      transform: scale(1.04);
+    }
+
+    .fixed-back-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      white-space: nowrap;
+    }
+    
+    .fixed-back-button:hover {
+      transform: translateX(-50%) scale(1.03);
     }
 
     h1 {margin-bottom: 15px; color: white;}
@@ -240,23 +261,6 @@
       color: #ffd700;
     }
 
-    .work-card .buy-button, .price-plan button {
-      width: 100%;
-      margin-top: 8px;
-      padding: 12px 20px;
-      font-size: 1rem;
-      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 40px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
-    }
-    
-    .work-card .buy-button:hover, .price-plan button:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
-      transform: scale(1.03);
-    }
-
     .social-container {
       display: flex;
       justify-content: center;
@@ -297,31 +301,6 @@
     .social-name {
       font-size: 0.8rem;
       opacity: 0.9;
-    }
-
-    .fixed-back-button {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255,255,255,0.3);
-      backdrop-filter: blur(15px);
-      padding: 12px 50px;
-      font-size: 1rem;
-      border-radius: 40px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
-      width: auto;
-      min-width: 200px;
-      max-width: 300px;
-      white-space: nowrap;
-    }
-    
-    .fixed-back-button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 25px rgba(255,255,255,0.25);
-      transform: translateX(-50%) scale(1.03);
     }
 
     /* Стили для прайса */
@@ -448,7 +427,7 @@
       </div>
     </div>
 
-    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в мену</button>
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
   <!-- Раздел о нас -->
@@ -461,7 +440,7 @@
         <div class="social-icon">📘</div>
         <div class="social-name">VK</div>
       </a>
-      <a href="https://t.me/musicdom" class="social-card" target="_blank">
+      <a href="https://t.me/musicdom" class="social-card" target="_blank>
         <div class="social-icon">📱</div>
         <div class="social-name">Telegram</div>
       </a>
