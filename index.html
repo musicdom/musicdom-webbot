@@ -137,7 +137,7 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    #works {
+    #works, #price {
       justify-content: flex-start;
       padding-top: 0;
       padding-bottom: 100px;
@@ -156,7 +156,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .works-container {
+    .works-container, .price-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
@@ -166,10 +166,10 @@
       align-items: start;
     }
 
-    .work-card {
+    .work-card, .price-plan {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
-      padding: 15px;
+      padding: 20px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
@@ -186,7 +186,7 @@
       }
     }
 
-    .work-card:hover {
+    .work-card:hover, .price-plan:hover {
       transform: translateY(-5px);
       box-shadow: 0 5px 25px rgba(255,255,255,0.2);
     }
@@ -234,7 +234,7 @@
       color: #ffd700;
     }
 
-    .work-card .buy-button {
+    .work-card .buy-button, .price-plan button {
       width: 100%;
       margin-top: 8px;
       padding: 10px 20px;
@@ -243,7 +243,7 @@
       border: 1px solid rgba(255,255,255,0.4);
     }
     
-    .work-card .buy-button:hover {
+    .work-card .buy-button:hover, .price-plan button:hover {
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
     }
 
@@ -289,7 +289,7 @@
       opacity: 0.9;
     }
 
-    #works .back-button {
+    .fixed-back-button {
       position: fixed;
       bottom: 40px;
       left: 50%;
@@ -304,7 +304,7 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.15);
     }
     
-    #works .back-button:hover {
+    .fixed-back-button:hover {
       background: rgba(255, 255, 255, 0.25);
       box-shadow: 0 0 25px rgba(255,255,255,0.25);
       transform: translateX(-50%) scale(1.03);
@@ -312,39 +312,24 @@
 
     /* Стили для прайса */
     .price-plan {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 20px;
-      margin: 15px 20px;
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255,255,255,0.2);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
       text-align: left;
       color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .price-plan h2 {
-      margin-bottom: 10px;
+      margin-bottom: 15px;
       color: white;
+      font-size: 1.3rem;
     }
 
     .price-plan p {
       font-size: 0.95rem;
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       line-height: 1.4;
-    }
-
-    .price-plan button {
-      width: 100%;
-      padding: 12px 0;
-      font-size: 1rem;
-      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-      border: 1px solid rgba(255,255,255,0.4);
-      border-radius: 40px;
-    }
-
-    .price-plan button:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+      flex-grow: 1;
     }
 
   </style>
@@ -402,47 +387,52 @@
     
     <div class="works-container" id="worksContainer"></div>
     
-    <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
   <!-- Раздел прайс -->
   <div class="section" id="price">
-    <h1>🎵 ПРАЙС | МУЗЫКАЛЬНЫЙ ДОМ 🎵</h1>
+    <div class="works-header">
+      <h1>💰 Прайс</h1>
+      <p>Выберите подходящий план для вашей песни</p>
+    </div>
+    
+    <div class="price-container">
+      <div class="price-plan">
+        <h2>🌱 План «Старт» — 500 ₽</h2>
+        <p>
+          • Неполная песня: куплет + припев<br>
+          • 1 текст без изменений<br>
+          • 1 готовый вариант песни<br>
+          Идеально, чтобы попробовать или создать короткую идею 💫
+        </p>
+        <button onclick="orderPlan('Старт', 500)">💳 Заказать</button>
+      </div>
 
-    <div class="price-plan">
-      <h2>🌱 План «Старт» — 500 ₽</h2>
-      <p>
-        • Неполная песня: куплет + припев<br>
-        • 1 текст без изменений<br>
-        • 1 готовый вариант песни<br>
-        Идеально, чтобы попробовать или создать короткую идею 💫
-      </p>
-      <button onclick="orderPlan('Старт', 500)">💳 Заказать</button>
+      <div class="price-plan">
+        <h2>🌸 План «История» — от 900 ₽</h2>
+        <p>
+          • Средняя версия: интро, куплет 1, припев, куплет 2, финал<br>
+          • До 3 текстов песни<br>
+          • До 2 правок после утверждения<br>
+          Баланс между простотой и глубиной — песня с настроением 🎶
+        </p>
+        <button onclick="orderPlan('История', 900)">💳 Заказать</button>
+      </div>
+
+      <div class="price-plan">
+        <h2>🌟 План «Премиум» — от 1500 ₽</h2>
+        <p>
+          • Полная версия: интро, куплет 1, припев, куплет 2, бридж, припев, финал<br>
+          • До 5 вариантов текста<br>
+          • До 5 правок после утверждения<br>
+          Максимальная проработка — каждая строка и переход звучат идеально 🔥
+        </p>
+        <button onclick="orderPlan('Премиум', 1500)">💳 Заказать</button>
+      </div>
     </div>
 
-    <div class="price-plan">
-      <h2>🌸 План «История» — от 900 ₽</h2>
-      <p>
-        • Средняя версия: интро, куплет 1, припев, куплет 2, финал<br>
-        • До 3 текстов песни<br>
-        • До 2 правок после утверждения<br>
-        Баланс между простотой и глубиной — песня с настроением 🎶
-      </p>
-      <button onclick="orderPlan('История', 900)">💳 Заказать</button>
-    </div>
-
-    <div class="price-plan">
-      <h2>🌟 План «Премиум» — от 1500 ₽</h2>
-      <p>
-        • Полная версия: интро, куплет 1, припев, куплет 2, бридж, припев, финал<br>
-        • До 5 вариантов текста<br>
-        • До 5 правок после утверждения<br>
-        Максимальная проработка — каждая строка и переход звучат идеально 🔥
-      </p>
-      <button onclick="orderPlan('Премиум', 1500)">💳 Заказать</button>
-    </div>
-
-    <button class="back-button" onclick="goBack()">⬅ Назад в меню</button>
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
   <!-- Раздел о нас -->
@@ -494,4 +484,3 @@
   </script>
 </body>
 </html>
-
