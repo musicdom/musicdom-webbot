@@ -453,7 +453,7 @@
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <script>
+<script>
     const workerUrl = "https://musicdom-payment.vercel.app/";
     
     const songs = [
@@ -486,9 +486,9 @@
       window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
     }
 
-    // Функция для покупки плана
+    // Функция для покупки плана - ИСПРАВЛЕННАЯ ВЕРСИЯ
     function buyPlan(plan, price) {
-      window.open(`${workerUrl}/?plan=${plan}&price=${price}`, '_blank');
+      window.open(`${workerUrl}/?plan=${encodeURIComponent(plan)}&planPrice=${price}`, '_blank');
     }
 
     // Функция для отображения работ
@@ -497,8 +497,14 @@
       songs.forEach(song => {
         const workCard = document.createElement('div');
         workCard.className = 'work-card';
+        
+        // Проверяем, является ли image эмодзи или путем к файлу
+        const imageContent = song.image.includes('.') 
+          ? `<img src="${song.image}" alt="${song.title}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`
+          : song.image;
+          
         workCard.innerHTML = `
-          <div class="work-image">${song.image}</div>
+          <div class="work-image">${imageContent}</div>
           <div class="work-title">${song.title}</div>
           <div class="work-description">${song.description}</div>
           <div class="work-price">${song.price} ₽</div>
@@ -577,6 +583,6 @@
       document.getElementById('menu').classList.add('active');
       history.pushState({}, "", window.location.pathname);
     }
-  </script>
+</script>
 </body>
 </html>
