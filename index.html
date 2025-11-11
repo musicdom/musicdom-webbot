@@ -735,9 +735,10 @@
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
     let wasBackgroundMusicPlaying = false;
+    let autoPlayFailed = false;
 
     // Функция для показа уведомления о музыке
-    function showMusicNotification(message) {
+    function showMusicNotification(message, isError = false) {
       // Удаляем предыдущее уведомление, если оно есть
       const existingNotification = document.querySelector('.music-notification');
       if (existingNotification) {
@@ -747,6 +748,10 @@
       // Создаем новое уведомление
       const notification = document.createElement('div');
       notification.className = 'music-notification';
+      if (isError) {
+        notification.style.background = 'rgba(239, 68, 68, 0.2)';
+        notification.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+      }
       notification.textContent = message;
       document.body.appendChild(notification);
       
@@ -770,10 +775,13 @@
         backgroundMusic.play().then(() => {
           musicToggle.textContent = '🎵';
           isBackgroundMusicPlaying = true;
+          autoPlayFailed = false;
           showMusicNotification('Музыка включена 🎵');
         }).catch(error => {
           console.log('Ошибка воспроизведения:', error);
-          showMusicNotification('Ошибка воспроизведения 😢');
+          musicToggle.textContent = '🔇';
+          isBackgroundMusicPlaying = false;
+          showMusicNotification('Не удалось включить музыку. Попробуйте еще раз или разрешите автовоспроизведение в браузере 🔧', true);
         });
       } else {
         backgroundMusic.pause();
@@ -795,11 +803,18 @@
       backgroundMusic.play().then(() => {
         musicToggle.textContent = '🎵';
         isBackgroundMusicPlaying = true;
+        autoPlayFailed = false;
       }).catch(error => {
         // Автовоспроизведение заблокировано браузером
         console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
         musicToggle.textContent = '🔇';
         isBackgroundMusicPlaying = false;
+        autoPlayFailed = true;
+        
+        // Показываем уведомление о том, что нужно нажать на кнопку музыки
+        setTimeout(() => {
+          showMusicNotification('Нажмите на кнопку музыки 🎵 чтобы включить фоновую музыку', true);
+        }, 1000);
       });
     }
 
