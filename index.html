@@ -348,16 +348,41 @@
       line-height: 1.4;
       flex-grow: 1;
     }
+    
+    /* Стиль для уведомления о музыке */
+    .music-notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: white;
+      font-size: 0.9rem;
+      z-index: 999;
+      animation: fadeInOut 4s forwards;
+      max-width: 200px;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-10px); }
+      20% { opacity: 1; transform: translateY(0); }
+      80% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
   </style>
 </head>
 <body>
-  <!-- Элемент аудио с предустановленной громкостью -->
-  <audio id="backgroundMusic" loop volume="0.6">
+  <!-- Элемент аудио для фоновой музыки -->
+  <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
   </audio>
 
-  <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🎵</div>
+  <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🔇</div>
 
   <div class="loader">
     <img src="logo.jpg" alt="Музыкальный Дом">
@@ -511,26 +536,58 @@
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
     let wasBackgroundMusicPlaying = false;
+    let musicInitialized = false;
 
     // Функция для инициализации музыки
     function initializeMusic() {
+      if (musicInitialized) return;
+      
       const backgroundMusic = document.getElementById('backgroundMusic');
       const musicToggle = document.getElementById('musicToggle');
       
       // Устанавливаем громкость на 60% (0.6)
-      backgroundMusic.volume = 0.3;
+      backgroundMusic.volume = 0.6;
       
       // Пытаемся включить музыку автоматически
-      backgroundMusic.play().then(() => {
-        musicToggle.textContent = '🎵';
-        isBackgroundMusicPlaying = true;
-      }).catch(error => {
-        console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
-        musicToggle.textContent = '🔇';
-        isBackgroundMusicPlaying = false;
-      });
+      const playPromise = backgroundMusic.play();
       
-      return backgroundMusic;
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          // Музыка успешно запущена
+          musicToggle.textContent = '🎵';
+          isBackgroundMusicPlaying = true;
+          musicInitialized = true;
+          showMusicNotification('Музыка включена 🎵');
+        }).catch(error => {
+          // Автовоспроизведение заблокировано
+          console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
+          musicToggle.textContent = '🔇';
+          isBackgroundMusicPlaying = false;
+          showMusicNotification('Нажмите для включения музыки 🎵');
+        });
+      }
+    }
+
+    // Функция для показа уведомления о музыке
+    function showMusicNotification(message) {
+      // Удаляем предыдущее уведомление, если оно есть
+      const existingNotification = document.querySelector('.music-notification');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+      
+      // Создаем новое уведомление
+      const notification = document.createElement('div');
+      notification.className = 'music-notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Автоматически удаляем уведомление через 4 секунды
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 4000);
     }
 
     // Функция переключения музыки
@@ -538,14 +595,22 @@
       const backgroundMusic = document.getElementById('backgroundMusic');
       const musicToggle = document.getElementById('musicToggle');
       
+      // Инициализируем музыку при первом нажатии, если еще не инициализирована
+      if (!musicInitialized) {
+        initializeMusic();
+        return;
+      }
+      
       if (backgroundMusic.paused) {
         backgroundMusic.play();
         musicToggle.textContent = '🎵';
         isBackgroundMusicPlaying = true;
+        showMusicNotification('Музыка включена 🎵');
       } else {
         backgroundMusic.pause();
         musicToggle.textContent = '🔇';
         isBackgroundMusicPlaying = false;
+        showMusicNotification('Музыка выключена 🔇');
       }
     }
 
@@ -698,7 +763,7 @@
         document.getElementById('menu').classList.add('active');
         renderWorks();
         
-        // Инициализируем музыку с правильной громкостью
+        // Пытаемся автоматически включить музыку после загрузки
         initializeMusic();
         
         // Настраиваем контроль аудио для всех существующих элементов
