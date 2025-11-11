@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Музыкальный Дом</title>
   <style>
-    /* === ОСНОВНЫЕ СТИЛИ === */
+    /* Все стили остаются без изменений */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       height: 100vh;
@@ -25,7 +25,6 @@
       100% {background-position: 0% 50%;}
     }
 
-    /* === СТИЛИ ЗАГРУЗКИ, МЕНЮ И РАЗДЕЛОВ === */
     .loader, .menu, .section {
       position: absolute;
       display: flex;
@@ -85,7 +84,6 @@
       border: 3px solid rgba(255,255,255,0.2);
     }
 
-    /* === СТИЛИ КНОПОК === */
     button {
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
@@ -111,7 +109,6 @@
       transform: scale(1.03);
     }
 
-    /* Специфичные стили для кнопок оплаты */
     #buySection button, .buy-button, .price-plan button {
       background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
       border: 1px solid rgba(255,255,255,0.4);
@@ -122,7 +119,6 @@
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
     }
 
-    /* === КНОПКА УПРАВЛЕНИЯ МУЗЫКОЙ === */
     .music-toggle {
       position: fixed;
       top: 20px;
@@ -149,7 +145,6 @@
       transform: scale(1.1);
     }
 
-    /* === СТИЛИ ДЛЯ ОСТАЛЬНЫХ ЭЛЕМЕНТОВ === */
     .fixed-back-button {
       position: fixed;
       bottom: 30px;
@@ -188,7 +183,6 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    /* === СТИЛИ РАЗДЕЛОВ РАБОТ И ПРАЙСА === */
     #works, #price {
       justify-content: flex-start;
       padding-top: 0;
@@ -334,7 +328,6 @@
       opacity: 0.9;
     }
 
-    /* Стили для прайса */
     .price-plan {
       text-align: left;
       color: white;
@@ -355,20 +348,17 @@
       line-height: 1.4;
       flex-grow: 1;
     }
-
   </style>
 </head>
 <body>
-  <!-- === ЭЛЕМЕНТ АУДИО ДЛЯ ФОНОВОЙ МУЗЫКИ === -->
-  <audio id="backgroundMusic" loop>
+  <!-- Элемент аудио с предустановленной громкостью -->
+  <audio id="backgroundMusic" loop volume="0.6">
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
   </audio>
 
-  <!-- === КНОПКА УПРАВЛЕНИЯ МУЗЫКОЙ === -->
   <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🎵</div>
 
-  <!-- === ЭКРАН ЗАГРУЗКИ === -->
   <div class="loader">
     <img src="logo.jpg" alt="Музыкальный Дом">
     <div class="loading-text">Загрузка...</div>
@@ -377,7 +367,6 @@
     </div>
   </div>
 
-  <!-- === ГЛАВНОЕ МЕНЮ === -->
   <div class="menu" id="menu">
     <img src="logo.jpg" alt="Музыкальный Дом" class="menu-logo">
     
@@ -387,7 +376,7 @@
     <button onclick="openSection('about')">💬 О нас</button>
   </div>
 
-  <!-- === РАЗДЕЛ "НАЙТИ СВОЮ ПЕСНЮ" === -->
+  <!-- Раздел найти песню -->
   <div class="section" id="find">
     <h1>🔍 Найти свою песню</h1>
     <div id="searchBox">
@@ -413,7 +402,7 @@
     <button onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <!-- === РАЗДЕЛ "РАБОТЫ" === -->
+  <!-- Раздел работы -->
   <div class="section" id="works">
     <div class="works-header">
       <h1>🎵 Наши работы</h1>
@@ -427,7 +416,7 @@
     <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <!-- === РАЗДЕЛ "ПРАЙС" === -->
+  <!-- Раздел прайс -->
   <div class="section" id="price">
     <div class="works-header">
       <h1>💰 Прайс</h1>
@@ -472,7 +461,7 @@
     <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <!-- === РАЗДЕЛ "О НАС" === -->
+  <!-- Раздел о нас -->
   <div class="section" id="about">
     <h1>💬 О нас</h1>
     <p>«Музыкальный Дом» — команда, создающая индивидуальные песни на заказ. Мы превращаем чувства, истории и эмоции в музыку.</p>
@@ -496,10 +485,8 @@
   </div>
 
 <script>
-    // === КОНСТАНТЫ И ПЕРЕМЕННЫЕ ===
     const workerUrl = "https://musicdom-payment.vercel.app/";
     
-    // Массив с данными песен
     const songs = [
       {
         code: "456",
@@ -525,8 +512,27 @@
     let isBackgroundMusicPlaying = false;
     let wasBackgroundMusicPlaying = false;
 
-    // === ФУНКЦИИ ДЛЯ МУЗЫКИ ===
-    
+    // Функция для инициализации музыки
+    function initializeMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 60% (0.6)
+      backgroundMusic.volume = 0.6;
+      
+      // Пытаемся включить музыку автоматически
+      backgroundMusic.play().then(() => {
+        musicToggle.textContent = '🎵';
+        isBackgroundMusicPlaying = true;
+      }).catch(error => {
+        console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
+        musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+      });
+      
+      return backgroundMusic;
+    }
+
     // Функция переключения музыки
     function toggleMusic() {
       const backgroundMusic = document.getElementById('backgroundMusic');
@@ -543,31 +549,10 @@
       }
     }
 
-    // Функция для автоматического включения музыки при загрузке
-    function autoPlayMusic() {
-      const backgroundMusic = document.getElementById('backgroundMusic');
-      const musicToggle = document.getElementById('musicToggle');
-      
-      // Устанавливаем громкость на 60% перед воспроизведением
-      backgroundMusic.volume = 0.1;
-      
-      // Пытаемся включить музыку автоматически
-      backgroundMusic.play().then(() => {
-        musicToggle.textContent = '🎵';
-        isBackgroundMusicPlaying = true;
-      }).catch(error => {
-        // Если автоматическое воспроизведение заблокировано браузером
-        console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
-        musicToggle.textContent = '🔇';
-        isBackgroundMusicPlaying = false;
-      });
-    }
-
     // Функция для управления фоновой музыкой при воспроизведении других аудио
     function setupAudioControl(audioElement) {
       const backgroundMusic = document.getElementById('backgroundMusic');
       
-      // Сохраняем состояние фоновой музыки при начале воспроизведения
       audioElement.addEventListener('play', function() {
         if (isBackgroundMusicPlaying) {
           backgroundMusic.pause();
@@ -575,7 +560,6 @@
         }
       });
 
-      // Восстанавливаем фоновую музыку после завершения воспроизведения
       audioElement.addEventListener('pause', function() {
         if (wasBackgroundMusicPlaying && !this.ended) {
           backgroundMusic.play();
@@ -583,7 +567,6 @@
         }
       });
 
-      // Восстанавливаем фоновую музыку после окончания трека
       audioElement.addEventListener('ended', function() {
         if (wasBackgroundMusicPlaying) {
           backgroundMusic.play();
@@ -594,16 +577,13 @@
 
     // Функция для настройки контроля аудио на всех элементах
     function setupAllAudioControls() {
-      // Находим все аудио элементы на странице, кроме фонового
       const allAudioElements = document.querySelectorAll('audio:not(#backgroundMusic)');
       allAudioElements.forEach(audio => {
         setupAudioControl(audio);
       });
     }
 
-    // === ФУНКЦИИ ДЛЯ РАБОТЫ С ПЛАТЕЖАМИ ===
-    
-    // Функция для покупки работы (песни)
+    // Функция для покупки работы
     function buyWork(code, price) {
       window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
     }
@@ -613,8 +593,6 @@
       window.open(`${workerUrl}/?plan=${encodeURIComponent(plan)}&planPrice=${price}`, '_blank');
     }
 
-    // === ФУНКЦИИ ДЛЯ ОТОБРАЖЕНИЯ КОНТЕНТА ===
-    
     // Функция для отображения работ
     function renderWorks() {
       const worksContainer = document.getElementById('worksContainer');
@@ -624,7 +602,6 @@
         const workCard = document.createElement('div');
         workCard.className = 'work-card';
         
-        // Проверяем, является ли image эмодзи или путем к файлу
         const imageContent = song.image.includes('.') 
           ? `<img src="${song.image}" alt="${song.title}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`
           : song.image;
@@ -645,7 +622,6 @@
         worksContainer.appendChild(workCard);
       });
 
-      // Настраиваем контроль аудио для вновь созданных элементов
       setTimeout(setupAllAudioControls, 100);
     }
 
@@ -668,22 +644,18 @@
         <button onclick="buyWork('${song.code}', ${song.price})">💳 Оплатить</button>
       `;
 
-      // Настраиваем контроль аудио для демо-плеера
       setTimeout(() => {
         const demoPlayer = document.getElementById('demoPlayer');
         setupAudioControl(demoPlayer);
       }, 100);
     }
 
-    // === ФУНКЦИИ ДЛЯ НАВИГАЦИИ ===
-    
     // Функция открытия раздела
     function openSection(id) {
       document.getElementById('menu').classList.remove('active');
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       
-      // При открытии раздела работ обновляем отображение
       if (id === 'works') {
         setTimeout(renderWorks, 100);
       }
@@ -696,8 +668,6 @@
       history.pushState({}, "", window.location.pathname);
     }
 
-    // === ОБРАБОТЧИКИ СОБЫТИЙ И ИНИЦИАЛИЗАЦИЯ ===
-    
     // Проверяем URL-параметр success (после оплаты)
     const urlParams = new URLSearchParams(window.location.search);
     const successCode = urlParams.get("success");
@@ -714,7 +684,6 @@
         document.getElementById('fullPlayer').src = song.full;
         document.getElementById('downloadLink').href = song.full;
 
-        // Настраиваем контроль аудио для полного плеера
         setTimeout(() => {
           const fullPlayer = document.getElementById('fullPlayer');
           setupAudioControl(fullPlayer);
@@ -729,8 +698,8 @@
         document.getElementById('menu').classList.add('active');
         renderWorks();
         
-        // Автоматически включаем музыку после загрузки
-        autoPlayMusic();
+        // Инициализируем музыку с правильной громкостью
+        initializeMusic();
         
         // Настраиваем контроль аудио для всех существующих элементов
         setupAllAudioControls();
