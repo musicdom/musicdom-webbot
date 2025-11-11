@@ -1,46 +1,82 @@
 // Глобальные переменные
 let currentSection = null;
+let sectionsCache = {}; // Кэш для загруженных секций
 
 // Функция открытия раздела
 function openSection(id) {
     if (currentSection === id) return;
     
+    // Скрываем меню
     document.getElementById('menu').classList.remove('active');
     
-    // Скрываем текущую секцию
-    if (currentSection) {
-        const currentSectionEl = document.getElementById(currentSection);
-        if (currentSectionEl) {
-            currentSectionEl.classList.remove('active');
-        }
+    // Показываем лоадер на время загрузки
+    document.getElementById('current-section').innerHTML = '<div class="loading-text">Загрузка...</div>';
+    
+    // Загружаем секцию
+    loadSection(id);
+}
+
+// Функция загрузки секции
+function loadSection(id) {
+    // Если секция уже в кэше - используем её
+    if (sectionsCache[id]) {
+        showSection(id, sectionsCache[id]);
+        return;
     }
     
-    // Показываем новую секцию
-    const section = document.getElementById(id);
-    if (section) {
-        section.classList.add('active');
-        currentSection = id;
-        
-        // Специальная инициализация для некоторых секций
-        if (id === 'works') {
-            setTimeout(renderWorks, 100);
-        }
+    // Загружаем секцию из файла
+    fetch(`sections/${id}.html`)
+        .then(response => {
+            if (!response.ok) throw new Error('Секция не найдена');
+            return response.text();
+        })
+        .then(html => {
+            // Сохраняем в кэш
+            sectionsCache[id] = html;
+            showSection(id, html);
+        })
+        .catch(error => {
+            console.error(`Ошибка загрузки секции ${id}:`, error);
+            document.getElementById('current-section').innerHTML = `
+                <div class="section">
+                    <h1>Ошибка</h1>
+                    <p>Не удалось загрузить раздел</p>
+                    <button onclick="goBack()">⬅ Назад в меню</button>
+                </div>
+            `;
+        });
+}
+
+// Функция показа секции
+function showSection(id, html) {
+    const container = document.getElementById('current-section');
+    container.innerHTML = html;
+    
+    // Добавляем класс section к загруженному контенту
+    const sectionElement = container.querySelector('.section') || container.children[0];
+    if (sectionElement) {
+        sectionElement.classList.add('section', 'active');
     }
+    
+    currentSection = id;
+    
+    // Специальная инициализация для некоторых секций
+    setTimeout(() => {
+        if (id === 'works') {
+            renderWorks();
+        }
+        setupAllAudioControls();
+    }, 100);
 }
 
 // Функция возврата в меню
 function goBack() {
-    if (currentSection) {
-        const currentSectionEl = document.getElementById(currentSection);
-        if (currentSectionEl) {
-            currentSectionEl.classList.remove('active');
-        }
-        currentSection = null;
-    }
+    document.getElementById('current-section').innerHTML = '';
     document.getElementById('menu').classList.add('active');
+    currentSection = null;
 }
 
-// Функция для поиска песни
+// Остальные функции остаются без изменений...
 function findSong() {
     const code = document.getElementById('songCode').value.trim();
     const song = songs.find(s => s.code === code);
@@ -65,17 +101,14 @@ function findSong() {
     }, 100);
 }
 
-// Функция для покупки работы
 function buyWork(code, price) {
     window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
 }
 
-// Функция для покупки плана
 function buyPlan(plan, price) {
     window.open(`${workerUrl}/?plan=${encodeURIComponent(plan)}&planPrice=${price}`, '_blank');
 }
 
-// Функция для отображения работ
 function renderWorks() {
     const worksContainer = document.getElementById('worksContainer');
     if (!worksContainer) return;
@@ -109,38 +142,14 @@ function renderWorks() {
     setTimeout(setupAllAudioControls, 100);
 }
 
-// Загрузка секций
-function loadSections() {
-    const sections = ['find', 'works', 'price', 'about'];
-    const container = document.getElementById('sections-container');
-    
-    sections.forEach(section => {
-        fetch(`sections/${section}.html`)
-            .then(response => response.text())
-            .then(html => {
-                container.innerHTML += html;
-            })
-            .catch(error => {
-                console.error(`Ошибка загрузки секции ${section}:`, error);
-            });
-    });
-}
-
 // Инициализация при загрузке
 window.onload = function() {
-    // Сначала загружаем секции
-    loadSections();
-    
-    // Затем инициализируем приложение
     setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
         
-        // Пытаемся автоматически включить музыку после загрузки
         autoPlayMusic();
-        
-        // Настраиваем контроль аудио для всех существующих элементов
-        setTimeout(setupAllAudioControls, 500);
+        setupAllAudioControls();
         
         // Проверяем URL-параметр success (после оплаты)
         const urlParams = new URLSearchParams(window.location.search);
@@ -152,22 +161,18 @@ window.onload = function() {
                 document.querySelector('.loader').style.opacity = '0';
                 document.getElementById('menu').classList.remove('active');
                 
-                // Ждем немного чтобы секция успела загрузиться
+                // Загружаем секцию find для показа успешной оплаты
+                loadSection('find');
+                
+                // Ждем загрузки и показываем успешное сообщение
                 setTimeout(() => {
-                    const findSection = document.getElementById('find');
-                    if (findSection) {
-                        findSection.classList.add('active');
-                        currentSection = 'find';
-                        document.getElementById('searchBox').style.display = 'none';
-                        document.getElementById('successInfo').style.display = 'block';
-                        document.getElementById('fullPlayer').src = song.full;
-                        document.getElementById('downloadLink').href = song.full;
+                    document.getElementById('searchBox').style.display = 'none';
+                    document.getElementById('successInfo').style.display = 'block';
+                    document.getElementById('fullPlayer').src = song.full;
+                    document.getElementById('downloadLink').href = song.full;
 
-                        setTimeout(() => {
-                            const fullPlayer = document.getElementById('fullPlayer');
-                            setupAudioControl(fullPlayer);
-                        }, 100);
-                    }
+                    const fullPlayer = document.getElementById('fullPlayer');
+                    setupAudioControl(fullPlayer);
                 }, 300);
             }
         }
