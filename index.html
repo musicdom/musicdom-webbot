@@ -4,9 +4,456 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Музыкальный Дом</title>
-  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    /* Все стили остаются без изменений */
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      height: 100vh;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+      background-size: 200% 200%;
+      animation: gradientMove 10s ease infinite;
+      color: white;
+      overflow: hidden;
+    }
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .loader, .menu, .section {
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      transition: opacity 1s ease;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+    }
+    .loader img {
+      width: 160px;
+      height: auto;
+      border-radius: 20px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      margin-bottom: 30px;
+    }
+    .menu, .section {opacity: 0; pointer-events: none;}
+    .menu.active, .section.active {opacity: 1; pointer-events: all;}
+
+    .loading-text {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+      color: white;
+    }
+
+    .loading-bar {
+      width: 300px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .loading-progress {
+      height: 100%;
+      width: 0%;
+      background: white;
+      border-radius: 3px;
+      animation: loading 2s ease-in-out forwards;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    .menu-logo {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 30px;
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 1rem;
+      padding: 14px 35px;
+      margin: 10px;
+      border-radius: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 200px;
+      max-width: 300px;
+      width: auto;
+      display: inline-block;
+      text-align: center;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      transform: scale(1.03);
+    }
+
+    #buySection button, .buy-button, .price-plan button {
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+    }
+
+    #buySection button:hover, .buy-button:hover, .price-plan button:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+    }
+
+    .music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+      transform: scale(1.1);
+    }
+
+    .fixed-back-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      white-space: nowrap;
+    }
+    
+    .fixed-back-button:hover {
+      transform: translateX(-50%) scale(1.03);
+    }
+
+    h1 {margin-bottom: 15px; color: white;}
+    p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
+    input {
+      padding:10px 20px;
+      border-radius:20px;
+      border:none;
+      font-size:1rem;
+      margin:10px 0;
+      text-align:center;
+      background: rgba(255,255,255,0.2);
+      color: white;
+    }
+    input::placeholder {color: rgba(255,255,255,0.7);}
+    a.download-btn {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 10px 30px;
+      border-radius: 25px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+      transition: all 0.3s;
+    }
+    a.download-btn:hover {background: rgba(255,255,255,0.35);}
+
+    #works, #price {
+      justify-content: flex-start;
+      padding-top: 0;
+      padding-bottom: 100px;
+      overflow-y: auto;
+    }
+
+    .works-header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      width: 100%;
+      padding: 20px;
+      z-index: 10;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .works-container, .price-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      width: 100%;
+      padding: 0 20px;
+      align-items: start;
+    }
+
+    .work-card, .price-plan {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardAppear 0.6s ease forwards;
+    }
+
+    @keyframes cardAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .work-card:hover, .price-plan:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
+    }
+
+    .work-image {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 3rem;
+    }
+
+    .work-title {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      color: white;
+      min-height: 2.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .work-description {
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+      opacity: 0.9;
+      line-height: 1.4;
+      color: white;
+      min-height: 3.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .work-audio {
+      width: 100%;
+      margin: 12px 0;
+      border-radius: 8px;
+      height: 40px;
+    }
+
+    .work-price {
+      font-size: 1.1rem;
+      font-weight: bold;
+      margin: 8px 0;
+      color: #ffd700;
+    }
+
+    .social-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 25px 0;
+      flex-wrap: wrap;
+    }
+
+    .social-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 15px;
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      transition: all 0.3s ease;
+      width: 100px;
+      height: 100px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .social-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+
+    .social-icon {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .social-name {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .price-plan {
+      text-align: left;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .price-plan h2 {
+      margin-bottom: 15px;
+      color: white;
+      font-size: 1.3rem;
+    }
+
+    .price-plan p {
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+      flex-grow: 1;
+    }
+    
+    .music-notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: white;
+      font-size: 0.9rem;
+      z-index: 999;
+      animation: fadeInOut 4s forwards;
+      max-width: 200px;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-10px); }
+      20% { opacity: 1; transform: translateY(0); }
+      80% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* Стили для раздела "О нас" */
+#about {
+  justify-content: flex-start;
+  padding-top: 0;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+.about-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
+  align-items: start;
+}
+
+.about-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255,255,255,0.1);
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: cardAppear 0.6s ease forwards;
+}
+
+.about-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 25px rgba(255,255,255,0.2);
+}
+
+.about-card h2 {
+  margin-bottom: 15px;
+  color: white;
+  font-size: 1.3rem;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  padding-bottom: 10px;
+}
+
+.about-card p {
+  margin-bottom: 12px;
+  line-height: 1.5;
+  color: white;
+}
+
+.about-card ul {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.about-card li {
+  margin-bottom: 8px;
+  line-height: 1.4;
+  color: white;
+}
+
+.about-card strong {
+  color: #ffd700;
+}
+
+.about-card em {
+  opacity: 0.9;
+  font-style: italic;
+}
+
+.social-section {
+  text-align: center;
+}
+
+.social-section .social-container {
+  margin-top: 20px;
+}
+  </style>
 </head>
 <body>
+  <!-- Элемент аудио для фоновой музыки -->
   <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
@@ -31,11 +478,488 @@
     <button onclick="openSection('about')">💬 О нас</button>
   </div>
 
-  <!-- Только ОДНА секция отображается одновременно -->
-  <div id="current-section"></div>
+  <!-- Раздел найти песню -->
+  <div class="section" id="find">
+    <h1>🔍 Найти свою песню</h1>
+    <div id="searchBox">
+      <p>Введите код вашей песни:</p>
+      <input type="text" id="songCode" placeholder="Например: 456">
+      <button onclick="findSong()">Найти</button>
+    </div>
 
-  <script src="scripts/sections.js"></script>
-  <script src="scripts/audio.js"></script>
-  <script src="scripts/main.js"></script>
+    <div id="songInfo" style="display:none; margin-top:20px;">
+      <h2 id="songTitle"></h2>
+      <audio id="demoPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+      <div id="buySection"></div>
+    </div>
+
+    <div id="successInfo" style="display:none; margin-top:20px;">
+      <h2>✅ Оплата прошла успешно!</h2>
+      <p>Ваша полная версия песни готова:</p>
+      <audio id="fullPlayer" controls style="margin:10px 0; width:90%; max-width:400px;"></audio>
+      <a id="downloadLink" class="download-btn" download>⬇ Скачать песню</a>
+      <button onclick="goBack()">⬅ Назад в меню</button>
+    </div>
+
+    <button onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+
+  <!-- Раздел работы -->
+  <div class="section" id="works">
+    <div class="works-header">
+      <h1>🎵 Наши работы</h1>
+      <p>Послушайте наши последние работы и выберите понравившуюся песню</p>
+    </div>
+    
+    <div class="works-container" id="worksContainer">
+      <!-- Карточки работ будут добавлены через JavaScript -->
+    </div>
+    
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+
+  <!-- Раздел прайс -->
+  <div class="section" id="price">
+    <div class="works-header">
+      <h1>💰 Прайс</h1>
+      <p>Выберите подходящий план для вашей песни</p>
+    </div>
+    
+    <div class="price-container">
+      <div class="price-plan">
+        <h2>🌱 План «Старт» — 500 ₽</h2>
+        <p>
+          • Неполная песня: куплет + припев<br>
+          • 1 текст без изменений<br>
+          • 1 готовый вариант песни<br>
+          Идеально, чтобы попробовать или создать короткую идею 💫
+        </p>
+        <button onclick="buyPlan('Старт', 5)">💳 Оплатить</button>
+      </div>
+
+      <div class="price-plan">
+        <h2>🌸 План «История» — от 900 ₽</h2>
+        <p>
+          • Средняя версия: интро, куплет 1, припев, куплет 2, финал<br>
+          • До 3 текстов песни<br>
+          • До 2 правок после утверждения<br>
+          Баланс между простотой и глубиной — песня с настроением 🎶
+        </p>
+        <button onclick="buyPlan('История', 900)">💳 Оплатить</button>
+      </div>
+
+      <div class="price-plan">
+        <h2>🌟 План «Премиум» — от 1500 ₽</h2>
+        <p>
+          • Полная версия: интро, куплет 1, припев, куплет 2, бридж, припев, финал<br>
+          • До 5 вариантов текста<br>
+          • До 5 правок после утверждения<br>
+          Максимальная проработка — каждая строка и переход звучат идеально 🔥
+        </p>
+        <button onclick="buyPlan('Премиум', 1500)">💳 Оплатить</button>
+      </div>
+    </div>
+
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
+  </div>
+
+  <!-- Раздел о нас -->
+<div class="section" id="about">
+  <div class="works-header">
+    <h1>💬 О нас</h1>
+    <p>Узнайте больше о Музыкальном Доме и получите ответы на частые вопросы</p>
+  </div>
+  
+  <div class="about-container">
+    <!-- Карточка с общей информацией -->
+    <div class="about-card">
+      <h2>🎵 Музыкальный Дом</h2>
+      <p>«Музыкальный Дом» — онлайн-платформа для создания уникальной музыки и песен. Мы превращаем чувства, истории и эмоции в музыку.</p>
+    </div>
+
+    <!-- FAQ карточки -->
+    <div class="about-card">
+      <h2>1. Что такое «Музыкальный Дом»?</h2>
+      <p>Музыкальный Дом — онлайн-платформа для создания уникальной музыки и песен.</p>
+      <p><strong>Мы делаем:</strong></p>
+      <ul>
+        <li>🎵 Песни с текстом — куплеты, припевы, бриджи, дуэты;</li>
+        <li>🎹 Фоновую и инструментальную музыку для сайтов, видео и приложений;</li>
+        <li>💿 Готовые треки — можно купить сразу в разделе «Работы».</li>
+      </ul>
+      <p>Пример: у нас есть готовый трек в стиле поп — вы можете прослушать и использовать его для своего проекта</p>
+    </div>
+
+    <div class="about-card">
+      <h2>2. Какие услуги доступны?</h2>
+      <p><strong>Заказ индивидуальной песни:</strong></p>
+      <ul>
+        <li>Вы выбираете жанр, стиль и тему текста.</li>
+        <li>Мы создаём текст и отправляем на согласование.</li>
+        <li>После утверждения текста вы оплачиваете, и мы отправляем готовую песню.</li>
+        <li>Время выполнения: 1–5 часов.</li>
+      </ul>
+      <p><strong>Фоновая музыка:</strong></p>
+      <ul>
+        <li>Лёгкая, современная, не отвлекающая.</li>
+        <li>Подходит для сайтов, видео и приложений.</li>
+      </ul>
+      <p><strong>Готовые треки:</strong></p>
+      <ul>
+        <li>Можно купить и использовать сразу.</li>
+        <li>Доступны разные жанры и стили.</li>
+      </ul>
+    </div>
+
+    <div class="about-card">
+      <h2>3. Как оформить заказ песни?</h2>
+      <ul>
+        <li>Вы выбираете жанр, стиль и настроение.</li>
+        <li>Указываете тематику и ключевые идеи для текста.</li>
+        <li>Мы создаём текст и отправляем его вам на согласование.</li>
+        <li>После утверждения текста вы оплачиваете заказ, и мы отправляем готовую композицию.</li>
+      </ul>
+      <p>💡 <em>Совет: если не знаете жанр, мы поможем подобрать подходящий под настроение и цель трека.</em></p>
+    </div>
+
+    <div class="about-card">
+      <h2>4. Сколько стоит музыка?</h2>
+      <ul>
+        <li>Минимальная песня (короткий куплет и припев) — от 500₽;</li>
+        <li>Полная песня с куплетами и припевами — 1000–1500₽;</li>
+        <li>Фоновая музыка и готовые треки — цена индивидуально.</li>
+      </ul>
+      <p>Оплата производится после согласования текста — предоплата не нужна.</p>
+    </div>
+
+    <div class="about-card">
+      <h2>5. Как оплатить заказ?</h2>
+      <ul>
+        <li>Прямо по реквизитам (карта, банковский перевод)</li>
+        <li>Через сайт</li>
+      </ul>
+      <p>💡 <em>Совет: Оплачиваете только после того, как увидите и согласуете текст песни.</em></p>
+    </div>
+
+    <div class="about-card">
+      <h2>6. Права и лицензии</h2>
+      <p>Все песни создаются с использованием AI-технологий и уникальны для вас.</p>
+      <p><strong>Вы получаете право использовать песню лично и коммерчески:</strong></p>
+      <ul>
+        <li>на сайте, в приложениях и соцсетях;</li>
+        <li>в видео, рекламе, презентациях;</li>
+        <li>на мероприятиях и личных проектах.</li>
+      </ul>
+      <p>❌ <strong>Запрещено</strong> перепродавать или выдавать трек за свой без согласования.</p>
+    </div>
+
+    <div class="about-card">
+      <h2>7. Сколько времени занимает работа?</h2>
+      <ul>
+        <li>Короткая песня: 1–2 часа</li>
+        <li>Полная песня: 3–5 часов</li>
+        <li>Сложные заказы (ремиксы, дополнительные изменения): до 5 часов</li>
+      </ul>
+      <p>💡 <em>Совет: чем точнее вы опишите стиль и идею песни, тем быстрее мы подготовим трек.</em></p>
+    </div>
+
+    <div class="about-card">
+      <h2>8. Для кого подходит «Музыкальный Дом»?</h2>
+      <ul>
+        <li>Частные лица, желающие уникальную песню для себя или в подарок</li>
+        <li>Рабочие и специалисты, которые хотят персональные композиции</li>
+        <li>Разработчики сайтов и видеопроектов, которым нужна фоновая музыка</li>
+        <li>Все, кто ценит индивидуальный подход и качество</li>
+      </ul>
+    </div>
+
+    <div class="about-card">
+      <h2>9. Почему выбрать «Музыкальный Дом»?</h2>
+      <ul>
+        <li><strong>Персональный подход:</strong> каждая песня создаётся по вашим идеям</li>
+        <li><strong>Современное качество:</strong> профессиональное звучание</li>
+        <li><strong>Удобство и скорость:</strong> весь процесс онлайн, от текста до готового трека за считанные часы</li>
+        <li><strong>Гибкая цена:</strong> доступно каждому</li>
+        <li><strong>Прозрачность:</strong> вы видите текст, согласуете его и оплачиваете только после утверждения</li>
+      </ul>
+      <p>💡 <em>Совет: начинайте с небольшого заказа, чтобы почувствовать качество и стиль, а потом можно заказать полную песню или фоновую музыку для проекта.</em></p>
+    </div>
+
+    <!-- Социальные кнопки -->
+    <div class="about-card social-section">
+      <h2>📞 Свяжитесь с нами</h2>
+      <div class="social-container">
+        <a href="https://vk.com/musicsdom" class="social-card" target="_blank">
+          <div class="social-icon">📘</div>
+          <div class="social-name">VK</div>
+        </a>
+        <a href="https://t.me/musikcdombot" class="social-card" target="_blank">
+          <div class="social-icon">📱</div>
+          <div class="social-name">Telegram</div>
+        </a>
+        <a href="https://chat.whatsapp.com/E8HqcDTajiNE7FUd4Y65Vi?mode=wwt" class="social-card" target="_blank">
+          <div class="social-icon">💬</div>
+          <div class="social-name">WhatsApp</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
+</div>
+
+<script>
+    const workerUrl = "https://musicdom-payment.vercel.app/";
+    
+    const songs = [
+      {
+        code: "456",
+        title: "Песня Музыкальный Дом",
+        description: "Эксклюзивная композиция от Музыкального Дома",
+        image: "logo.jpg",
+        demo: "song/song456_demo.mp3",
+        full: "song/song456_full.mp3",
+        price: 10
+      },
+      {
+        code: "123",
+        title: "Песня для Максима",
+        description: "Индивидуальная песня, созданная специально для Максима",
+        image: "🎶",
+        demo: "songs/song123_demo.mp3",
+        full: "songs/song123_full.mp3",
+        price: 200
+      }
+    ];
+
+    // Переменные для управления музыкой
+    let isBackgroundMusicPlaying = false;
+    let wasBackgroundMusicPlaying = false;
+
+    // Функция для показа уведомления о музыке
+    function showMusicNotification(message) {
+      // Удаляем предыдущее уведомление, если оно есть
+      const existingNotification = document.querySelector('.music-notification');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+      
+      // Создаем новое уведомление
+      const notification = document.createElement('div');
+      notification.className = 'music-notification';
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Автоматически удаляем уведомление через 4 секунды
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 4000);
+    }
+
+    // Функция переключения музыки
+    function toggleMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 30% перед воспроизведением
+      backgroundMusic.volume = 0.3;
+      
+      if (backgroundMusic.paused) {
+        backgroundMusic.play().then(() => {
+          musicToggle.textContent = '🎵';
+          isBackgroundMusicPlaying = true;
+          showMusicNotification('Музыка включена 🎵');
+        }).catch(error => {
+          console.log('Ошибка воспроизведения:', error);
+          showMusicNotification('Ошибка воспроизведения 😢');
+        });
+      } else {
+        backgroundMusic.pause();
+        musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+        showMusicNotification('Музыка выключена 🔇');
+      }
+    }
+
+    // Функция для автоматического включения музыки
+    function autoPlayMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 30%
+      backgroundMusic.volume = 0.3;
+      
+      // Пытаемся включить музыку автоматически
+      backgroundMusic.play().then(() => {
+        musicToggle.textContent = '🎵';
+        isBackgroundMusicPlaying = true;
+      }).catch(error => {
+        // Автовоспроизведение заблокировано браузером
+        console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
+        musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+      });
+    }
+
+    // Функция для управления фоновой музыкой при воспроизведении других аудио
+    function setupAudioControl(audioElement) {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      
+      audioElement.addEventListener('play', function() {
+        if (isBackgroundMusicPlaying) {
+          backgroundMusic.pause();
+          wasBackgroundMusicPlaying = true;
+        }
+      });
+
+      audioElement.addEventListener('pause', function() {
+        if (wasBackgroundMusicPlaying && !this.ended) {
+          backgroundMusic.play();
+          wasBackgroundMusicPlaying = false;
+        }
+      });
+
+      audioElement.addEventListener('ended', function() {
+        if (wasBackgroundMusicPlaying) {
+          backgroundMusic.play();
+          wasBackgroundMusicPlaying = false;
+        }
+      });
+    }
+
+    // Функция для настройки контроля аудио на всех элементах
+    function setupAllAudioControls() {
+      const allAudioElements = document.querySelectorAll('audio:not(#backgroundMusic)');
+      allAudioElements.forEach(audio => {
+        setupAudioControl(audio);
+      });
+    }
+
+    // Функция для покупки работы
+    function buyWork(code, price) {
+      window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
+    }
+
+    // Функция для покупки плана
+    function buyPlan(plan, price) {
+      window.open(`${workerUrl}/?plan=${encodeURIComponent(plan)}&planPrice=${price}`, '_blank');
+    }
+
+    // Функция для отображения работ
+    function renderWorks() {
+      const worksContainer = document.getElementById('worksContainer');
+      worksContainer.innerHTML = '';
+      
+      songs.forEach(song => {
+        const workCard = document.createElement('div');
+        workCard.className = 'work-card';
+        
+        const imageContent = song.image.includes('.') 
+          ? `<img src="${song.image}" alt="${song.title}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`
+          : song.image;
+          
+        workCard.innerHTML = `
+          <div class="work-image">${imageContent}</div>
+          <div class="work-title">${song.title}</div>
+          <div class="work-description">${song.description}</div>
+          <div class="work-price">${song.price} ₽</div>
+          <audio class="work-audio" controls>
+            <source src="${song.demo}" type="audio/mpeg">
+            Ваш браузер не поддерживает аудио элемент.
+          </audio>
+          <button class="buy-button" onclick="buyWork('${song.code}', ${song.price})">
+            💳 Оплатить
+          </button>
+        `;
+        worksContainer.appendChild(workCard);
+      });
+
+      setTimeout(setupAllAudioControls, 100);
+    }
+
+    // Функция для поиска песни
+    function findSong() {
+      const code = document.getElementById('songCode').value.trim();
+      const song = songs.find(s => s.code === code);
+      
+      if (!song) {
+        alert("Песня с таким кодом не найдена 😢");
+        return;
+      }
+
+      document.getElementById('songInfo').style.display = 'block';
+      document.getElementById('songTitle').textContent = song.title;
+      document.getElementById('demoPlayer').src = song.demo;
+
+      document.getElementById('buySection').innerHTML = `
+        <p>Цена: ${song.price}₽</p>
+        <button onclick="buyWork('${song.code}', ${song.price})">💳 Оплатить</button>
+      `;
+
+      setTimeout(() => {
+        const demoPlayer = document.getElementById('demoPlayer');
+        setupAudioControl(demoPlayer);
+      }, 100);
+    }
+
+    // Функция открытия раздела
+    function openSection(id) {
+      document.getElementById('menu').classList.remove('active');
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      
+      if (id === 'works') {
+        setTimeout(renderWorks, 100);
+      }
+    }
+
+    // Функция возврата в меню
+    function goBack() {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById('menu').classList.add('active');
+      history.pushState({}, "", window.location.pathname);
+    }
+
+    // Проверяем URL-параметр success (после оплаты)
+    const urlParams = new URLSearchParams(window.location.search);
+    const successCode = urlParams.get("success");
+    
+    if (successCode) {
+      const song = songs.find(s => s.code === successCode);
+      if (song) {
+        document.querySelector('.loader').style.opacity = '0';
+        document.getElementById('menu').classList.remove('active');
+        const findSection = document.getElementById('find');
+        findSection.classList.add('active');
+        document.getElementById('searchBox').style.display = 'none';
+        document.getElementById('successInfo').style.display = 'block';
+        document.getElementById('fullPlayer').src = song.full;
+        document.getElementById('downloadLink').href = song.full;
+
+        setTimeout(() => {
+          const fullPlayer = document.getElementById('fullPlayer');
+          setupAudioControl(fullPlayer);
+        }, 100);
+      }
+    }
+
+    // Инициализация при загрузке
+    window.onload = function() {
+      setTimeout(() => {
+        document.querySelector('.loader').style.opacity = '0';
+        document.getElementById('menu').classList.add('active');
+        renderWorks();
+        
+        // Пытаемся автоматически включить музыку после загрузки
+        autoPlayMusic();
+        
+        // Настраиваем контроль аудио для всех существующих элементов
+        setupAllAudioControls();
+      }, 2000);
+    };
+</script>
 </body>
 </html>
+
