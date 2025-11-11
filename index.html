@@ -521,16 +521,6 @@
       }
     ];
 
-    // Получаем элементы DOM
-    const loader = document.querySelector('.loader');
-    const menu = document.getElementById('menu');
-    const worksContainer = document.getElementById('worksContainer');
-    const backgroundMusic = document.getElementById('backgroundMusic');
-    const musicToggle = document.getElementById('musicToggle');
-
-    // Устанавливаем громкость фоновой музыки на 60%
-    backgroundMusic.volume = 50;
-
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
     let wasBackgroundMusicPlaying = false;
@@ -539,6 +529,9 @@
     
     // Функция переключения музыки
     function toggleMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
       if (backgroundMusic.paused) {
         backgroundMusic.play();
         musicToggle.textContent = '🎵';
@@ -552,6 +545,12 @@
 
     // Функция для автоматического включения музыки при загрузке
     function autoPlayMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 60% перед воспроизведением
+      backgroundMusic.volume = 0.6;
+      
       // Пытаемся включить музыку автоматически
       backgroundMusic.play().then(() => {
         musicToggle.textContent = '🎵';
@@ -566,6 +565,8 @@
 
     // Функция для управления фоновой музыкой при воспроизведении других аудио
     function setupAudioControl(audioElement) {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      
       // Сохраняем состояние фоновой музыки при начале воспроизведения
       audioElement.addEventListener('play', function() {
         if (isBackgroundMusicPlaying) {
@@ -616,7 +617,9 @@
     
     // Функция для отображения работ
     function renderWorks() {
+      const worksContainer = document.getElementById('worksContainer');
       worksContainer.innerHTML = '';
+      
       songs.forEach(song => {
         const workCard = document.createElement('div');
         workCard.className = 'work-card';
