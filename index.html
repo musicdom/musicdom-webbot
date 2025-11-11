@@ -36,6 +36,7 @@
       height: 100%;
       padding: 20px;
     }
+
     .loader img {
       width: 160px;
       height: auto;
@@ -43,15 +44,11 @@
       box-shadow: 0 0 25px rgba(255,255,255,0.3);
       margin-bottom: 30px;
     }
+
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
 
-    .loading-text {
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      color: white;
-    }
-
+    .loading-text {font-size: 1.2rem; margin-bottom: 15px; color: white;}
     .loading-bar {
       width: 300px;
       height: 6px;
@@ -59,7 +56,6 @@
       border-radius: 3px;
       overflow: hidden;
     }
-
     .loading-progress {
       height: 100%;
       width: 0%;
@@ -67,11 +63,7 @@
       border-radius: 3px;
       animation: loading 2s ease-in-out forwards;
     }
-
-    @keyframes loading {
-      0% { width: 0%; }
-      100% { width: 100%; }
-    }
+    @keyframes loading {0% { width: 0%; } 100% { width: 100%; }}
 
     .menu-logo {
       width: 200px;
@@ -101,7 +93,6 @@
       display: inline-block;
       text-align: center;
     }
-
     button:hover {
       background: rgba(255, 255, 255, 0.25);
       box-shadow: 0 0 25px rgba(255,255,255,0.25);
@@ -119,6 +110,7 @@
 
     h1 {margin-bottom: 15px; color: white;}
     p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
+
     input {
       padding:10px 20px;
       border-radius:20px;
@@ -130,6 +122,7 @@
       color: white;
     }
     input::placeholder {color: rgba(255,255,255,0.7);}
+
     a.download-btn {
       background: rgba(255,255,255,0.2);
       color: white;
@@ -142,11 +135,7 @@
     }
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    #works, #price {
-      justify-content: flex-start;
-      padding-bottom: 100px;
-      overflow-y: auto;
-    }
+    #works, #price {justify-content: flex-start; padding-bottom: 100px; overflow-y: auto;}
 
     .works-header {
       position: sticky;
@@ -183,10 +172,7 @@
     }
 
     @keyframes cardAppear {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .work-card:hover, .price-plan:hover {
@@ -224,9 +210,7 @@
       backdrop-filter: blur(10px);
       transition: all 0.3s ease;
     }
-    .music-toggle:hover {
-      background: rgba(255, 255, 255, 0.25);
-    }
+    .music-toggle:hover {background: rgba(255, 255, 255, 0.25);}
   </style>
 </head>
 <body>
@@ -248,23 +232,32 @@
     <button onclick="openSection('about')">💬 О нас</button>
   </div>
 
-  <!-- Остальные разделы (как у тебя) -->
-  <!-- ... оставляем без изменений ... -->
+  <!-- Секции -->
+  <div id="find" class="section">
+    <h1>Найти песню</h1>
+    <p>Здесь можно искать свои песни по коду или названию.</p>
+    <button onclick="openSection('menu')">⬅ Назад в меню</button>
+  </div>
+
+  <div id="works" class="section">
+    <h1>Работы</h1>
+    <p>Примеры наших музыкальных работ.</p>
+    <button onclick="openSection('menu')">⬅ Назад в меню</button>
+  </div>
+
+  <div id="price" class="section">
+    <h1>Прайс</h1>
+    <p>Стоимость создания песен и композиций.</p>
+    <button onclick="openSection('menu')">⬅ Назад в меню</button>
+  </div>
+
+  <div id="about" class="section">
+    <h1>О нас</h1>
+    <p>Информация о Музыкальном Доме, нашей команде и услугах.</p>
+    <button onclick="openSection('menu')">⬅ Назад в меню</button>
+  </div>
 
 <script>
-const workerUrl = "https://musicdom-payment.vercel.app/";
-const songs = [
-  {
-    code: "456",
-    title: "Песня Музыкальный Дом",
-    description: "Эксклюзивная композиция от Музыкального Дома",
-    image: "logo.jpg",
-    demo: "song/song456_demo.mp3",
-    full: "song/song456_full.mp3",
-    price: 10
-  }
-];
-
 const bgMusic = document.getElementById('backgroundMusic');
 const musicToggle = document.getElementById('musicToggle');
 let musicPlaying = false;
@@ -280,35 +273,31 @@ function toggleMusic() {
   musicPlaying = !musicPlaying;
 }
 
-// При проигрывании любой песни — выключаем фон
-function pauseBackgroundForSong(songElement) {
-  if (bgMusic && !bgMusic.paused) {
-    bgMusic.pause();
-    musicToggle.textContent = '🔇';
-    musicPlaying = false;
-  }
-  songElement.addEventListener('ended', () => {
-    if (!musicPlaying) {
-      bgMusic.play().catch(()=>{});
-      musicToggle.textContent = '🎵';
-      musicPlaying = true;
-    }
-  });
-}
-
-window.onload = function() {
+// Автоматическое включение фоновой музыки при загрузке
+window.addEventListener('load', () => {
   setTimeout(() => {
     document.querySelector('.loader').style.opacity = '0';
     document.getElementById('menu').classList.add('active');
   }, 2000);
-};
+  bgMusic.play().then(()=>{ musicPlaying=true; musicToggle.textContent='🎵'; }).catch(()=>{});
+});
 
-// Подключаем событие для всех аудио на странице
+// При воспроизведении любой другой песни — выключаем фон
 document.addEventListener('play', function(e) {
   if (e.target.tagName === 'AUDIO' && e.target.id !== 'backgroundMusic') {
-    pauseBackgroundForSong(e.target);
+    if (bgMusic && !bgMusic.paused) { bgMusic.pause(); musicToggle.textContent='🔇'; musicPlaying=false; }
+    e.target.addEventListener('ended', ()=>{
+      if (!musicPlaying) { bgMusic.play().catch(()=>{}); musicToggle.textContent='🎵'; musicPlaying=true; }
+    });
   }
 }, true);
+
+// Функция для открытия секций
+function openSection(id){
+  document.querySelectorAll('.section, .menu').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById(id);
+  if(target) target.classList.add('active');
+}
 </script>
 </body>
 </html>
