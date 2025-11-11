@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Музыкальный Дом</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+  <!-- Элемент аудио для фоновой музыки -->
+  <audio id="backgroundMusic" loop>
+    <source src="song/background.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио элемент.
+  </audio>
+
+  <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🔇</div>
+
+  <div class="loader">
+    <img src="logo.jpg" alt="Музыкальный Дом">
+    <div class="loading-text">Загрузка...</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+  </div>
+
+  <div class="menu" id="menu">
+    <img src="logo.jpg" alt="Музыкальный Дом" class="menu-logo">
+    
+    <button onclick="openSection('find')">🔍 Найти свою песню</button>
+    <button onclick="openSection('works')">🎵 Работы</button>
+    <button onclick="openSection('price')">💰 Прайс</button>
+    <button onclick="openSection('about')">💬 О нас</button>
+  </div>
+
+  <!-- Секции будут загружаться динамически -->
+  <div id="sections-container"></div>
+
+  <script src="scripts/sections.js"></script>
+  <script src="scripts/audio.js"></script>
+  <script src="scripts/main.js"></script>
+</body>
+</html>
