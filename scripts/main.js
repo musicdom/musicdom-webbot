@@ -1,40 +1,55 @@
-// Глобальные переменные
+// === Глобальные переменные ===
 let currentSection = null;
 let sectionsCache = {}; // Кэш для загруженных секций
 
-// Функция открытия раздела
+// === Функция открытия раздела ===
 function openSection(id) {
     if (currentSection === id) return;
-    
+
     // Скрываем меню
     document.getElementById('menu').classList.remove('active');
-    
-    // Показываем лоадер на время загрузки
-    document.getElementById('current-section').innerHTML = '<div class="loading-text">Загрузка...</div>';
-    
+
+    // Показываем лоадер
+    const container = document.getElementById('current-section');
+    container.innerHTML = '<div class="loading-text">Загрузка...</div>';
+
     // Загружаем секцию
     loadSection(id);
 }
 
-// Функция загрузки секции
+// === Функция загрузки секции ===
 function loadSection(id) {
-    // Если секция уже в кэше - используем её
+    // Если секция уже есть в кэше — используем её
     if (sectionsCache[id]) {
         showSection(id, sectionsCache[id]);
         return;
     }
-    
-    // Загружаем секцию из файла
-    // Функция показа секции
+
+    // Загружаем секцию из папки sections/
+    fetch(`sections/${id}.html`)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            return response.text();
+        })
+        .then(html => {
+            sectionsCache[id] = html; // сохраняем в кэш
+            showSection(id, html);
+        })
+        .catch(error => {
+            console.error(`Ошибка загрузки секции ${id}:`, error);
+            document.getElementById('current-section').innerHTML =
+                `<p style="color:white;">Ошибка загрузки раздела "${id}".</p>`;
+        });
+}
+
+// === Функция показа секции ===
 function showSection(id, html) {
     const container = document.getElementById('current-section');
     container.innerHTML = html;
-    
-    // Находим загруженную секцию
+
     let sectionElement = container.querySelector('.section');
-    
-    // Если нет элемента с классом section, создаем обертку
     if (!sectionElement) {
+        // если в html нет .section — создаем обертку
         const wrapper = document.createElement('div');
         wrapper.className = 'section';
         wrapper.innerHTML = html;
@@ -42,30 +57,22 @@ function showSection(id, html) {
         container.appendChild(wrapper);
         sectionElement = wrapper;
     }
-    
-    // Устанавливаем id для секции
+
+    // Устанавливаем id и активируем секцию
     sectionElement.id = id;
-    
-    // Добавляем класс active с задержкой для анимации
-    setTimeout(() => {
-        sectionElement.classList.add('active');
-    }, 50);
-    
+    setTimeout(() => sectionElement.classList.add('active'), 50);
+
     currentSection = id;
-    
-    // Специальная инициализация для некоторых секций
+
+    // Инициализация для специфических секций
     setTimeout(() => {
-        if (id === 'works') {
-            renderWorks();
-        }
+        if (id === 'works') renderWorks();
         setupAllAudioControls();
-        
-        // Принудительно применяем стили для центрирования
         applyCenteringStyles();
     }, 100);
 }
 
-// Функция для принудительного применения стилей центрирования
+// === Принудительное выравнивание содержимого ===
 function applyCenteringStyles() {
     const section = document.querySelector('#current-section .section.active');
     if (section) {
@@ -77,40 +84,18 @@ function applyCenteringStyles() {
     }
 }
 
-// Функция показа секции
-function showSection(id, html) {
-    const container = document.getElementById('current-section');
-    container.innerHTML = html;
-    
-    // Добавляем класс section к загруженному контенту
-    const sectionElement = container.querySelector('.section') || container.children[0];
-    if (sectionElement) {
-        sectionElement.classList.add('section', 'active');
-    }
-    
-    currentSection = id;
-    
-    // Специальная инициализация для некоторых секций
-    setTimeout(() => {
-        if (id === 'works') {
-            renderWorks();
-        }
-        setupAllAudioControls();
-    }, 100);
-}
-
-// Функция возврата в меню
+// === Возврат в меню ===
 function goBack() {
     document.getElementById('current-section').innerHTML = '';
     document.getElementById('menu').classList.add('active');
     currentSection = null;
 }
 
-// Остальные функции остаются без изменений...
+// === Поиск песни ===
 function findSong() {
     const code = document.getElementById('songCode').value.trim();
     const song = songs.find(s => s.code === code);
-    
+
     if (!song) {
         alert("Песня с таким кодом не найдена 😢");
         return;
@@ -131,28 +116,31 @@ function findSong() {
     }, 100);
 }
 
+// === Оплата конкретной песни ===
 function buyWork(code, price) {
     window.open(`${workerUrl}/?code=${code}&price=${price}`, '_blank');
 }
 
+// === Оплата тарифного плана ===
 function buyPlan(plan, price) {
     window.open(`${workerUrl}/?plan=${encodeURIComponent(plan)}&planPrice=${price}`, '_blank');
 }
 
+// === Отрисовка всех песен ===
 function renderWorks() {
     const worksContainer = document.getElementById('worksContainer');
     if (!worksContainer) return;
-    
+
     worksContainer.innerHTML = '';
-    
+
     songs.forEach(song => {
         const workCard = document.createElement('div');
         workCard.className = 'work-card';
-        
-        const imageContent = song.image.includes('.') 
+
+        const imageContent = song.image.includes('.')
             ? `<img src="${song.image}" alt="${song.title}" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">`
             : song.image;
-            
+
         workCard.innerHTML = `
             <div class="work-image">${imageContent}</div>
             <div class="work-title">${song.title}</div>
@@ -166,35 +154,36 @@ function renderWorks() {
                 💳 Оплатить
             </button>
         `;
+
         worksContainer.appendChild(workCard);
     });
 
     setTimeout(setupAllAudioControls, 100);
 }
 
-// Инициализация при загрузке
+// === Инициализация при загрузке страницы ===
 window.onload = function() {
     setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
-        
+
         autoPlayMusic();
         setupAllAudioControls();
-        
-        // Проверяем URL-параметр success (после оплаты)
+
+        // Проверка успешной оплаты через URL
         const urlParams = new URLSearchParams(window.location.search);
         const successCode = urlParams.get("success");
-        
+
         if (successCode) {
             const song = songs.find(s => s.code === successCode);
             if (song) {
                 document.querySelector('.loader').style.opacity = '0';
                 document.getElementById('menu').classList.remove('active');
-                
-                // Загружаем секцию find для показа успешной оплаты
+
+                // Загружаем секцию find
                 loadSection('find');
-                
-                // Ждем загрузки и показываем успешное сообщение
+
+                // Показываем сообщение об успешной оплате
                 setTimeout(() => {
                     document.getElementById('searchBox').style.display = 'none';
                     document.getElementById('successInfo').style.display = 'block';
