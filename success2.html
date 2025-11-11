@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Музыкальный Дом — Ваш план</title>
+  <style>
+    * {margin: 0; padding: 0; box-sizing: border-box;}
+    body {
+      height: 100vh;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
+      background-size: 200% 200%;
+      animation: gradientMove 10s ease infinite;
+      color: white;
+      overflow: hidden;
+      text-align: center;
+    }
+    @keyframes gradientMove {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 25px;
+      padding: 40px 30px;
+      margin: 20px;
+      max-width: 500px;
+      width: 90%;
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+    }
+
+    p {
+      margin-bottom: 25px;
+      opacity: 0.9;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    /* Кнопка WhatsApp в стиле основной страницы */
+    .whatsapp-button {
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      font-size: 1.1rem;
+      padding: 15px 35px;
+      margin: 15px 0;
+      border-radius: 40px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all 0.3s ease;
+    }
+
+    .whatsapp-button:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      transform: scale(1.03);
+    }
+
+    .plan-info {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: left;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .plan-info h3 {
+      margin-bottom: 10px;
+      color: #ffd700;
+      text-align: center;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>✅ Спасибо за оплату!</h2>
+    <p>Ваш план успешно активирован 🎵</p>
+
+    <div id="planBox"></div>
+
+    <footer>Музыкальный Дом © 2025</footer>
+  </div>
+
+  <script>
+    const url = new URL(window.location.href);
+    const plan = url.searchParams.get('plan');
+
+    if (plan) {
+      // Определяем описание плана
+      let planDescription = '';
+      switch(plan) {
+        case 'Старт':
+          planDescription = '• Неполная песня: куплет + припев<br>• 1 текст без изменений<br>• 1 готовый вариант песни';
+          break;
+        case 'История':
+          planDescription = '• Средняя версия: интро, куплет 1, припев, куплет 2, финал<br>• До 3 текстов песни<br>• До 2 правок после утверждения';
+          break;
+        case 'Премиум':
+          planDescription = '• Полная версия: интро, куплет 1, припев, куплет 2, бридж, припев, финал<br>• До 5 вариантов текста<br>• До 5 правок после утверждения';
+          break;
+        default:
+          planDescription = 'Индивидуальный план создания песни';
+      }
+
+      document.getElementById("planBox").innerHTML = `
+        <div class="plan-info">
+          <h3>План «${plan}»</h3>
+          <div>${planDescription}</div>
+        </div>
+        <p>Нажмите кнопку ниже, чтобы связаться с нами в WhatsApp и обсудить детали вашей песни</p>
+        <a href="https://wa.me/79001234567?text=Я%20оплатил(а)%20план%20«${encodeURIComponent(plan)}»%20и%20хочу%20обсудить%20детали%20заказа" 
+           class="whatsapp-button" 
+           target="_blank">
+          💬 Написать в WhatsApp
+        </a>
+      `;
+    } else {
+      document.getElementById("planBox").innerHTML = "<p>Ошибка: информация о плане не найдена.</p>";
+    }
+  </script>
+</body>
+</html>
