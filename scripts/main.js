@@ -25,26 +25,56 @@ function loadSection(id) {
     }
     
     // Загружаем секцию из файла
-    fetch(`sections/${id}.html`)
-        .then(response => {
-            if (!response.ok) throw new Error('Секция не найдена');
-            return response.text();
-        })
-        .then(html => {
-            // Сохраняем в кэш
-            sectionsCache[id] = html;
-            showSection(id, html);
-        })
-        .catch(error => {
-            console.error(`Ошибка загрузки секции ${id}:`, error);
-            document.getElementById('current-section').innerHTML = `
-                <div class="section">
-                    <h1>Ошибка</h1>
-                    <p>Не удалось загрузить раздел</p>
-                    <button onclick="goBack()">⬅ Назад в меню</button>
-                </div>
-            `;
-        });
+    // Функция показа секции
+function showSection(id, html) {
+    const container = document.getElementById('current-section');
+    container.innerHTML = html;
+    
+    // Находим загруженную секцию
+    let sectionElement = container.querySelector('.section');
+    
+    // Если нет элемента с классом section, создаем обертку
+    if (!sectionElement) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'section';
+        wrapper.innerHTML = html;
+        container.innerHTML = '';
+        container.appendChild(wrapper);
+        sectionElement = wrapper;
+    }
+    
+    // Устанавливаем id для секции
+    sectionElement.id = id;
+    
+    // Добавляем класс active с задержкой для анимации
+    setTimeout(() => {
+        sectionElement.classList.add('active');
+    }, 50);
+    
+    currentSection = id;
+    
+    // Специальная инициализация для некоторых секций
+    setTimeout(() => {
+        if (id === 'works') {
+            renderWorks();
+        }
+        setupAllAudioControls();
+        
+        // Принудительно применяем стили для центрирования
+        applyCenteringStyles();
+    }, 100);
+}
+
+// Функция для принудительного применения стилей центрирования
+function applyCenteringStyles() {
+    const section = document.querySelector('#current-section .section.active');
+    if (section) {
+        section.style.display = 'flex';
+        section.style.justifyContent = 'center';
+        section.style.alignItems = 'center';
+        section.style.flexDirection = 'column';
+        section.style.textAlign = 'center';
+    }
 }
 
 // Функция показа секции
