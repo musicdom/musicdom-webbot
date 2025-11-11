@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
-  <!-- Элемент аудио для фоновой музыки -->
   <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
@@ -32,12 +31,11 @@
     <button onclick="openSection('about')">💬 О нас</button>
   </div>
 
-  <!-- Секции будут загружаться динамически -->
-  <div id="sections-container"></div>
+  <!-- Только ОДНА секция отображается одновременно -->
+  <div id="current-section"></div>
 
   <script src="scripts/sections.js"></script>
   <script src="scripts/audio.js"></script>
   <script src="scripts/main.js"></script>
 </body>
 </html>
-
