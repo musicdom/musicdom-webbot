@@ -528,6 +528,10 @@
     const backgroundMusic = document.getElementById('backgroundMusic');
     const musicToggle = document.getElementById('musicToggle');
 
+    // Переменные для управления музыкой
+    let isBackgroundMusicPlaying = false;
+    let wasBackgroundMusicPlaying = false;
+
     // === ФУНКЦИИ ДЛЯ МУЗЫКИ ===
     
     // Функция переключения музыки
@@ -535,9 +539,11 @@
       if (backgroundMusic.paused) {
         backgroundMusic.play();
         musicToggle.textContent = '🎵';
+        isBackgroundMusicPlaying = true;
       } else {
         backgroundMusic.pause();
         musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
       }
     }
 
@@ -546,10 +552,48 @@
       // Пытаемся включить музыку автоматически
       backgroundMusic.play().then(() => {
         musicToggle.textContent = '🎵';
+        isBackgroundMusicPlaying = true;
       }).catch(error => {
         // Если автоматическое воспроизведение заблокировано браузером
         console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
         musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+      });
+    }
+
+    // Функция для управления фоновой музыкой при воспроизведении других аудио
+    function setupAudioControl(audioElement) {
+      // Сохраняем состояние фоновой музыки при начале воспроизведения
+      audioElement.addEventListener('play', function() {
+        if (isBackgroundMusicPlaying) {
+          backgroundMusic.pause();
+          wasBackgroundMusicPlaying = true;
+        }
+      });
+
+      // Восстанавливаем фоновую музыку после завершения воспроизведения
+      audioElement.addEventListener('pause', function() {
+        if (wasBackgroundMusicPlaying && !this.ended) {
+          backgroundMusic.play();
+          wasBackgroundMusicPlaying = false;
+        }
+      });
+
+      // Восстанавливаем фоновую музыку после окончания трека
+      audioElement.addEventListener('ended', function() {
+        if (wasBackgroundMusicPlaying) {
+          backgroundMusic.play();
+          wasBackgroundMusicPlaying = false;
+        }
+      });
+    }
+
+    // Функция для настройки контроля аудио на всех элементах
+    function setupAllAudioControls() {
+      // Находим все аудио элементы на странице, кроме фонового
+      const allAudioElements = document.querySelectorAll('audio:not(#backgroundMusic)');
+      allAudioElements.forEach(audio => {
+        setupAudioControl(audio);
       });
     }
 
@@ -594,6 +638,9 @@
         `;
         worksContainer.appendChild(workCard);
       });
+
+      // Настраиваем контроль аудио для вновь созданных элементов
+      setTimeout(setupAllAudioControls, 100);
     }
 
     // Функция для поиска песни
@@ -614,6 +661,12 @@
         <p>Цена: ${song.price}₽</p>
         <button onclick="buyWork('${song.code}', ${song.price})">💳 Оплатить</button>
       `;
+
+      // Настраиваем контроль аудио для демо-плеера
+      setTimeout(() => {
+        const demoPlayer = document.getElementById('demoPlayer');
+        setupAudioControl(demoPlayer);
+      }, 100);
     }
 
     // === ФУНКЦИИ ДЛЯ НАВИГАЦИИ ===
@@ -654,6 +707,12 @@
         document.getElementById('successInfo').style.display = 'block';
         document.getElementById('fullPlayer').src = song.full;
         document.getElementById('downloadLink').href = song.full;
+
+        // Настраиваем контроль аудио для полного плеера
+        setTimeout(() => {
+          const fullPlayer = document.getElementById('fullPlayer');
+          setupAudioControl(fullPlayer);
+        }, 100);
       }
     }
 
@@ -666,6 +725,9 @@
         
         // Автоматически включаем музыку после загрузки
         autoPlayMusic();
+        
+        // Настраиваем контроль аудио для всех существующих элементов
+        setupAllAudioControls();
       }, 2000);
     };
 </script>
