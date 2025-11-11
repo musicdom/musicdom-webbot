@@ -349,7 +349,6 @@
       flex-grow: 1;
     }
     
-    /* Стиль для уведомления о музыке */
     .music-notification {
       position: fixed;
       top: 80px;
@@ -377,7 +376,7 @@
 </head>
 <body>
   <!-- Элемент аудио для фоновой музыки -->
-  <audio id="backgroundMusic" loop>
+  <audio id="backgroundMusic" loop preload="auto">
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
   </audio>
@@ -538,6 +537,42 @@
     let wasBackgroundMusicPlaying = false;
     let musicInitialized = false;
 
+    // Функция для установки громкости музыки
+    function setMusicVolume() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      
+      // МНОЖЕСТВЕННЫЕ СПОСОБЫ УСТАНОВКИ ГРОМКОСТИ
+      
+      // Способ 1: Установка громкости через свойство volume
+      backgroundMusic.volume = 0.3; // 30% громкость
+      
+      // Способ 2: Попытка установки через Web Audio API (если доступно)
+      if (window.AudioContext || window.webkitAudioContext) {
+        try {
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const source = audioContext.createMediaElementSource(backgroundMusic);
+          const gainNode = audioContext.createGain();
+          gainNode.gain.value = 0.3; // 30% громкость
+          source.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+        } catch(e) {
+          console.log("Web Audio API не поддерживается");
+        }
+      }
+      
+      // Способ 3: Установка громкости при каждом событии play
+      backgroundMusic.addEventListener('play', function() {
+        this.volume = 0.3;
+      });
+      
+      // Способ 4: Установка громкости при загрузке метаданных
+      backgroundMusic.addEventListener('loadedmetadata', function() {
+        this.volume = 0.3;
+      });
+      
+      console.log("Громкость музыки установлена на 30%");
+    }
+
     // Функция для инициализации музыки
     function initializeMusic() {
       if (musicInitialized) return;
@@ -545,8 +580,8 @@
       const backgroundMusic = document.getElementById('backgroundMusic');
       const musicToggle = document.getElementById('musicToggle');
       
-      // Устанавливаем громкость на 60% (0.6)
-      backgroundMusic.volume = 0.1;
+      // Устанавливаем громкость перед воспроизведением
+      setMusicVolume();
       
       // Пытаемся включить музыку автоматически
       const playPromise = backgroundMusic.play();
@@ -558,6 +593,11 @@
           isBackgroundMusicPlaying = true;
           musicInitialized = true;
           showMusicNotification('Музыка включена 🎵');
+          
+          // Дополнительная установка громкости после начала воспроизведения
+          setTimeout(() => {
+            backgroundMusic.volume = 0.3;
+          }, 100);
         }).catch(error => {
           // Автовоспроизведение заблокировано
           console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
@@ -602,6 +642,8 @@
       }
       
       if (backgroundMusic.paused) {
+        // Устанавливаем громкость перед воспроизведением
+        setMusicVolume();
         backgroundMusic.play();
         musicToggle.textContent = '🎵';
         isBackgroundMusicPlaying = true;
@@ -627,6 +669,8 @@
 
       audioElement.addEventListener('pause', function() {
         if (wasBackgroundMusicPlaying && !this.ended) {
+          // Восстанавливаем громкость при возобновлении фоновой музыки
+          setMusicVolume();
           backgroundMusic.play();
           wasBackgroundMusicPlaying = false;
         }
@@ -634,6 +678,8 @@
 
       audioElement.addEventListener('ended', function() {
         if (wasBackgroundMusicPlaying) {
+          // Восстанавливаем громкость при возобновлении фоновой музыки
+          setMusicVolume();
           backgroundMusic.play();
           wasBackgroundMusicPlaying = false;
         }
@@ -758,6 +804,9 @@
 
     // Инициализация при загрузке
     window.onload = function() {
+      // Предварительная установка громкости
+      setMusicVolume();
+      
       setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
