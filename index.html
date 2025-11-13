@@ -3,28 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Музыкальный Дом</title>
+  <title>Музыкальный Дом — Зимнее настроение</title>
   <style>
-    /* Все стили остаются без изменений */
     * {margin: 0; padding: 0; box-sizing: border-box;}
+    
+    /* 🌨️ Зимний фон и анимации из дизайна ИИ */
     body {
       height: 100vh;
       font-family: 'Inter', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
-      background-size: 200% 200%;
-      animation: gradientMove 10s ease infinite;
       color: white;
+      background: linear-gradient(#0b1622, #1b263b);
       overflow: hidden;
-    }
-    @keyframes gradientMove {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
+      position: relative;
     }
 
+    /* ❄️ Анимация снега */
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      color: white;
+      font-size: 1em;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1000;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {transform: translateY(0) rotate(0deg); opacity: 1;}
+      100% {transform: translateY(100vh) rotate(360deg); opacity: 0.3;}
+    }
+
+    /* 🌨️ Иней по краям */
+    .frost {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent 60%),
+                  radial-gradient(circle at bottom right, rgba(255,255,255,0.15), transparent 60%);
+      z-index: 50;
+      filter: blur(8px);
+    }
+
+    /* Снег на земле */
+    .ground-snow {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 120px;
+      background: radial-gradient(ellipse at top, rgba(255,255,255,0.8), transparent);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* 🔔 Стили для функциональных элементов (сохранены из второго кода) */
     .loader, .menu, .section {
       position: absolute;
       display: flex;
@@ -36,7 +68,9 @@
       width: 100%;
       height: 100%;
       padding: 20px;
+      z-index: 100;
     }
+    
     .loader img {
       width: 160px;
       height: auto;
@@ -44,6 +78,7 @@
       box-shadow: 0 0 25px rgba(255,255,255,0.3);
       margin-bottom: 30px;
     }
+    
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
 
@@ -84,93 +119,114 @@
       border: 3px solid rgba(255,255,255,0.2);
     }
 
+    /* 🎄 Зимние кнопки с анимациями снега */
     button {
       background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
       color: white;
-      font-size: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.5);
       padding: 14px 35px;
       margin: 10px;
-      border-radius: 40px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      border-radius: 10px;
+      font-size: 1rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      position: relative;
+      transition: 0.3s;
+      box-shadow: 0 0 10px rgba(255,255,255,0.2);
       min-width: 200px;
       max-width: 300px;
       width: auto;
       display: inline-block;
       text-align: center;
+      backdrop-filter: blur(15px);
+    }
+
+    /* Снег на кнопках */
+    button::before {
+      content: "❄️";
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      font-size: 1.2em;
+      opacity: 0.8;
+      animation: snowDrift 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes snowDrift {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(5px) rotate(15deg); }
     }
 
     button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 25px rgba(255,255,255,0.25);
-      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255,255,255,0.6);
     }
 
+    /* Специальные стили для кнопок покупки */
     #buySection button, .buy-button, .price-plan button {
-      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-      border: 1px solid rgba(255,255,255,0.4);
-      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 0 15px rgba(255,255,255,0.4);
     }
 
     #buySection button:hover, .buy-button:hover, .price-plan button:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+      background: rgba(255,255,255,0.35);
     }
 
+    /* 🎵 Кнопка музыки в зимнем стиле */
     .music-toggle {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      top: 15px;
+      right: 15px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 50%;
+      font-size: 1.4em;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 200;
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+      transition: 0.3s;
       width: 50px;
       height: 50px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.15);
-      cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5rem;
-      z-index: 1000;
-      transition: all 0.3s ease;
     }
-
+    
     .music-toggle:hover {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.35);
       transform: scale(1.1);
     }
 
-    .fixed-back-button {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
-      white-space: nowrap;
-    }
-    
-    .fixed-back-button:hover {
-      transform: translateX(-50%) scale(1.03);
+    /* 🔥 Заголовок с зимним свечением */
+    h1 {
+      margin-bottom: 15px;
+      text-shadow: 0 0 25px rgba(255,255,255,0.9);
+      animation: glow 3s ease-in-out infinite alternate;
     }
 
-    h1 {margin-bottom: 15px; color: white;}
+    @keyframes glow {
+      from {text-shadow: 0 0 20px rgba(255,255,255,0.7);}
+      to {text-shadow: 0 0 40px rgba(173,216,230,1);}
+    }
+
     p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
+    
     input {
       padding:10px 20px;
       border-radius:20px;
-      border:none;
+      border: 1px solid rgba(255,255,255,0.5);
       font-size:1rem;
       margin:10px 0;
       text-align:center;
       background: rgba(255,255,255,0.2);
       color: white;
+      backdrop-filter: blur(15px);
     }
+    
     input::placeholder {color: rgba(255,255,255,0.7);}
+    
     a.download-btn {
       background: rgba(255,255,255,0.2);
       color: white;
@@ -180,10 +236,13 @@
       display: inline-block;
       margin-top: 10px;
       transition: all 0.3s;
+      border: 1px solid rgba(255,255,255,0.3);
     }
+    
     a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
-    #works, #price {
+    /* Стили для разделов с прокруткой */
+    #works, #price, #about {
       justify-content: flex-start;
       padding-top: 0;
       padding-bottom: 100px;
@@ -202,7 +261,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .works-container, .price-container {
+    .works-container, .price-container, .about-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
@@ -212,12 +271,13 @@
       align-items: start;
     }
 
-    .work-card, .price-plan {
+    /* ❄️ Зимние карточки */
+    .work-card, .price-plan, .about-card {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 20px;
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: 0 0 20px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       opacity: 0;
@@ -232,9 +292,10 @@
       }
     }
 
-    .work-card:hover, .price-plan:hover {
+    .work-card:hover, .price-plan:hover, .about-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
+      box-shadow: 0 5px 25px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .work-image {
@@ -249,6 +310,7 @@
       justify-content: center;
       color: rgba(255,255,255,0.7);
       font-size: 3rem;
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .work-title {
@@ -277,6 +339,8 @@
       margin: 12px 0;
       border-radius: 8px;
       height: 40px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .work-price {
@@ -284,6 +348,7 @@
       font-weight: bold;
       margin: 8px 0;
       color: #ffd700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
     }
 
     .social-container {
@@ -303,7 +368,7 @@
       border-radius: 15px;
       padding: 15px;
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       box-shadow: 0 0 15px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       width: 100px;
@@ -316,6 +381,7 @@
       transform: translateY(-5px);
       background: rgba(255, 255, 255, 0.15);
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .social-icon {
@@ -349,6 +415,19 @@
       flex-grow: 1;
     }
     
+    .fixed-back-button {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      white-space: nowrap;
+    }
+    
+    .fixed-back-button:hover {
+      transform: translateX(-50%) scale(1.03);
+    }
+
     .music-notification {
       position: fixed;
       top: 80px;
@@ -374,86 +453,63 @@
     }
 
     /* Стили для раздела "О нас" */
-#about {
-  justify-content: flex-start;
-  padding-top: 0;
-  padding-bottom: 100px;
-  overflow-y: auto;
-}
+    #about {
+      justify-content: flex-start;
+      padding-top: 0;
+      padding-bottom: 100px;
+      overflow-y: auto;
+    }
 
-.about-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  max-width: 1200px;
-  width: 100%;
-  padding: 0 20px;
-  align-items: start;
-}
+    .about-card h2 {
+      margin-bottom: 15px;
+      color: white;
+      font-size: 1.3rem;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 10px;
+    }
 
-.about-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 25px;
-  backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 0 20px rgba(255,255,255,0.1);
-  transition: all 0.3s ease;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: cardAppear 0.6s ease forwards;
-}
+    .about-card p {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      color: white;
+    }
 
-.about-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 25px rgba(255,255,255,0.2);
-}
+    .about-card ul {
+      margin: 15px 0;
+      padding-left: 20px;
+    }
 
-.about-card h2 {
-  margin-bottom: 15px;
-  color: white;
-  font-size: 1.3rem;
-  border-bottom: 1px solid rgba(255,255,255,0.2);
-  padding-bottom: 10px;
-}
+    .about-card li {
+      margin-bottom: 8px;
+      line-height: 1.4;
+      color: white;
+    }
 
-.about-card p {
-  margin-bottom: 12px;
-  line-height: 1.5;
-  color: white;
-}
+    .about-card strong {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.3);
+    }
 
-.about-card ul {
-  margin: 15px 0;
-  padding-left: 20px;
-}
+    .about-card em {
+      opacity: 0.9;
+      font-style: italic;
+    }
 
-.about-card li {
-  margin-bottom: 8px;
-  line-height: 1.4;
-  color: white;
-}
+    .social-section {
+      text-align: center;
+    }
 
-.about-card strong {
-  color: #ffd700;
-}
-
-.about-card em {
-  opacity: 0.9;
-  font-style: italic;
-}
-
-.social-section {
-  text-align: center;
-}
-
-.social-section .social-container {
-  margin-top: 20px;
-}
+    .social-section .social-container {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <!-- Элемент аудио для фоновой музыки -->
+  <!-- ❄️ Зимние декоративные элементы -->
+  <div class="ground-snow"></div>
+  <div class="frost"></div>
+
+  <!-- 🎵 Функциональные элементы (сохранены из второго кода) -->
   <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
@@ -534,7 +590,7 @@
           • 1 готовый вариант песни<br>
           Идеально, чтобы попробовать или создать короткую идею 💫
         </p>
-        <button onclick="buyPlan('Старт', 5)">💳 Оплатить</button>
+        <button onclick="buyPlan('Старт', 500)">💳 Оплатить</button>
       </div>
 
       <div class="price-plan">
@@ -564,151 +620,167 @@
   </div>
 
   <!-- Раздел о нас -->
-<div class="section" id="about">
-  <div class="works-header">
-    <h1>💬 О нас</h1>
-    <p>Узнайте больше о Музыкальном Доме и получите ответы на частые вопросы</p>
-  </div>
-  
-  <div class="about-container">
-    <!-- Карточка с общей информацией -->
-    <div class="about-card">
-      <h2>🎵 Музыкальный Дом</h2>
-      <p>«Музыкальный Дом» — онлайн-платформа для создания уникальной музыки и песен. Мы превращаем чувства, истории и эмоции в музыку.</p>
+  <div class="section" id="about">
+    <div class="works-header">
+      <h1>💬 О нас</h1>
+      <p>Узнайте больше о Музыкальном Доме и получите ответы на частые вопросы</p>
     </div>
+    
+    <div class="about-container">
+      <!-- Карточка с общей информацией -->
+      <div class="about-card">
+        <h2>🎵 Музыкальный Дом</h2>
+        <p>«Музыкальный Дом» — онлайн-платформа для создания уникальной музыки и песен. Мы превращаем чувства, истории и эмоции в музыку.</p>
+      </div>
 
-    <!-- FAQ карточки -->
-    <div class="about-card">
-      <h2>1. Что такое «Музыкальный Дом»?</h2>
-      <p>Музыкальный Дом — онлайн-платформа для создания уникальной музыки и песен.</p>
-      <p><strong>Мы делаем:</strong></p>
-      <ul>
-        <li>🎵 Песни с текстом — куплеты, припевы, бриджи, дуэты;</li>
-        <li>🎹 Фоновую и инструментальную музыку для сайтов, видео и приложений;</li>
-        <li>💿 Готовые треки — можно купить сразу в разделе «Работы».</li>
-      </ul>
-      <p>Пример: у нас есть готовый трек в стиле поп — вы можете прослушать и использовать его для своего проекта</p>
-    </div>
+      <!-- FAQ карточки -->
+      <div class="about-card">
+        <h2>1. Что такое «Музыкальный Дом»?</h2>
+        <p>Музыкальный Дом — онлайн-платформа для создания уникальной музыки и песен.</p>
+        <p><strong>Мы делаем:</strong></p>
+        <ul>
+          <li>🎵 Песни с текстом — куплеты, припевы, бриджи, дуэты;</li>
+          <li>🎹 Фоновую и инструментальную музыку для сайтов, видео и приложений;</li>
+          <li>💿 Готовые треки — можно купить сразу в разделе «Работы».</li>
+        </ul>
+        <p>Пример: у нас есть готовый трек в стиле поп — вы можете прослушать и использовать его для своего проекта</p>
+      </div>
 
-    <div class="about-card">
-      <h2>2. Какие услуги доступны?</h2>
-      <p><strong>Заказ индивидуальной песни:</strong></p>
-      <ul>
-        <li>Вы выбираете жанр, стиль и тему текста.</li>
-        <li>Мы создаём текст и отправляем на согласование.</li>
-        <li>После утверждения текста вы оплачиваете, и мы отправляем готовую песню.</li>
-        <li>Время выполнения: 1–5 часов.</li>
-      </ul>
-      <p><strong>Фоновая музыка:</strong></p>
-      <ul>
-        <li>Лёгкая, современная, не отвлекающая.</li>
-        <li>Подходит для сайтов, видео и приложений.</li>
-      </ul>
-      <p><strong>Готовые треки:</strong></p>
-      <ul>
-        <li>Можно купить и использовать сразу.</li>
-        <li>Доступны разные жанры и стили.</li>
-      </ul>
-    </div>
+      <div class="about-card">
+        <h2>2. Какие услуги доступны?</h2>
+        <p><strong>Заказ индивидуальной песни:</strong></p>
+        <ul>
+          <li>Вы выбираете жанр, стиль и тему текста.</li>
+          <li>Мы создаём текст и отправляем на согласование.</li>
+          <li>После утверждения текста вы оплачиваете, и мы отправляем готовую песню.</li>
+          <li>Время выполнения: 1–5 часов.</li>
+        </ul>
+        <p><strong>Фоновая музыка:</strong></p>
+        <ul>
+          <li>Лёгкая, современная, не отвлекающая.</li>
+          <li>Подходит для сайтов, видео и приложений.</li>
+        </ul>
+        <p><strong>Готовые треки:</strong></p>
+        <ul>
+          <li>Можно купить и использовать сразу.</li>
+          <li>Доступны разные жанры и стили.</li>
+        </ul>
+      </div>
 
-    <div class="about-card">
-      <h2>3. Как оформить заказ песни?</h2>
-      <ul>
-        <li>Вы выбираете жанр, стиль и настроение.</li>
-        <li>Указываете тематику и ключевые идеи для текста.</li>
-        <li>Мы создаём текст и отправляем его вам на согласование.</li>
-        <li>После утверждения текста вы оплачиваете заказ, и мы отправляем готовую композицию.</li>
-      </ul>
-      <p>💡 <em>Совет: если не знаете жанр, мы поможем подобрать подходящий под настроение и цель трека.</em></p>
-    </div>
+      <div class="about-card">
+        <h2>3. Как оформить заказ песни?</h2>
+        <ul>
+          <li>Вы выбираете жанр, стиль и настроение.</li>
+          <li>Указываете тематику и ключевые идеи для текста.</li>
+          <li>Мы создаём текст и отправляем его вам на согласование.</li>
+          <li>После утверждения текста вы оплачиваете заказ, и мы отправляем готовую композицию.</li>
+        </ul>
+        <p>💡 <em>Совет: если не знаете жанр, мы поможем подобрать подходящий под настроение и цель трека.</em></p>
+      </div>
 
-    <div class="about-card">
-      <h2>4. Сколько стоит музыка?</h2>
-      <ul>
-        <li>Минимальная песня (короткий куплет и припев) — от 500₽;</li>
-        <li>Полная песня с куплетами и припевами — 1000–1500₽;</li>
-        <li>Фоновая музыка и готовые треки — цена индивидуально.</li>
-      </ul>
-      <p>Оплата производится после согласования текста — предоплата не нужна.</p>
-    </div>
+      <div class="about-card">
+        <h2>4. Сколько стоит музыка?</h2>
+        <ul>
+          <li>Минимальная песня (короткий куплет и припев) — от 500₽;</li>
+          <li>Полная песня с куплетами и припевами — 1000–1500₽;</li>
+          <li>Фоновая музыка и готовые треки — цена индивидуально.</li>
+        </ul>
+        <p>Оплата производится после согласования текста — предоплата не нужна.</p>
+      </div>
 
-    <div class="about-card">
-      <h2>5. Как оплатить заказ?</h2>
-      <ul>
-        <li>Прямо по реквизитам (карта, банковский перевод)</li>
-        <li>Через сайт</li>
-      </ul>
-      <p>💡 <em>Совет: Оплачиваете только после того, как увидите и согласуете текст песни.</em></p>
-    </div>
+      <div class="about-card">
+        <h2>5. Как оплатить заказ?</h2>
+        <ul>
+          <li>Прямо по реквизитам (карта, банковский перевод)</li>
+          <li>Через сайт</li>
+        </ul>
+        <p>💡 <em>Совет: Оплачиваете только после того, как увидите и согласуете текст песни.</em></p>
+      </div>
 
-    <div class="about-card">
-      <h2>6. Права и лицензии</h2>
-      <p>Все песни создаются с использованием AI-технологий и уникальны для вас.</p>
-      <p><strong>Вы получаете право использовать песню лично и коммерчески:</strong></p>
-      <ul>
-        <li>на сайте, в приложениях и соцсетях;</li>
-        <li>в видео, рекламе, презентациях;</li>
-        <li>на мероприятиях и личных проектах.</li>
-      </ul>
-      <p>❌ <strong>Запрещено</strong> перепродавать или выдавать трек за свой без согласования.</p>
-    </div>
+      <div class="about-card">
+        <h2>6. Права и лицензии</h2>
+        <p>Все песни создаются с использованием AI-технологий и уникальны для вас.</p>
+        <p><strong>Вы получаете право использовать песню лично и коммерчески:</strong></p>
+        <ul>
+          <li>на сайте, в приложениях и соцсетях;</li>
+          <li>в видео, рекламе, презентациях;</li>
+          <li>на мероприятиях и личных проектах.</li>
+        </ul>
+        <p>❌ <strong>Запрещено</strong> перепродавать или выдавать трек за свой без согласования.</p>
+      </div>
 
-    <div class="about-card">
-      <h2>7. Сколько времени занимает работа?</h2>
-      <ul>
-        <li>Короткая песня: 1–2 часа</li>
-        <li>Полная песня: 3–5 часов</li>
-        <li>Сложные заказы (ремиксы, дополнительные изменения): до 5 часов</li>
-      </ul>
-      <p>💡 <em>Совет: чем точнее вы опишите стиль и идею песни, тем быстрее мы подготовим трек.</em></p>
-    </div>
+      <div class="about-card">
+        <h2>7. Сколько времени занимает работа?</h2>
+        <ul>
+          <li>Короткая песня: 1–2 часа</li>
+          <li>Полная песня: 3–5 часов</li>
+          <li>Сложные заказы (ремиксы, дополнительные изменения): до 5 часов</li>
+        </ul>
+        <p>💡 <em>Совет: чем точнее вы опишите стиль и идею песни, тем быстрее мы подготовим трек.</em></p>
+      </div>
 
-    <div class="about-card">
-      <h2>8. Для кого подходит «Музыкальный Дом»?</h2>
-      <ul>
-        <li>Частные лица, желающие уникальную песню для себя или в подарок</li>
-        <li>Рабочие и специалисты, которые хотят персональные композиции</li>
-        <li>Разработчики сайтов и видеопроектов, которым нужна фоновая музыка</li>
-        <li>Все, кто ценит индивидуальный подход и качество</li>
-      </ul>
-    </div>
+      <div class="about-card">
+        <h2>8. Для кого подходит «Музыкальный Дом»?</h2>
+        <ul>
+          <li>Частные лица, желающие уникальную песню для себя или в подарок</li>
+          <li>Рабочие и специалисты, которые хотят персональные композиции</li>
+          <li>Разработчики сайтов и видеопроектов, которым нужна фоновая музыка</li>
+          <li>Все, кто ценит индивидуальный подход и качество</li>
+        </ul>
+      </div>
 
-    <div class="about-card">
-      <h2>9. Почему выбрать «Музыкальный Дом»?</h2>
-      <ul>
-        <li><strong>Персональный подход:</strong> каждая песня создаётся по вашим идеям</li>
-        <li><strong>Современное качество:</strong> профессиональное звучание</li>
-        <li><strong>Удобство и скорость:</strong> весь процесс онлайн, от текста до готового трека за считанные часы</li>
-        <li><strong>Гибкая цена:</strong> доступно каждому</li>
-        <li><strong>Прозрачность:</strong> вы видите текст, согласуете его и оплачиваете только после утверждения</li>
-      </ul>
-      <p>💡 <em>Совет: начинайте с небольшого заказа, чтобы почувствовать качество и стиль, а потом можно заказать полную песню или фоновую музыку для проекта.</em></p>
-    </div>
+      <div class="about-card">
+        <h2>9. Почему выбрать «Музыкальный Дом»?</h2>
+        <ul>
+          <li><strong>Персональный подход:</strong> каждая песня создаётся по вашим идеям</li>
+          <li><strong>Современное качество:</strong> профессиональное звучание</li>
+          <li><strong>Удобство и скорость:</strong> весь процесс онлайн, от текста до готового трека за считанные часы</li>
+          <li><strong>Гибкая цена:</strong> доступно каждому</li>
+          <li><strong>Прозрачность:</strong> вы видите текст, согласуете его и оплачиваете только после утверждения</li>
+        </ul>
+        <p>💡 <em>Совет: начинайте с небольшого заказа, чтобы почувствовать качество и стиль, а потом можно заказать полную песню или фоновую музыку для проекта.</em></p>
+      </div>
 
-    <!-- Социальные кнопки -->
-    <div class="about-card social-section">
-      <h2>📞 Свяжитесь с нами</h2>
-      <div class="social-container">
-        <a href="https://vk.com/musicsdom" class="social-card" target="_blank">
-          <div class="social-icon">📘</div>
-          <div class="social-name">VK</div>
-        </a>
-        <a href="https://t.me/musikcdombot" class="social-card" target="_blank">
-          <div class="social-icon">📱</div>
-          <div class="social-name">Telegram</div>
-        </a>
-        <a href="https://chat.whatsapp.com/E8HqcDTajiNE7FUd4Y65Vi?mode=wwt" class="social-card" target="_blank">
-          <div class="social-icon">💬</div>
-          <div class="social-name">WhatsApp</div>
-        </a>
+      <!-- Социальные кнопки -->
+      <div class="about-card social-section">
+        <h2>📞 Свяжитесь с нами</h2>
+        <div class="social-container">
+          <a href="https://vk.com/musicsdom" class="social-card" target="_blank">
+            <div class="social-icon">📘</div>
+            <div class="social-name">VK</div>
+          </a>
+          <a href="https://t.me/musikcdombot" class="social-card" target="_blank">
+            <div class="social-icon">📱</div>
+            <div class="social-name">Telegram</div>
+          </a>
+          <a href="https://chat.whatsapp.com/E8HqcDTajiNE7FUd4Y65Vi?mode=wwt" class="social-card" target="_blank">
+            <div class="social-icon">💬</div>
+            <div class="social-name">WhatsApp</div>
+          </a>
+        </div>
       </div>
     </div>
+
+    <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
-</div>
+  <script>
+    // --- Эффект падающего снега из дизайна ИИ ---
+    const snowflakeCount = 70;
 
-<script>
+    for (let i = 0; i < snowflakeCount; i++) {
+      const snowflake = document.createElement('div');
+      snowflake.classList.add('snowflake');
+      snowflake.textContent = '❄';
+      snowflake.style.left = Math.random() * 100 + 'vw';
+      snowflake.style.fontSize = (Math.random() * 12 + 10) + 'px';
+      snowflake.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      snowflake.style.opacity = Math.random();
+      snowflake.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(snowflake);
+    }
+
+    // --- Функциональный код из второго сайта (сохранен без изменений) ---
     const workerUrl = "https://musicdom-payment.vercel.app/";
     
     const songs = [
@@ -974,7 +1046,6 @@
         setupAllAudioControls();
       }, 2000);
     };
-</script>
+  </script>
 </body>
 </html>
-
