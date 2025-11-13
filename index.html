@@ -3,18 +3,70 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Музыкальный Дом — Зимнее настроение</title>
+  <title>Музыкальный Дом — Зимняя Сказка</title>
   <style>
     * {margin: 0; padding: 0; box-sizing: border-box;}
     
-    /* 🌨️ Зимний фон и анимации из дизайна ИИ */
+    /* ❄️ Улучшенный зимний фон */
     body {
       height: 100vh;
       font-family: 'Inter', sans-serif;
       color: white;
-      background: linear-gradient(#0b1622, #1b263b);
+      background: linear-gradient(180deg, #0a1520 0%, #1a2b3e 30%, #2d4a6b 70%, #3a638c 100%);
       overflow: hidden;
       position: relative;
+    }
+
+    /* 🌌 Северное сияние */
+    .aurora {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 60%;
+      background: 
+        linear-gradient(180deg, 
+          rgba(78, 205, 196, 0.15) 0%, 
+          rgba(87, 174, 255, 0.1) 20%,
+          rgba(152, 118, 249, 0.08) 40%,
+          transparent 70%);
+      filter: blur(40px);
+      animation: auroraShift 8s ease-in-out infinite alternate;
+      z-index: 1;
+    }
+
+    @keyframes auroraShift {
+      0% { opacity: 0.7; transform: translateY(-10px) scale(1.05); }
+      100% { opacity: 1; transform: translateY(10px) scale(1); }
+    }
+
+    /* 🏔️ Снежные горы на заднем плане */
+    .mountains {
+      position: fixed;
+      bottom: 120px;
+      left: 0;
+      width: 100%;
+      height: 300px;
+      background: 
+        linear-gradient(180deg, transparent 60%, rgba(255,255,255,0.1) 100%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Cpath fill='%231a2b3e' d='M0,200 L150,100 L300,150 L450,80 L600,120 L750,60 L900,130 L1050,40 L1200,100 L1200,300 L0,300 Z'/%3E%3C/svg%3E");
+      background-size: cover;
+      z-index: 2;
+      opacity: 0.8;
+    }
+
+    /* 🌲 Елочки */
+    .trees {
+      position: fixed;
+      bottom: 120px;
+      left: 0;
+      width: 100%;
+      height: 200px;
+      background-image: 
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 200'%3E%3Cpath fill='%231e3a5c' d='M100,200 L120,150 L140,200 Z M200,200 L220,130 L240,200 Z M300,200 L320,170 L340,200 Z M400,200 L420,140 L440,200 Z M500,200 L520,160 L540,200 Z M600,200 L620,120 L640,200 Z M700,200 L720,150 L740,200 Z M800,200 L820,130 L840,200 Z M900,200 L920,180 L940,200 Z M1000,200 L1020,140 L1040,200 Z M1100,200 L1120,160 L1140,200 Z'/%3E");
+      background-size: 1200px 200px;
+      z-index: 3;
+      opacity: 0.6;
     }
 
     /* ❄️ Анимация снега */
@@ -27,11 +79,13 @@
       pointer-events: none;
       z-index: 1000;
       animation: fall linear infinite;
+      text-shadow: 0 0 5px rgba(173, 216, 230, 0.7);
     }
 
     @keyframes fall {
-      0% {transform: translateY(0) rotate(0deg); opacity: 1;}
-      100% {transform: translateY(100vh) rotate(360deg); opacity: 0.3;}
+      0% {transform: translateY(0) rotate(0deg) translateX(0); opacity: 1;}
+      50% {transform: translateY(50vh) rotate(180deg) translateX(20px); opacity: 0.7;}
+      100% {transform: translateY(100vh) rotate(360deg) translateX(-20px); opacity: 0.3;}
     }
 
     /* 🌨️ Иней по краям */
@@ -39,10 +93,18 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      background: radial-gradient(circle at top left, rgba(255,255,255,0.15), transparent 60%),
-                  radial-gradient(circle at bottom right, rgba(255,255,255,0.15), transparent 60%);
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 40% 70%, rgba(255,255,255,0.1) 0%, transparent 40%);
       z-index: 50;
-      filter: blur(8px);
+      filter: blur(15px);
+      animation: frostGlow 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes frostGlow {
+      0% { opacity: 0.7; }
+      100% { opacity: 1; }
     }
 
     /* Снег на земле */
@@ -50,13 +112,39 @@
       position: absolute;
       bottom: 0;
       width: 100%;
-      height: 120px;
-      background: radial-gradient(ellipse at top, rgba(255,255,255,0.8), transparent);
+      height: 150px;
+      background: 
+        radial-gradient(ellipse at top, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.4) 30%, transparent 70%),
+        linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.2) 100%);
       pointer-events: none;
       z-index: 10;
+      border-top: 2px solid rgba(255,255,255,0.3);
     }
 
-    /* 🔔 Стили для функциональных элементов (сохранены из второго кода) */
+    /* ✨ Сверкающие звезды */
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 70%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* 🔔 Стили для функциональных элементов */
     .loader, .menu, .section {
       position: absolute;
       display: flex;
@@ -75,8 +163,10 @@
       width: 160px;
       height: auto;
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      box-shadow: 0 0 30px rgba(173, 216, 230, 0.5);
       margin-bottom: 30px;
+      border: 2px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
     }
     
     .menu, .section {opacity: 0; pointer-events: none;}
@@ -86,22 +176,25 @@
       font-size: 1.2rem;
       margin-bottom: 15px;
       color: white;
+      text-shadow: 0 0 10px rgba(173, 216, 230, 0.7);
     }
 
     .loading-bar {
       width: 300px;
-      height: 6px;
+      height: 8px;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.3);
     }
 
     .loading-progress {
       height: 100%;
       width: 0%;
-      background: white;
-      border-radius: 3px;
+      background: linear-gradient(90deg, #87CEEB, #E0F7FF);
+      border-radius: 4px;
       animation: loading 2s ease-in-out forwards;
+      box-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
     }
 
     @keyframes loading {
@@ -115,8 +208,14 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 30px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.4);
-      border: 3px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 40px rgba(173, 216, 230, 0.6);
+      border: 3px solid rgba(255,255,255,0.4);
+      animation: logoGlow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes logoGlow {
+      0% { box-shadow: 0 0 30px rgba(173, 216, 230, 0.4); }
+      100% { box-shadow: 0 0 50px rgba(173, 216, 230, 0.8); }
     }
 
     /* 🎄 Зимние кнопки с анимациями снега */
@@ -126,18 +225,19 @@
       border: 1px solid rgba(255, 255, 255, 0.5);
       padding: 14px 35px;
       margin: 10px;
-      border-radius: 10px;
+      border-radius: 15px;
       font-size: 1rem;
       cursor: pointer;
       position: relative;
-      transition: 0.3s;
-      box-shadow: 0 0 10px rgba(255,255,255,0.2);
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(255,255,255,0.2);
       min-width: 200px;
       max-width: 300px;
       width: auto;
       display: inline-block;
       text-align: center;
       backdrop-filter: blur(15px);
+      overflow: hidden;
     }
 
     /* Снег на кнопках */
@@ -156,90 +256,142 @@
       100% { transform: translateY(5px) rotate(15deg); }
     }
 
+    /* Эффект снежного свечения при наведении */
+    button::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    button:hover::after {
+      left: 100%;
+    }
+
     button:hover {
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.25);
       transform: scale(1.05);
-      box-shadow: 0 0 15px rgba(255,255,255,0.6);
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
     }
 
     /* Специальные стили для кнопок покупки */
     #buySection button, .buy-button, .price-plan button {
       background: rgba(255,255,255,0.25);
       border: 1px solid rgba(255,255,255,0.6);
-      box-shadow: 0 0 15px rgba(255,255,255,0.4);
+      box-shadow: 0 0 20px rgba(255,255,255,0.3);
     }
 
     #buySection button:hover, .buy-button:hover, .price-plan button:hover {
       background: rgba(255,255,255,0.35);
+      box-shadow: 0 0 30px rgba(255,255,255,0.5);
     }
 
     /* 🎵 Кнопка музыки в зимнем стиле */
     .music-toggle {
       position: fixed;
-      top: 15px;
-      right: 15px;
+      top: 20px;
+      right: 20px;
       background: rgba(255,255,255,0.2);
       border: 1px solid rgba(255,255,255,0.5);
       border-radius: 50%;
       font-size: 1.4em;
-      padding: 10px;
+      padding: 12px;
       cursor: pointer;
       z-index: 200;
-      box-shadow: 0 0 10px rgba(255,255,255,0.4);
-      transition: 0.3s;
-      width: 50px;
-      height: 50px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      transition: all 0.3s ease;
+      width: 55px;
+      height: 55px;
       display: flex;
       justify-content: center;
       align-items: center;
+      backdrop-filter: blur(10px);
+      animation: musicPulse 2s infinite;
+    }
+    
+    @keyframes musicPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
     
     .music-toggle:hover {
       background: rgba(255,255,255,0.35);
-      transform: scale(1.1);
+      transform: scale(1.15);
+      box-shadow: 0 0 25px rgba(255,255,255,0.5);
     }
 
     /* 🔥 Заголовок с зимним свечением */
     h1 {
-      margin-bottom: 15px;
-      text-shadow: 0 0 25px rgba(255,255,255,0.9);
+      margin-bottom: 20px;
+      text-shadow: 0 0 20px rgba(173, 216, 230, 0.9);
       animation: glow 3s ease-in-out infinite alternate;
+      font-size: 2.2em;
     }
 
     @keyframes glow {
-      from {text-shadow: 0 0 20px rgba(255,255,255,0.7);}
-      to {text-shadow: 0 0 40px rgba(173,216,230,1);}
+      from { 
+        text-shadow: 0 0 20px rgba(173, 216, 230, 0.7),
+                     0 0 30px rgba(173, 216, 230, 0.5);
+      }
+      to { 
+        text-shadow: 0 0 30px rgba(173, 216, 230, 1),
+                     0 0 40px rgba(173, 216, 230, 0.8),
+                     0 0 50px rgba(173, 216, 230, 0.6);
+      }
     }
 
-    p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
-    
-    input {
-      padding:10px 20px;
-      border-radius:20px;
-      border: 1px solid rgba(255,255,255,0.5);
-      font-size:1rem;
-      margin:10px 0;
-      text-align:center;
-      background: rgba(255,255,255,0.2);
+    p {
+      max-width: 600px;
+      font-size: 1rem;
+      opacity: 0.9;
       color: white;
-      backdrop-filter: blur(15px);
+      text-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
     
-    input::placeholder {color: rgba(255,255,255,0.7);}
+    input {
+      padding: 12px 20px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.5);
+      font-size: 1rem;
+      margin: 10px 0;
+      text-align: center;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      backdrop-filter: blur(15px);
+      transition: all 0.3s ease;
+    }
+    
+    input:focus {
+      outline: none;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+    }
+    
+    input::placeholder {
+      color: rgba(255,255,255,0.7);
+    }
     
     a.download-btn {
       background: rgba(255,255,255,0.2);
       color: white;
-      padding: 10px 30px;
+      padding: 12px 30px;
       border-radius: 25px;
       text-decoration: none;
       display: inline-block;
       margin-top: 10px;
       transition: all 0.3s;
       border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
     }
     
-    a.download-btn:hover {background: rgba(255,255,255,0.35);}
+    a.download-btn:hover {
+      background: rgba(255,255,255,0.35);
+      transform: scale(1.05);
+    }
 
     /* Стили для разделов с прокруткой */
     #works, #price, #about {
@@ -253,18 +405,19 @@
       position: sticky;
       top: 0;
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       width: 100%;
-      padding: 20px;
+      padding: 25px;
       z-index: 10;
       margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
     .works-container, .price-container, .about-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      gap: 25px;
       max-width: 1200px;
       width: 100%;
       padding: 0 20px;
@@ -274,15 +427,27 @@
     /* ❄️ Зимние карточки */
     .work-card, .price-plan, .about-card {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 20px;
-      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 25px;
+      backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
       opacity: 0;
       transform: translateY(30px);
       animation: cardAppear 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .work-card::before, .price-plan::before, .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
     }
 
     @keyframes cardAppear {
@@ -293,8 +458,8 @@
     }
 
     .work-card:hover, .price-plan:hover, .about-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.3);
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
@@ -302,8 +467,8 @@
       width: 100%;
       height: 160px;
       object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 12px;
+      border-radius: 15px;
+      margin-bottom: 15px;
       background: rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
@@ -311,21 +476,23 @@
       color: rgba(255,255,255,0.7);
       font-size: 3rem;
       border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
     .work-title {
       font-size: 1.2rem;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: white;
       min-height: 2.8rem;
       display: flex;
       align-items: center;
       justify-content: center;
+      text-shadow: 0 0 10px rgba(0,0,0,0.3);
     }
 
     .work-description {
       font-size: 0.85rem;
-      margin-bottom: 12px;
+      margin-bottom: 15px;
       opacity: 0.9;
       line-height: 1.4;
       color: white;
@@ -336,8 +503,8 @@
 
     .work-audio {
       width: 100%;
-      margin: 12px 0;
-      border-radius: 8px;
+      margin: 15px 0;
+      border-radius: 10px;
       height: 40px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.3);
@@ -346,7 +513,7 @@
     .work-price {
       font-size: 1.1rem;
       font-weight: bold;
-      margin: 8px 0;
+      margin: 10px 0;
       color: #ffd700;
       text-shadow: 0 0 10px rgba(255,215,0,0.5);
     }
@@ -369,7 +536,7 @@
       padding: 15px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
       width: 100px;
       height: 100px;
@@ -380,7 +547,7 @@
     .social-card:hover {
       transform: translateY(-5px);
       background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      box-shadow: 0 8px 20px rgba(255,255,255,0.2);
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
@@ -422,27 +589,28 @@
       transform: translateX(-50%);
       z-index: 100;
       white-space: nowrap;
+      backdrop-filter: blur(15px);
     }
     
     .fixed-back-button:hover {
-      transform: translateX(-50%) scale(1.03);
+      transform: translateX(-50%) scale(1.05);
     }
 
     .music-notification {
       position: fixed;
-      top: 80px;
+      top: 90px;
       right: 20px;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.15);
-      border-radius: 10px;
-      padding: 10px 15px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      border-radius: 12px;
+      padding: 12px 18px;
       color: white;
       font-size: 0.9rem;
       z-index: 999;
       animation: fadeInOut 4s forwards;
-      max-width: 200px;
+      max-width: 220px;
     }
     
     @keyframes fadeInOut {
@@ -502,14 +670,40 @@
     .social-section .social-container {
       margin-top: 20px;
     }
+
+    /* Адаптивность */
+    @media (max-width: 768px) {
+      .works-container, .price-container, .about-container {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+      }
+      
+      h1 {
+        font-size: 1.8em;
+      }
+      
+      .menu-logo {
+        width: 150px;
+        height: 150px;
+      }
+      
+      button {
+        min-width: 180px;
+        padding: 12px 25px;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- ❄️ Зимние декоративные элементы -->
+  <!-- 🌌 Зимние декоративные элементы -->
+  <div class="aurora"></div>
+  <div class="stars" id="stars"></div>
+  <div class="mountains"></div>
+  <div class="trees"></div>
   <div class="ground-snow"></div>
   <div class="frost"></div>
 
-  <!-- 🎵 Функциональные элементы (сохранены из второго кода) -->
+  <!-- 🎵 Функциональные элементы -->
   <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
     Ваш браузер не поддерживает аудио элемент.
@@ -519,7 +713,7 @@
 
   <div class="loader">
     <img src="logo.jpg" alt="Музыкальный Дом">
-    <div class="loading-text">Загрузка...</div>
+    <div class="loading-text">Загрузка зимней сказки...</div>
     <div class="loading-bar">
       <div class="loading-progress"></div>
     </div>
@@ -534,6 +728,7 @@
     <button onclick="openSection('about')">💬 О нас</button>
   </div>
 
+  <!-- Остальные разделы остаются без изменений в HTML -->
   <!-- Раздел найти песню -->
   <div class="section" id="find">
     <h1>🔍 Найти свою песню</h1>
@@ -765,7 +960,7 @@
   </div>
 
   <script>
-    // --- Эффект падающего снега из дизайна ИИ ---
+    // --- Эффект падающего снега ---
     const snowflakeCount = 70;
 
     for (let i = 0; i < snowflakeCount; i++) {
@@ -778,6 +973,24 @@
       snowflake.style.opacity = Math.random();
       snowflake.style.animationDelay = Math.random() * 5 + 's';
       document.body.appendChild(snowflake);
+    }
+
+    // --- Создание звезд ---
+    function createStars() {
+      const starsContainer = document.getElementById('stars');
+      const starCount = 50;
+      
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
+        star.style.left = Math.random() * 100 + 'vw';
+        star.style.top = Math.random() * 70 + 'vh';
+        star.style.width = (Math.random() * 3 + 1) + 'px';
+        star.style.height = star.style.width;
+        star.style.animationDelay = Math.random() * 3 + 's';
+        star.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        starsContainer.appendChild(star);
+      }
     }
 
     // --- Функциональный код из второго сайта (сохранен без изменений) ---
@@ -1034,6 +1247,9 @@
 
     // Инициализация при загрузке
     window.onload = function() {
+      // Создаем звезды
+      createStars();
+      
       setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
