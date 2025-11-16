@@ -556,7 +556,9 @@
 </head>
 <body>
   <!-- Контейнер для снежинок - загружается сразу -->
-  <div class="snowflakes" id="snowflakes"></div>
+  <div class="snowflakes" id="snowflakes">
+    <!-- Снежинки будут созданы сразу через JavaScript -->
+  </div>
 
   <!-- Элемент аудио для фоновой музыки -->
   <audio id="backgroundMusic" loop>
@@ -814,29 +816,6 @@
   </div>
 
   <script>
-    const workerUrl = "https://musicdom-payment.vercel.app/";
-    
-    const songs = [
-      {
-        code: "456",
-        title: "Песня Музыкальный Дом",
-        description: "Эксклюзивная композиция от Музыкального Дома",
-        image: "logo.jpg",
-        demo: "song/song456_demo.mp3",
-        full: "song/song456_full.mp3",
-        price: 10
-      },
-      {
-        code: "123",
-        title: "Песня для Максима",
-        description: "Индивидуальная песня, созданная специально для Максима",
-        image: "🎶",
-        demo: "songs/song123_demo.mp3",
-        full: "songs/song123_full.mp3",
-        price: 200
-      }
-    ];
-
     // Функция для создания снежинок - запускается сразу
     function createSnowflakes() {
       const snowflakesContainer = document.getElementById('snowflakes');
@@ -867,10 +846,31 @@
       }
     }
 
-    // Создаем снежинки сразу при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function() {
-      createSnowflakes();
-    });
+    // Создаем снежинки сразу при выполнении скрипта
+    createSnowflakes();
+
+    const workerUrl = "https://musicdom-payment.vercel.app/";
+    
+    const songs = [
+      {
+        code: "456",
+        title: "Песня Музыкальный Дом",
+        description: "Эксклюзивная композиция от Музыкального Дома",
+        image: "logo.jpg",
+        demo: "song/song456_demo.mp3",
+        full: "song/song456_full.mp3",
+        price: 10
+      },
+      {
+        code: "123",
+        title: "Песня для Максима",
+        description: "Индивидуальная песня, созданная специально для Максима",
+        image: "🎶",
+        demo: "songs/song123_demo.mp3",
+        full: "songs/song123_full.mp3",
+        price: 200
+      }
+    ];
 
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
