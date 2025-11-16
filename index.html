@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Музыкальный Дом</title>
   <style>
-    /* Зимний стиль с исправлениями */
+    /* Зимний стиль с эффектом подмерзшего стекла */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       height: 100vh;
@@ -13,11 +13,50 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #a8d8ea, #c1e1f7, #e6f7ff);
+      background: linear-gradient(135deg, #1e3c72, #2a5298, #6dd5fa);
       background-size: 200% 200%;
       animation: gradientMove 15s ease infinite;
-      color: #2c3e50;
+      color: white;
       overflow: hidden;
+      position: relative;
+    }
+    
+    /* Контейнер для снежинок */
+    .snowflakes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Индивидуальные снежинки */
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: white;
+      font-size: 1em;
+      animation: snowFall 10s linear infinite;
+      user-select: none;
+    }
+    
+    @keyframes snowFall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateX(20px) rotate(360deg);
+        opacity: 0;
+      }
     }
     
     @keyframes gradientMove {
@@ -37,14 +76,14 @@
       width: 100%;
       height: 100%;
       padding: 20px;
+      z-index: 2;
     }
     .loader img {
       width: 160px;
       height: auto;
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.5);
+      box-shadow: 0 0 25px rgba(255,255,255,0.3);
       margin-bottom: 30px;
-      border: 3px solid rgba(255,255,255,0.3);
     }
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
@@ -52,13 +91,13 @@
     .loading-text {
       font-size: 1.2rem;
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: white;
     }
 
     .loading-bar {
       width: 300px;
       height: 6px;
-      background: rgba(44, 62, 80, 0.2);
+      background: rgba(255, 255, 255, 0.2);
       border-radius: 3px;
       overflow: hidden;
     }
@@ -66,7 +105,7 @@
     .loading-progress {
       height: 100%;
       width: 0%;
-      background: #3498db;
+      background: white;
       border-radius: 3px;
       animation: loading 2s ease-in-out forwards;
     }
@@ -82,20 +121,20 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 30px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.5);
-      border: 3px solid rgba(255,255,255,0.3);
+      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      border: 3px solid rgba(255,255,255,0.2);
     }
 
     button {
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      color: #2c3e50;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
       font-size: 1rem;
       padding: 14px 35px;
       margin: 10px;
       border-radius: 40px;
       backdrop-filter: blur(15px);
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      box-shadow: 0 0 20px rgba(255,255,255,0.15);
       cursor: pointer;
       transition: all 0.3s ease;
       min-width: 200px;
@@ -106,19 +145,19 @@
     }
 
     button:hover {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 25px rgba(255,255,255,0.4);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 25px rgba(255,255,255,0.25);
       transform: scale(1.03);
     }
 
     #buySection button, .buy-button, .price-plan button {
-      background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.5));
-      border: 1px solid rgba(255,255,255,0.6);
-      box-shadow: 0 0 30px rgba(255,255,255,0.3);
+      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
+      border: 1px solid rgba(255,255,255,0.4);
+      box-shadow: 0 0 30px rgba(255,255,255,0.2);
     }
 
     #buySection button:hover, .buy-button:hover, .price-plan button:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
     }
 
     .music-toggle {
@@ -128,10 +167,10 @@
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
       cursor: pointer;
       display: flex;
       justify-content: center;
@@ -142,8 +181,8 @@
     }
 
     .music-toggle:hover {
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
       transform: scale(1.1);
     }
 
@@ -160,8 +199,8 @@
       transform: translateX(-50%) scale(1.03);
     }
 
-    h1 {margin-bottom: 15px; color: #2c3e50;}
-    p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: #2c3e50;}
+    h1 {margin-bottom: 15px; color: white;}
+    p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
     input {
       padding:10px 20px;
       border-radius:20px;
@@ -169,13 +208,13 @@
       font-size:1rem;
       margin:10px 0;
       text-align:center;
-      background: rgba(255,255,255,0.7);
-      color: #2c3e50;
+      background: rgba(255,255,255,0.2);
+      color: white;
     }
-    input::placeholder {color: rgba(44, 62, 80, 0.7);}
+    input::placeholder {color: rgba(255,255,255,0.7);}
     a.download-btn {
-      background: rgba(255,255,255,0.7);
-      color: #2c3e50;
+      background: rgba(255,255,255,0.2);
+      color: white;
       padding: 10px 30px;
       border-radius: 25px;
       text-decoration: none;
@@ -183,7 +222,7 @@
       margin-top: 10px;
       transition: all 0.3s;
     }
-    a.download-btn:hover {background: rgba(255,255,255,0.9);}
+    a.download-btn:hover {background: rgba(255,255,255,0.35);}
 
     #works, #price {
       justify-content: flex-start;
@@ -195,13 +234,13 @@
     .works-header {
       position: sticky;
       top: 0;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(15px);
       width: 100%;
       padding: 20px;
       z-index: 10;
       margin-bottom: 20px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .works-container, .price-container {
@@ -215,12 +254,12 @@
     }
 
     .work-card, .price-plan {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 20px;
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       opacity: 0;
       transform: translateY(30px);
@@ -236,7 +275,7 @@
 
     .work-card:hover, .price-plan:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.4);
+      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
     }
 
     .work-image {
@@ -245,18 +284,18 @@
       object-fit: cover;
       border-radius: 12px;
       margin-bottom: 12px;
-      background: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(44, 62, 80, 0.7);
+      color: rgba(255,255,255,0.7);
       font-size: 3rem;
     }
 
     .work-title {
       font-size: 1.2rem;
       margin-bottom: 8px;
-      color: #2c3e50;
+      color: white;
       min-height: 2.8rem;
       display: flex;
       align-items: center;
@@ -268,7 +307,7 @@
       margin-bottom: 12px;
       opacity: 0.9;
       line-height: 1.4;
-      color: #2c3e50;
+      color: white;
       min-height: 3.5rem;
       display: flex;
       align-items: center;
@@ -285,7 +324,7 @@
       font-size: 1.1rem;
       font-weight: bold;
       margin: 8px 0;
-      color: #e74c3c;
+      color: #ffd700;
     }
 
     .social-container {
@@ -301,23 +340,23 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 15px;
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       width: 100px;
       height: 100px;
       text-decoration: none;
-      color: #2c3e50;
+      color: white;
     }
 
     .social-card:hover {
       transform: translateY(-5px);
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 0 20px rgba(255,255,255,0.4);
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
 
     .social-icon {
@@ -332,7 +371,7 @@
 
     .price-plan {
       text-align: left;
-      color: #2c3e50;
+      color: white;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -340,7 +379,7 @@
 
     .price-plan h2 {
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: white;
       font-size: 1.3rem;
     }
 
@@ -355,13 +394,13 @@
       position: fixed;
       top: 80px;
       right: 20px;
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      box-shadow: 0 0 15px rgba(255,255,255,0.15);
       border-radius: 10px;
       padding: 10px 15px;
-      color: #2c3e50;
+      color: white;
       font-size: 0.9rem;
       z-index: 999;
       animation: fadeInOut 4s forwards;
@@ -394,12 +433,12 @@
     }
 
     .about-card {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 25px;
       backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 0 20px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
       transition: all 0.3s ease;
       opacity: 0;
       transform: translateY(30px);
@@ -408,21 +447,21 @@
 
     .about-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.4);
+      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
     }
 
     .about-card h2 {
       margin-bottom: 15px;
-      color: #2c3e50;
+      color: white;
       font-size: 1.3rem;
-      border-bottom: 1px solid rgba(255,255,255,0.5);
+      border-bottom: 1px solid rgba(255,255,255,0.2);
       padding-bottom: 10px;
     }
 
     .about-card p {
       margin-bottom: 12px;
       line-height: 1.5;
-      color: #2c3e50;
+      color: white;
     }
 
     .about-card ul {
@@ -433,11 +472,11 @@
     .about-card li {
       margin-bottom: 8px;
       line-height: 1.4;
-      color: #2c3e50;
+      color: white;
     }
 
     .about-card strong {
-      color: #3498db;
+      color: #ffd700;
     }
 
     .about-card em {
@@ -455,6 +494,9 @@
   </style>
 </head>
 <body>
+  <!-- Контейнер для снежинок -->
+  <div class="snowflakes" id="snowflakes"></div>
+
   <!-- Элемент аудио для фоновой музыки -->
   <audio id="backgroundMusic" loop>
     <source src="song/background.mp3" type="audio/mpeg">
@@ -710,7 +752,6 @@
     <button class="fixed-back-button" onclick="goBack()">⬅ Назад в меню</button>
   </div>
 
-  <!-- JavaScript без изменений -->
   <script>
     const workerUrl = "https://musicdom-payment.vercel.app/";
     
@@ -734,6 +775,32 @@
         price: 200
       }
     ];
+
+    // Функция для создания снежинок
+    function createSnowflakes() {
+      const snowflakesContainer = document.getElementById('snowflakes');
+      const snowflakeSymbols = ['❅', '❆', '❄', '•'];
+      
+      for (let i = 0; i < 50; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.textContent = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
+        
+        // Случайные параметры для снежинки
+        const left = Math.random() * 100;
+        const animationDuration = 5 + Math.random() * 10;
+        const animationDelay = Math.random() * 5;
+        const fontSize = 10 + Math.random() * 20;
+        
+        snowflake.style.left = `${left}%`;
+        snowflake.style.animationDuration = `${animationDuration}s`;
+        snowflake.style.animationDelay = `${animationDelay}s`;
+        snowflake.style.fontSize = `${fontSize}px`;
+        snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+        
+        snowflakesContainer.appendChild(snowflake);
+      }
+    }
 
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
@@ -965,6 +1032,9 @@
 
     // Инициализация при загрузке
     window.onload = function() {
+      // Создаем снежинки
+      createSnowflakes();
+      
       setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
