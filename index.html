@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Музыкальный Дом</title>
   <style>
-    /* Зимний стиль с эффектом подмерзшего стекла */
+    /* Зимний стиль с улучшенным эффектом подмерзшего стекла */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       height: 100vh;
@@ -13,15 +13,15 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #1e3c72, #2a5298, #6dd5fa);
-      background-size: 200% 200%;
-      animation: gradientMove 15s ease infinite;
+      background: linear-gradient(135deg, #0f1b33, #1a3a5f, #2c5282, #4a7bab);
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
       color: white;
       overflow: hidden;
       position: relative;
     }
     
-    /* Контейнер для снежинок */
+    /* Контейнер для снежинок - загружается сразу */
     .snowflakes {
       position: absolute;
       top: 0;
@@ -36,10 +36,11 @@
     .snowflake {
       position: absolute;
       top: -10px;
-      color: white;
+      color: rgba(255, 255, 255, 0.9);
       font-size: 1em;
-      animation: snowFall 10s linear infinite;
+      animation: snowFall linear infinite;
       user-select: none;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
     }
     
     @keyframes snowFall {
@@ -76,14 +77,18 @@
       width: 100%;
       height: 100%;
       padding: 20px;
-      z-index: 2;
+      z-index: 3; /* Повышаем z-index для контента */
     }
     .loader img {
       width: 160px;
       height: auto;
       border-radius: 20px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.3);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.3),
+        inset 0 0 20px rgba(255,255,255,0.1);
       margin-bottom: 30px;
+      border: 2px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
     }
     .menu, .section {opacity: 0; pointer-events: none;}
     .menu.active, .section.active {opacity: 1; pointer-events: all;}
@@ -92,22 +97,25 @@
       font-size: 1.2rem;
       margin-bottom: 15px;
       color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
     .loading-bar {
       width: 300px;
-      height: 6px;
+      height: 8px;
       background: rgba(255, 255, 255, 0.2);
-      border-radius: 3px;
+      border-radius: 4px;
       overflow: hidden;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
     }
 
     .loading-progress {
       height: 100%;
       width: 0%;
-      background: white;
-      border-radius: 3px;
+      background: linear-gradient(90deg, #a8d8ea, #ffffff);
+      border-radius: 4px;
       animation: loading 2s ease-in-out forwards;
+      box-shadow: 0 0 10px rgba(168, 216, 234, 0.7);
     }
 
     @keyframes loading {
@@ -121,20 +129,26 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 30px;
-      box-shadow: 0 0 25px rgba(255,255,255,0.4);
-      border: 3px solid rgba(255,255,255,0.2);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.4),
+        inset 0 0 30px rgba(255,255,255,0.1);
+      border: 3px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(15px);
     }
 
+    /* Улучшенный эффект подмерзшего стекла для кнопок */
     button {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: white;
       font-size: 1rem;
       padding: 14px 35px;
       margin: 10px;
       border-radius: 40px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 25px rgba(255,255,255,0.15),
+        inset 0 0 20px rgba(255,255,255,0.05);
       cursor: pointer;
       transition: all 0.3s ease;
       min-width: 200px;
@@ -142,22 +156,44 @@
       width: auto;
       display: inline-block;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
     }
 
     button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.25),
+        inset 0 0 20px rgba(255,255,255,0.1);
       transform: scale(1.03);
     }
 
+    button:hover::before {
+      left: 100%;
+    }
+
     #buySection button, .buy-button, .price-plan button {
-      background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1));
-      border: 1px solid rgba(255,255,255,0.4);
-      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+      border: 1px solid rgba(255,255,255,0.3);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.2),
+        inset 0 0 20px rgba(255,255,255,0.05);
     }
 
     #buySection button:hover, .buy-button:hover, .price-plan button:hover {
-      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.15));
+      background: linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.12));
     }
 
     .music-toggle {
@@ -169,8 +205,10 @@
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 15px rgba(255,255,255,0.15),
+        inset 0 0 10px rgba(255,255,255,0.05);
       cursor: pointer;
       display: flex;
       justify-content: center;
@@ -182,7 +220,9 @@
 
     .music-toggle:hover {
       background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 20px rgba(255,255,255,0.25);
+      box-shadow: 
+        0 0 20px rgba(255,255,255,0.25),
+        inset 0 0 10px rgba(255,255,255,0.1);
       transform: scale(1.1);
     }
 
@@ -199,21 +239,39 @@
       transform: translateX(-50%) scale(1.03);
     }
 
-    h1 {margin-bottom: 15px; color: white;}
-    p {max-width: 600px; font-size: 1rem; opacity: 0.9; color: white;}
+    h1 {
+      margin-bottom: 15px; 
+      color: white;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
+    }
+    
+    p {
+      max-width: 600px; 
+      font-size: 1rem; 
+      opacity: 0.9; 
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+    
     input {
       padding:10px 20px;
       border-radius:20px;
-      border:none;
+      border:1px solid rgba(255,255,255,0.3);
       font-size:1rem;
       margin:10px 0;
       text-align:center;
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.15);
       color: white;
+      backdrop-filter: blur(10px);
+      box-shadow: 
+        inset 0 0 10px rgba(255,255,255,0.1),
+        0 0 15px rgba(255,255,255,0.1);
     }
+    
     input::placeholder {color: rgba(255,255,255,0.7);}
+    
     a.download-btn {
-      background: rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.15);
       color: white;
       padding: 10px 30px;
       border-radius: 25px;
@@ -221,10 +279,17 @@
       display: inline-block;
       margin-top: 10px;
       transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
     }
-    a.download-btn:hover {background: rgba(255,255,255,0.35);}
+    
+    a.download-btn:hover {
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
 
-    #works, #price {
+    #works, #price, #about {
       justify-content: flex-start;
       padding-top: 0;
       padding-bottom: 100px;
@@ -235,15 +300,16 @@
       position: sticky;
       top: 0;
       background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       width: 100%;
       padding: 20px;
       z-index: 10;
       margin-bottom: 20px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
-    .works-container, .price-container {
+    .works-container, .price-container, .about-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
@@ -253,17 +319,33 @@
       align-items: start;
     }
 
-    .work-card, .price-plan {
+    /* Улучшенный эффект стекла для карточек */
+    .work-card, .price-plan, .about-card {
       background: rgba(255, 255, 255, 0.1);
       border-radius: 15px;
       padding: 20px;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+      box-shadow: 
+        0 0 25px rgba(255,255,255,0.1),
+        inset 0 0 20px rgba(255,255,255,0.05);
       transition: all 0.3s ease;
       opacity: 0;
       transform: translateY(30px);
       animation: cardAppear 0.6s ease forwards;
+      position: relative;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .work-card::before, .price-plan::before, .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
     }
 
     @keyframes cardAppear {
@@ -273,9 +355,11 @@
       }
     }
 
-    .work-card:hover, .price-plan:hover {
+    .work-card:hover, .price-plan:hover, .about-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
+      box-shadow: 
+        0 5px 30px rgba(255,255,255,0.2),
+        inset 0 0 20px rgba(255,255,255,0.1);
     }
 
     .work-image {
@@ -290,6 +374,8 @@
       justify-content: center;
       color: rgba(255,255,255,0.7);
       font-size: 3rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: inset 0 0 15px rgba(255,255,255,0.1);
     }
 
     .work-title {
@@ -300,6 +386,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
     .work-description {
@@ -318,6 +405,8 @@
       margin: 12px 0;
       border-radius: 8px;
       height: 40px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
     }
 
     .work-price {
@@ -325,6 +414,7 @@
       font-weight: bold;
       margin: 8px 0;
       color: #ffd700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
     }
 
     .social-container {
@@ -345,7 +435,9 @@
       padding: 15px;
       backdrop-filter: blur(15px);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+      box-shadow: 
+        0 0 15px rgba(255,255,255,0.1),
+        inset 0 0 10px rgba(255,255,255,0.05);
       transition: all 0.3s ease;
       width: 100px;
       height: 100px;
@@ -356,7 +448,9 @@
     .social-card:hover {
       transform: translateY(-5px);
       background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      box-shadow: 
+        0 0 20px rgba(255,255,255,0.2),
+        inset 0 0 10px rgba(255,255,255,0.1);
     }
 
     .social-icon {
@@ -396,8 +490,10 @@
       right: 20px;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 15px rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 15px rgba(255,255,255,0.15),
+        inset 0 0 10px rgba(255,255,255,0.05);
       border-radius: 10px;
       padding: 10px 15px;
       color: white;
@@ -415,41 +511,6 @@
     }
 
     /* Стили для раздела "О нас" */
-    #about {
-      justify-content: flex-start;
-      padding-top: 0;
-      padding-bottom: 100px;
-      overflow-y: auto;
-    }
-
-    .about-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      max-width: 1200px;
-      width: 100%;
-      padding: 0 20px;
-      align-items: start;
-    }
-
-    .about-card {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 15px;
-      padding: 25px;
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-      transition: all 0.3s ease;
-      opacity: 0;
-      transform: translateY(30px);
-      animation: cardAppear 0.6s ease forwards;
-    }
-
-    .about-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 25px rgba(255,255,255,0.2);
-    }
-
     .about-card h2 {
       margin-bottom: 15px;
       color: white;
@@ -476,7 +537,7 @@
     }
 
     .about-card strong {
-      color: #ffd700;
+      color: #a8d8ea;
     }
 
     .about-card em {
@@ -494,7 +555,7 @@
   </style>
 </head>
 <body>
-  <!-- Контейнер для снежинок -->
+  <!-- Контейнер для снежинок - загружается сразу -->
   <div class="snowflakes" id="snowflakes"></div>
 
   <!-- Элемент аудио для фоновой музыки -->
@@ -776,21 +837,25 @@
       }
     ];
 
-    // Функция для создания снежинок
+    // Функция для создания снежинок - запускается сразу
     function createSnowflakes() {
       const snowflakesContainer = document.getElementById('snowflakes');
       const snowflakeSymbols = ['❅', '❆', '❄', '•'];
+      const snowflakeCount = 80; // Увеличиваем количество снежинок
       
-      for (let i = 0; i < 50; i++) {
+      // Очищаем контейнер (на всякий случай)
+      snowflakesContainer.innerHTML = '';
+      
+      for (let i = 0; i < snowflakeCount; i++) {
         const snowflake = document.createElement('div');
         snowflake.className = 'snowflake';
         snowflake.textContent = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
         
         // Случайные параметры для снежинки
         const left = Math.random() * 100;
-        const animationDuration = 5 + Math.random() * 10;
+        const animationDuration = 5 + Math.random() * 15; // Разная скорость
         const animationDelay = Math.random() * 5;
-        const fontSize = 10 + Math.random() * 20;
+        const fontSize = 8 + Math.random() * 15; // Разные размеры
         
         snowflake.style.left = `${left}%`;
         snowflake.style.animationDuration = `${animationDuration}s`;
@@ -801,6 +866,11 @@
         snowflakesContainer.appendChild(snowflake);
       }
     }
+
+    // Создаем снежинки сразу при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function() {
+      createSnowflakes();
+    });
 
     // Переменные для управления музыкой
     let isBackgroundMusicPlaying = false;
@@ -1032,9 +1102,6 @@
 
     // Инициализация при загрузке
     window.onload = function() {
-      // Создаем снежинки
-      createSnowflakes();
-      
       setTimeout(() => {
         document.querySelector('.loader').style.opacity = '0';
         document.getElementById('menu').classList.add('active');
