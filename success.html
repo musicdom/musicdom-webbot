@@ -7,7 +7,7 @@
     /* Зимний стиль с улучшенным эффектом подмерзшего стекла */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
-      height: 100vh;
+      min-height: 100vh;
       font-family: 'Inter', sans-serif;
       display: flex;
       justify-content: center;
@@ -16,14 +16,15 @@
       background-size: 400% 400%;
       animation: gradientMove 20s ease infinite;
       color: white;
-      overflow: hidden;
+      overflow: auto;
       position: relative;
       text-align: center;
+      padding: 20px;
     }
     
     /* Контейнер для снежинок - загружается сразу */
     .snowflakes {
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
       width: 100%;
@@ -72,10 +73,10 @@
       backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 25px;
-      padding: 40px 30px;
-      margin: 20px;
-      max-width: 500px;
-      width: 90%;
+      padding: 50px 40px;
+      margin: 30px auto;
+      max-width: 650px;
+      width: 100%;
       box-shadow: 
         0 0 30px rgba(255,255,255,0.1),
         inset 0 0 20px rgba(255,255,255,0.05);
@@ -99,30 +100,46 @@
       to {opacity: 1; transform: translateY(0);}
     }
 
+    .logo {
+      width: 140px;
+      height: 140px;
+      border-radius: 25px;
+      margin-bottom: 25px;
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.3),
+        inset 0 0 20px rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      object-fit: cover;
+    }
+
     h2 {
-      margin-bottom: 15px;
-      font-size: 1.8rem;
+      margin-bottom: 20px;
+      font-size: 2.2rem;
       color: white;
       text-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
     p {
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       opacity: 0.9;
-      max-width: 400px;
+      max-width: 500px;
       margin-left: auto;
       margin-right: auto;
+      line-height: 1.6;
       color: white;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      font-size: 1.1rem;
     }
 
     audio {
       width: 100%;
-      max-width: 400px;
-      margin: 20px 0;
-      border-radius: 10px;
+      max-width: 500px;
+      margin: 25px 0;
+      border-radius: 12px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
+      height: 50px;
     }
 
     /* Кнопка скачивания в стиле основной страницы */
@@ -130,9 +147,9 @@
       background: rgba(255, 255, 255, 0.12);
       border: 1px solid rgba(255, 255, 255, 0.25);
       color: white;
-      font-size: 1.1rem;
-      padding: 15px 35px;
-      margin: 15px 0;
+      font-size: 1.2rem;
+      padding: 18px 45px;
+      margin: 25px 0;
       border-radius: 40px;
       backdrop-filter: blur(20px);
       box-shadow: 
@@ -171,8 +188,8 @@
     }
 
     footer {
-      margin-top: 25px;
-      font-size: 0.9rem;
+      margin-top: 30px;
+      font-size: 1rem;
       opacity: 0.7;
       color: white;
       text-shadow: 0 0 10px rgba(255,255,255,0.3);
@@ -181,10 +198,10 @@
     /* Переключатель музыки */
     .music-toggle {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 50px;
-      height: 50px;
+      top: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
@@ -196,7 +213,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       z-index: 1000;
       transition: all 0.3s ease;
     }
@@ -212,21 +229,21 @@
     /* Уведомление о музыке */
     .music-notification {
       position: fixed;
-      top: 80px;
-      right: 20px;
+      top: 100px;
+      right: 25px;
       background: rgba(255, 255, 255, 0.15);
       border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(20px);
       box-shadow: 
         0 0 15px rgba(255,255,255,0.15),
         inset 0 0 10px rgba(255,255,255,0.05);
-      border-radius: 10px;
-      padding: 10px 15px;
+      border-radius: 12px;
+      padding: 12px 18px;
       color: white;
-      font-size: 0.9rem;
+      font-size: 1rem;
       z-index: 999;
       animation: fadeInOut 4s forwards;
-      max-width: 200px;
+      max-width: 220px;
     }
     
     @keyframes fadeInOut {
@@ -234,6 +251,32 @@
       20% { opacity: 1; transform: translateY(0); }
       80% { opacity: 1; transform: translateY(0); }
       100% { opacity: 0; transform: translateY(-10px); }
+    }
+
+    /* Дополнительная информация о песне */
+    .song-info {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 25px;
+      margin: 25px 0;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 
+        inset 0 0 15px rgba(255,255,255,0.05),
+        0 0 15px rgba(255,255,255,0.1);
+    }
+
+    .song-info h3 {
+      margin-bottom: 15px;
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
+      font-size: 1.4rem;
+    }
+
+    .song-info p {
+      margin-bottom: 0;
+      font-size: 1.05rem;
     }
   </style>
 </head>
@@ -250,8 +293,14 @@
   <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🔇</div>
 
   <div class="card">
+    <img src="logo.jpg" alt="Музыкальный Дом" class="logo">
     <h2>✅ Спасибо за оплату!</h2>
     <p>Ваша полная версия песни готова 🎵</p>
+
+    <div class="song-info">
+      <h3>Ваша премиум песня</h3>
+      <p>Теперь вы можете скачать полную версию без ограничений</p>
+    </div>
 
     <div id="playerBox"></div>
 
@@ -263,7 +312,7 @@
     function createSnowflakes() {
       const snowflakesContainer = document.getElementById('snowflakes');
       const snowflakeSymbols = ['❅', '❆', '❄', '•'];
-      const snowflakeCount = 60;
+      const snowflakeCount = 70;
       
       // Очищаем контейнер (на всякий случай)
       snowflakesContainer.innerHTML = '';
@@ -277,7 +326,7 @@
         const left = Math.random() * 100;
         const animationDuration = 5 + Math.random() * 15; // Разная скорость
         const animationDelay = Math.random() * 5;
-        const fontSize = 8 + Math.random() * 15; // Разные размеры
+        const fontSize = 10 + Math.random() * 20; // Разные размеры
         
         snowflake.style.left = `${left}%`;
         snowflake.style.animationDuration = `${animationDuration}s`;
@@ -417,7 +466,7 @@
         </audio>
         <br>
         <a href="${songPath}" download class="download-button">
-          ⬇️ Скачать песню
+          ⬇️ Скачать полную версию песни
         </a>
       `;
       
