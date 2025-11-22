@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Музыкальный Дом — Ваш план</title>
   <style>
+    /* Зимний стиль с улучшенным эффектом подмерзшего стекла */
     * {margin: 0; padding: 0; box-sizing: border-box;}
     body {
       height: 100vh;
@@ -11,31 +12,88 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #a855f7, #ec4899, #f97316);
-      background-size: 200% 200%;
-      animation: gradientMove 10s ease infinite;
+      background: linear-gradient(135deg, #3a6ea5, #5a8ec9, #7baedc, #9cc9eb);
+      background-size: 400% 400%;
+      animation: gradientMove 20s ease infinite;
       color: white;
       overflow: hidden;
+      position: relative;
       text-align: center;
     }
+    
+    /* Контейнер для снежинок - загружается сразу */
+    .snowflakes {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    /* Индивидуальные снежинки */
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 1em;
+      animation: snowFall linear infinite;
+      user-select: none;
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    
+    @keyframes snowFall {
+      0% {
+        transform: translateY(0) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateX(20px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
     @keyframes gradientMove {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
 
+    /* Улучшенный эффект стекла для карточки */
     .card {
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 25px;
       padding: 40px 30px;
       margin: 20px;
       max-width: 500px;
       width: 90%;
-      box-shadow: 0 0 30px rgba(255,255,255,0.2);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.1),
+        inset 0 0 20px rgba(255,255,255,0.05);
       animation: fadeIn 0.8s ease-in-out;
+      position: relative;
+      z-index: 3;
     }
+    
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+    }
+    
     @keyframes fadeIn {
       from {opacity: 0; transform: translateY(20px);}
       to {opacity: 1; transform: translateY(0);}
@@ -44,6 +102,8 @@
     h2 {
       margin-bottom: 15px;
       font-size: 1.8rem;
+      color: white;
+      text-shadow: 0 0 15px rgba(255,255,255,0.5);
     }
 
     p {
@@ -53,29 +113,53 @@
       margin-left: auto;
       margin-right: auto;
       line-height: 1.5;
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
     /* Кнопка WhatsApp в стиле основной страницы */
     .whatsapp-button {
-      background: rgba(255, 255, 255, 0.15);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       color: white;
       font-size: 1.1rem;
       padding: 15px 35px;
       margin: 15px 0;
       border-radius: 40px;
-      backdrop-filter: blur(15px);
-      box-shadow: 0 0 20px rgba(255,255,255,0.15);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 25px rgba(255,255,255,0.15),
+        inset 0 0 20px rgba(255,255,255,0.05);
       cursor: pointer;
       text-decoration: none;
       display: inline-block;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    .whatsapp-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
     }
 
     .whatsapp-button:hover {
-      background: rgba(255, 255, 255, 0.25);
-      box-shadow: 0 0 25px rgba(255,255,255,0.25);
+      background: rgba(255, 255, 255, 0.18);
+      box-shadow: 
+        0 0 30px rgba(255,255,255,0.25),
+        inset 0 0 20px rgba(255,255,255,0.1);
       transform: scale(1.03);
+    }
+
+    .whatsapp-button:hover::before {
+      left: 100%;
     }
 
     .plan-info {
@@ -85,22 +169,104 @@
       margin: 20px 0;
       text-align: left;
       border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      box-shadow: 
+        inset 0 0 15px rgba(255,255,255,0.05),
+        0 0 15px rgba(255,255,255,0.1);
     }
 
     .plan-info h3 {
       margin-bottom: 10px;
       color: #ffd700;
       text-align: center;
+      text-shadow: 0 0 10px rgba(255,215,0,0.5);
+    }
+
+    .plan-info div {
+      line-height: 1.6;
+      color: white;
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
     }
 
     footer {
       margin-top: 25px;
       font-size: 0.9rem;
       opacity: 0.7;
+      color: white;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    /* Переключатель музыки */
+    .music-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 15px rgba(255,255,255,0.15),
+        inset 0 0 10px rgba(255,255,255,0.05);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      z-index: 1000;
+      transition: all 0.3s ease;
+    }
+
+    .music-toggle:hover {
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 
+        0 0 20px rgba(255,255,255,0.25),
+        inset 0 0 10px rgba(255,255,255,0.1);
+      transform: scale(1.1);
+    }
+
+    /* Уведомление о музыке */
+    .music-notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 0 15px rgba(255,255,255,0.15),
+        inset 0 0 10px rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px 15px;
+      color: white;
+      font-size: 0.9rem;
+      z-index: 999;
+      animation: fadeInOut 4s forwards;
+      max-width: 200px;
+    }
+    
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translateY(-10px); }
+      20% { opacity: 1; transform: translateY(0); }
+      80% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-10px); }
     }
   </style>
 </head>
 <body>
+  <!-- Контейнер для снежинок - загружается сразу -->
+  <div class="snowflakes" id="snowflakes"></div>
+
+  <!-- Элемент аудио для фоновой музыки -->
+  <audio id="backgroundMusic" loop>
+    <source src="song/background.mp3" type="audio/mpeg">
+    Ваш браузер не поддерживает аудио элемент.
+  </audio>
+
+  <div class="music-toggle" id="musicToggle" onclick="toggleMusic()">🔇</div>
+
   <div class="card">
     <h2>✅ Спасибо за оплату!</h2>
     <p>Ваш план успешно активирован 🎵</p>
@@ -111,6 +277,125 @@
   </div>
 
   <script>
+    // Функция для создания снежинок - запускается сразу
+    function createSnowflakes() {
+      const snowflakesContainer = document.getElementById('snowflakes');
+      const snowflakeSymbols = ['❅', '❆', '❄', '•'];
+      const snowflakeCount = 60;
+      
+      // Очищаем контейнер (на всякий случай)
+      snowflakesContainer.innerHTML = '';
+      
+      for (let i = 0; i < snowflakeCount; i++) {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        snowflake.textContent = snowflakeSymbols[Math.floor(Math.random() * snowflakeSymbols.length)];
+        
+        // Случайные параметры для снежинки
+        const left = Math.random() * 100;
+        const animationDuration = 5 + Math.random() * 15; // Разная скорость
+        const animationDelay = Math.random() * 5;
+        const fontSize = 8 + Math.random() * 15; // Разные размеры
+        
+        snowflake.style.left = `${left}%`;
+        snowflake.style.animationDuration = `${animationDuration}s`;
+        snowflake.style.animationDelay = `${animationDelay}s`;
+        snowflake.style.fontSize = `${fontSize}px`;
+        snowflake.style.opacity = Math.random() * 0.7 + 0.3;
+        
+        snowflakesContainer.appendChild(snowflake);
+      }
+    }
+
+    // Создаем снежинки сразу при выполнении скрипта
+    createSnowflakes();
+
+    // Переменные для управления музыкой
+    let isBackgroundMusicPlaying = false;
+    let autoPlayFailed = false;
+
+    // Функция для показа уведомления о музыке
+    function showMusicNotification(message, isError = false) {
+      // Удаляем предыдущее уведомление, если оно есть
+      const existingNotification = document.querySelector('.music-notification');
+      if (existingNotification) {
+        existingNotification.remove();
+      }
+      
+      // Создаем новое уведомление
+      const notification = document.createElement('div');
+      notification.className = 'music-notification';
+      if (isError) {
+        notification.style.background = 'rgba(239, 68, 68, 0.2)';
+        notification.style.border = '1px solid rgba(239, 68, 68, 0.4)';
+      }
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Автоматически удаляем уведомление через 4 секунды
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.remove();
+        }
+      }, 4000);
+    }
+
+    // Функция переключения музыки
+    function toggleMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 30% перед воспроизведением
+      backgroundMusic.volume = 0.3;
+      
+      if (backgroundMusic.paused) {
+        backgroundMusic.play().then(() => {
+          musicToggle.textContent = '🎵';
+          isBackgroundMusicPlaying = true;
+          autoPlayFailed = false;
+          showMusicNotification('Музыка включена 🎵');
+        }).catch(error => {
+          console.log('Ошибка воспроизведения:', error);
+          musicToggle.textContent = '🔇';
+          isBackgroundMusicPlaying = false;
+          showMusicNotification('Не удалось включить музыку. Попробуйте еще раз или разрешите автовоспроизведение в браузере 🔧', true);
+        });
+      } else {
+        backgroundMusic.pause();
+        musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+        showMusicNotification('Музыка выключена 🔇');
+      }
+    }
+
+    // Функция для автоматического включения музыки
+    function autoPlayMusic() {
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      const musicToggle = document.getElementById('musicToggle');
+      
+      // Устанавливаем громкость на 30%
+      backgroundMusic.volume = 0.3;
+      
+      // Пытаемся включить музыку автоматически
+      backgroundMusic.play().then(() => {
+        musicToggle.textContent = '🎵';
+        isBackgroundMusicPlaying = true;
+        autoPlayFailed = false;
+      }).catch(error => {
+        // Автовоспроизведение заблокировано браузером
+        console.log('Автовоспроизведение заблокировано. Пользователь должен включить музыку вручную.');
+        musicToggle.textContent = '🔇';
+        isBackgroundMusicPlaying = false;
+        autoPlayFailed = true;
+        
+        // Показываем уведомление о том, что нужно нажать на кнопку музыки
+        setTimeout(() => {
+          showMusicNotification('Нажмите на кнопку музыки 🎵', true);
+        }, 1000);
+      });
+    }
+
+    // Получаем информацию о плане из URL и отображаем её
     const url = new URL(window.location.href);
     const plan = url.searchParams.get('plan');
 
@@ -146,6 +431,12 @@
     } else {
       document.getElementById("planBox").innerHTML = "<p>Ошибка: информация о плане не найдена.</p>";
     }
+
+    // Инициализация при загрузке
+    window.onload = function() {
+      // Пытаемся автоматически включить музыку после загрузки
+      setTimeout(autoPlayMusic, 500);
+    };
   </script>
 </body>
 </html>
